@@ -23,19 +23,19 @@ Tiếng Anh ngắt câu bằng dấu câu, còn tiếng Việt nối câu bằng
 ### 1. Cài đặt qua Skills CLI
 Cài đặt toàn cục cho mọi agent:
 ```bash
-npx skills add kkhanh-kas/humanizer --global
+npx skills add kkhanh-kas/humanizer-VietAcademic --global
 ```
 *(Bỏ cờ `--global` nếu chỉ muốn cài đặt cho dự án hiện tại. Thêm `--agent <tên>` hoặc `--agent '*'` để chỉ định agent nhận kỹ năng, sau đó tải lại danh sách skills).*
 
 Cập nhật phiên bản mới nhất:
 ```bash
-npx skills update humanizer --global
+npx skills update humanizer-viet-academic --global
 ```
 
 ### 2. Cài đặt như một Claude Plugin
 Dành cho Claude Code 2.1.142 trở lên:
 ```text
-/plugin marketplace add kkhanh-kas/humanizer
+/plugin marketplace add kkhanh-kas/humanizer-VietAcademic
 /plugin install humanizer@humanizer
 ```
 Lệnh gọi plugin trong Claude: `/humanizer:humanizer-viet-academic`.
