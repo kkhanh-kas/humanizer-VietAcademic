@@ -1,7 +1,5 @@
 # Humanizer-VietAcademic
 
-[![skills.sh installs](https://skills.sh/b/kkhanh-kas/humanizer)](https://skills.sh/kkhanh-kas/humanizer)
-
 Humanizer-VietAcademic là công cụ tối ưu hóa văn phong học thuật tiếng Việt cho AI agent. Kỹ năng này viết lại các văn bản tiếng Việt mang giọng điệu AI hoặc dịch thô từ tiếng nước ngoài (Anh, Trung) thành văn phong học thuật chuẩn mực, tự nhiên như văn của giảng viên và nhà nghiên cứu người Việt, đồng thời **bảo toàn tuyệt đối mọi dữ kiện, số liệu và trích dẫn khoa học**, không bịa đặt nội dung.
 
 ## Cách thức hoạt động
