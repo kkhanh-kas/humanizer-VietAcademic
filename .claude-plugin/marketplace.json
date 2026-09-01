@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
   "name": "humanizer",
   "owner": {
-    "name": "blader",
-    "url": "https://github.com/blader"
+    "name": "kkhanh-kas",
+    "url": "https://github.com/kkhanh-kas"
   },
   "description": "Install Humanizer-VietAcademic as a Claude plugin.",
   "plugins": [

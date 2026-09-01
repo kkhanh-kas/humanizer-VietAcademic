@@ -7,8 +7,8 @@
     "name": "blader",
     "url": "https://github.com/blader"
   },
-  "homepage": "https://github.com/blader/humanizer",
-  "repository": "https://github.com/blader/humanizer",
+  "homepage": "https://github.com/kkhanh-kas/humanizer",
+  "repository": "https://github.com/kkhanh-kas/humanizer",
   "license": "MIT",
   "keywords": ["writing", "editing", "vietnamese", "academic", "thesis", "ai-detection", "humanize", "prose", "style"],
   "skills": ["./"]
