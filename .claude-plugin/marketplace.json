@@ -5,14 +5,14 @@
     "name": "blader",
     "url": "https://github.com/blader"
   },
-  "description": "Install Humanizer as a Claude plugin.",
+  "description": "Install Humanizer-VietAcademic as a Claude plugin.",
   "plugins": [
     {
       "name": "humanizer",
       "source": "./",
-      "description": "Rewrite AI-sounding text so it reads naturally without changing what it says.",
+      "description": "Rewrite AI-sounding or machine-translated Vietnamese text into natural, formal academic prose while preserving facts and citations.",
       "license": "MIT",
-      "keywords": ["writing", "editing", "ai-detection", "humanize", "prose", "style"]
+      "keywords": ["writing", "editing", "vietnamese", "academic", "thesis", "ai-detection", "humanize", "prose", "style"]
     }
   ]
 }

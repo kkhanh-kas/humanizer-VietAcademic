@@ -21,6 +21,12 @@ jobs:
           python-version: "3.12"
       - name: Check package files
         run: python3 scripts/validate-package.py
+      - name: Check pattern catalog
+        run: python3 scripts/validate-patterns.py
+      - name: Check linter regressions
+        run: python3 scripts/test-kiem-tra.py
+      - name: Check benchmark cases
+        run: python3 scripts/run-benchmark.py
       - name: Check skill discovery
         run: npx --yes skills@1.5.20 add . --list
       - name: Check Claude marketplace

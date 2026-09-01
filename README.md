@@ -1,209 +1,197 @@
-# Humanizer
+# Humanizer-VietAcademic
 
-[![skills.sh installs](https://skills.sh/b/blader/humanizer)](https://skills.sh/blader/humanizer)
+[![skills.sh installs](https://skills.sh/b/kkhanh-kas/humanizer)](https://skills.sh/kkhanh-kas/humanizer)
 
-Humanizer rewrites AI-sounding text so it reads like a person wrote it, without changing what it says. Because it is just Markdown, it works with any agent that supports skills.
+Humanizer-VietAcademic là công cụ tối ưu hóa văn phong học thuật tiếng Việt cho AI agent. Kỹ năng này viết lại các văn bản tiếng Việt mang giọng điệu AI hoặc dịch thô từ tiếng nước ngoài (Anh, Trung) thành văn phong học thuật chuẩn mực, tự nhiên như văn của giảng viên và nhà nghiên cứu người Việt, đồng thời **bảo toàn tuyệt đối mọi dữ kiện, số liệu và trích dẫn khoa học**, không bịa đặt nội dung.
 
-## How it works
+## Cách thức hoạt động
 
-Humanizer uses 35 patterns from Wikipedia's ["Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. It makes a first pass without treating the original structure as fixed. Then it checks the draft against those patterns and the original claims before rewriting whatever still needs work.
+Humanizer-VietAcademic xây dựng bộ 35 pattern trên cơ sở danh mục [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) của Wikipedia, kết hợp với hệ thống quy chuẩn ngữ pháp, nhịp điệu và dấu câu của văn bản học thuật tiếng Việt.
 
-> "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+> **Nguyên lý cốt lõi:** *Khi phân vân, hãy ghép mệnh đề thay vì tách câu.*
 
-It does not make things up. A name, number, date, quote, citation, or other factual detail must come from the source or the writer. For personal writing, Humanizer keeps the writer's style. Technical and reference prose stays neutral and plain. If you provide a writing sample, Humanizer follows that sample instead of its default style rules.
+Tiếng Anh ngắt câu bằng dấu câu, còn tiếng Việt nối câu bằng từ nối. Văn phong học thuật tiếng Việt tự nhiên nối liền 3–4 mệnh đề trong một câu bằng dấu phẩy và các liên từ phụ thuộc (*nhờ đó, qua đó, trong khi, đồng thời*), duy trì nhịp điệu trung bình 21 âm tiết/câu và mật độ từ nối đạt 4–5%.
 
-When you paste text, Humanizer shows its work before giving you the final version. You see the first rewrite and a short critique of anything that still sounds artificial. Point it at a file and it changes only the prose, leaving code, data, frontmatter, and link targets alone.
+### Quy chuẩn cứng cho văn học thuật tiếng Việt
 
-## Usage
+- **Không dùng dấu gạch ngang giữa câu:** Cấm dùng dấu gạch ngang (`—`, `–`) hoặc ` - ` để chen ngang ý giữa câu. Hãy thay bằng dấu phẩy và từ nối.
+- **Không dùng dấu chấm phẩy:** Văn xuôi tiếng Việt hiện đại không dùng dấu chấm phẩy (`;`), chỉ dùng dấu phẩy và dấu chấm.
+- **Bảo toàn nguyên vẹn trích dẫn:** Tuyệt đối giữ nguyên vị trí và ký hiệu trích dẫn tài liệu tham khảo (`[1]`, `[3-5]`, `(Nguyen et al., 2024)`) cũng như các biểu thức toán học.
+- **Chuẩn hóa ngoặc kép cong:** Luôn dùng ngoặc kép cong `“ ”` (không dùng ngoặc kép thẳng `" "`).
+- **Xóa bỏ triệt để văn dịch:** Loại bỏ thể bị động ngoại lai `được ... bởi` và đại từ ngôi thứ hai `bạn` trong văn bản học thuật.
 
-Call the skill directly:
+## Cài đặt (Installation)
 
+### 1. Cài đặt qua Skills CLI
+Cài đặt toàn cục cho mọi agent:
+```bash
+npx skills add kkhanh-kas/humanizer --global
 ```
-/humanizer
+*(Bỏ cờ `--global` nếu chỉ muốn cài đặt cho dự án hiện tại. Thêm `--agent <tên>` hoặc `--agent '*'` để chỉ định agent nhận kỹ năng, sau đó tải lại danh sách skills).*
 
-[paste your text here]
-```
-
-Or ask in plain language:
-
-```
-Please humanize this text: [your text]
-```
-
-To rewrite a file, give Humanizer its path:
-
-```
-Humanize the prose in docs/launch-post.md
+Cập nhật phiên bản mới nhất:
+```bash
+npx skills update humanizer --global
 ```
 
-### Match your voice
-
-If you want the rewrite to sound more like you, include a sample:
-
+### 2. Cài đặt như một Claude Plugin
+Dành cho Claude Code 2.1.142 trở lên:
+```text
+/plugin marketplace add kkhanh-kas/humanizer
+/plugin install humanizer@humanizer
 ```
-/humanizer
+Lệnh gọi plugin trong Claude: `/humanizer:humanizer-viet-academic`.
 
-Here's a sample of my writing for voice matching:
-[paste 2-3 paragraphs of your own writing]
+### 3. Cài đặt trên Claude Desktop
+Tải repository này dưới dạng file ZIP và tải lên (upload) trong mục Skills của Claude Desktop.
 
-Now humanize this text:
-[paste AI text to humanize]
+### 4. Cài đặt thủ công (Manual install)
+Sao chép toàn bộ thư mục repository vào thư mục skills của agent. Lưu ý: Không chỉ sao chép mỗi file `SKILL.md`, vì trong quá trình hoạt động prompt sẽ tự động đọc các file tham chiếu trong `references/` và catalog trong `patterns/`.
+
+## Hướng dẫn sử dụng (Usage)
+
+Gọi trực tiếp kỹ năng bằng lệnh:
+```text
+/humanizer-viet-academic
+
+[Dán đoạn văn bản học thuật cần chỉnh sửa vào đây]
 ```
 
-Humanizer follows the sample's rhythm, word choice, punctuation, and deliberate quirks.
+Hoặc yêu cầu bằng ngôn ngữ tự nhiên:
+```text
+Sửa lại đoạn văn này theo văn phong học thuật tiếng Việt: [nội dung đoạn văn]
+```
 
-## The 35 patterns
+Để chỉnh sửa trực tiếp một file Markdown hoặc LaTeX:
+```text
+Humanize the academic prose in chapters/chapter2.md
+```
 
-### Content patterns
+## Các chế độ đầu ra (Output modes)
 
-| # | Pattern | Before | After |
+Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
+
+1. **`clean_rewrite` (Mặc định):** Trực tiếp viết lại đoạn văn mượt mà và thay thế vào văn bản gốc khi ngữ nghĩa rõ ràng và dữ kiện đầy đủ.
+2. **`review_comment`:** Trả về nhận xét phản biện khi văn bản gốc thiếu nguồn trích dẫn, thiếu số liệu thực nghiệm hoặc có khẳng định chưa được chứng minh, thay vì tự bịa thêm thông tin.
+3. **`needs_author_decision`:** Đặt câu hỏi và đưa ra các lựa chọn cho tác giả khi câu gốc mơ hồ và có nhiều cách hiểu kỹ thuật khác nhau.
+4. **`no_change`:** Giữ nguyên văn bản gốc khi câu chữ đã tự nhiên, chuẩn xác và không mắc lỗi AI.
+
+## Bộ 35 pattern
+
+### Nhóm nội dung
+
+| # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 1 | **Inflated importance and legacy** | "marking a pivotal moment in the evolution of..." | "was established in 1989 as part of a wider decentralization" |
-| 2 | **Name-dropping to prove importance** | "cited in NYT, BBC, FT, and The Hindu" | Keep only useful, sourced context |
-| 3 | **Shallow -ing analysis** | "symbolizing... reflecting... showcasing..." | Keep only what the source supports |
-| 4 | **Sales language** | "nestled within the breathtaking region" | "is a town in the Gonder region" |
-| 5 | **Vague sources** | "Experts believe it plays a crucial role" | Name a real source or remove the claim |
-| 6 | **Formulaic challenges and outlook** | "Despite challenges... continues to thrive" | Keep the facts and remove the sales pitch |
+| 1 | **Thổi phồng tầm quan trọng và di sản** | "đánh dấu bước ngoặt mang tính cách mạng trong quá trình nhận diện hình ảnh..." | "được đề xuất vào năm 2021 nhằm phục vụ bài toán nhận diện hình ảnh" |
+| 2 | **Kể tên mơ hồ để tạo uy tín** | "được nhắc đến bởi nhiều chuyên gia đầu ngành và tạp chí uy tín" | "được phân tích chi tiết trong nghiên cứu của LeCun et al. [1]" |
+| 3 | **Phân tích hời hợt với mệnh đề rỗng** | "qua đó thể hiện sự quan tâm sâu sắc và góp phần nâng cao trải nghiệm" | "để tăng cường bảo mật tài khoản" |
+| 4 | **Ngôn ngữ quảng cáo, thương mại** | "cung cấp kiến trúc vi dịch vụ vô cùng mạnh mẽ và hoàn hảo" | "sử dụng kiến trúc vi dịch vụ để giảm độ trễ xử lý dữ liệu" |
+| 5 | **Nguồn trích dẫn mập mờ** | "Theo các chuyên gia, việc chuyển dịch đám mây là tất yếu" | "Khảo sát của Gartner [2] cho thấy 85% doanh nghiệp đang chuyển dịch hạ tầng" |
+| 6 | **Công thức sáo rỗng trong các phần bắt buộc** | "Bên cạnh kết quả, vẫn còn hạn chế nhất định... sẽ tiếp tục hoàn thiện" | "Mô hình hiện chỉ thử nghiệm trên tập 2.000 mẫu và chưa đánh giá khi thiếu sáng" |
 
-### Language and grammar patterns
+### Nhóm ngôn ngữ và ngữ pháp
 
-| # | Pattern | Before | After |
+| # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 7 | **Overused AI words** | "Actually... additionally... gated on... quietly... testament... landscape... showcasing" | "also... needs... remain common" |
-| 8 | **Avoiding is and are** | "serves as... features... boasts" | "is... has" |
-| 9 | **Not X but Y and clipped endings** | "It's not just X, it's Y", "..., no guessing" | State the point directly |
-| 10 | **Forced groups of three** | "innovation, inspiration, and insights" | Use the number of items the meaning needs |
-| 11 | **Changing names and repeated openings** | "protagonist... main character... hero" or "She noted... She noted... She filed..." | Use one name or merge the repeated sentences |
-| 12 | **False from X to Y ranges** | "from the Big Bang to dark matter" | List the topics directly |
-| 13 | **Passive voice and missing subjects** | "No configuration file needed" | Name the actor when that helps |
+| 7 | **Lạm dụng từ ngữ AI đặc trưng** | "bức tranh toàn cảnh... đi sâu vào... kiến tạo nền tảng vững chắc" | "phân tích cấu trúc... tổng hợp các chính sách hỗ trợ" |
+| 8 | **Tránh dùng từ 'là' và 'có'** | "PostgreSQL đóng vai trò là hệ quản trị cơ sở dữ liệu..." | "PostgreSQL là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở" |
+| 9 | **Cặp cấu trúc đối xứng lặp lại** | "không chỉ giúp tối ưu bộ nhớ mà còn tăng tốc... không chỉ xử lý số liệu mà còn..." | "tối ưu bộ nhớ, tăng tốc độ thực thi và hỗ trợ phân tích ngữ nghĩa" |
+| 10 | **Gượng ép ghép nhóm bộ ba, bộ bốn** | "đảm bảo tính trực quan, tính thẩm mỹ, tính tương tác và tính bảo mật" | "trực quan và đảm bảo an toàn thông tin khi thao tác" |
+| 11 | **Đổi tên gọi tùy tiện và lặp đầu câu** | "tác giả... người viết... nhà nghiên cứu luân phiên trong cùng đoạn" | Dùng nhất quán một danh xưng ("nhóm nghiên cứu") |
+| 12 | **Phạm vi giả định 'từ X đến Y'** | "khảo sát từ cấu trúc vi mạch bán dẫn đến chính sách kinh tế vĩ mô" | "phân tích chuỗi cung ứng vi mạch và các chính sách kinh tế liên quan" |
+| 13 | **Bị động dịch thô và sai đại từ xưng hô** | "Dữ liệu được thu thập bởi hệ thống. Bạn có thể thấy nó hoạt động..." | "Hệ thống tự động thu thập dữ liệu với tốc độ xử lý dưới 50ms" |
 
-### Style patterns
+### Nhóm văn phong và trình bày
 
-| # | Pattern | Before | After |
+| # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 14 | **Em/en dashes** | "institutions—not the people—yet this continues—" | Cut them: periods, commas, colons, or parentheses |
-| 15 | **Too much bold text** | "**OKRs**, **KPIs**, **BMC**" | "OKRs, KPIs, BMC" |
-| 16 | **Lists with bold mini-headings** | "**Performance:** Performance improved" | Use prose when a list adds no value |
-| 17 | **Title case in headings** | "Strategic Negotiations And Partnerships" | "Strategic negotiations and partnerships" |
-| 18 | **Emojis** | "🚀 Launch Phase: 💡 Key Insight:" | Remove emojis |
-| 19 | **Curly quotes** | `said “the project”` | `said "the project"` |
-| 26 | **Too many hyphenated word pairs** | “cross-functional, data-driven, client-facing” | Keep only the hyphens grammar needs |
-| 27 | **A fake deeper truth** | "At its core, what matters is..." | State the point directly |
-| 28 | **Announcing the next point** | "Let's dive in", or "one thing that bit me" | Start with the content |
-| 29 | **A heading repeated below itself** | "## Performance" + "Speed matters." | Let the heading do the work |
-| 30 | **Writing about the old version** | "This function was added to replace..." | Describe what it does now |
-| 31 | **Forced punchlines and fragments** | "It had no preference. No prior. No nostalgia." | Use natural sentence lengths and specific claims |
-| 32 | **Formulaic sayings** | "Symmetry is the language of trust" | State the specific claim |
-| 33 | **Fake-candid openings** | "Honestly? It depends..." | State the answer directly |
-| 34 | **Answering objections no one raised** | "This isn't mainly about prompt length..." | Remove the unsupported defense and keep any real claim |
-| 35 | **Rejecting fake alternatives** | "A tempting option would be to..., but" | Remove the fake option and keep real choices |
+| 14 | **Dấu gạch ngang giữa câu (— / –)** | "Hệ thống xác thực — vốn phát triển theo OAuth 2.0 — cho phép..." | "Hệ thống xác thực được phát triển theo OAuth 2.0, nhờ đó cho phép..." |
+| 15 | **Lạm dụng in đậm (Bold)** | "Mô hình **Transformer** sử dụng cơ chế **Self-Attention**..." | "Mô hình Transformer sử dụng cơ chế Self-Attention..." |
+| 16 | **Danh sách gạch đầu dòng in đậm tiêu đề** | "- **Hiệu năng:** Tăng 20%.\n- **Chi phí:** Tiết kiệm 15%." | "Tối ưu thuật toán giúp tăng tốc 20%, đồng thời tiết kiệm 15% phần cứng" |
+| 17 | **Viết hoa kiểu Title Case ở tiêu đề** | "## Phân Tích Hiệu Năng Của Thuật Toán" | "## Phân tích hiệu năng của thuật toán" |
+| 18 | **Sử dụng Emoji và biểu tượng trang trí** | "💡 **Kết quả chính:** Đạt 95%" | "Kết quả thử nghiệm cho thấy mô hình đạt độ chính xác 95%" |
+| 19 | **Dấu ngoặc kép thẳng** | `gọi là "học sâu"` | `gọi là “học sâu”` |
 
-### Chatbot patterns
+### Nhóm dấu vết chatbot
 
-| # | Pattern | Before | After |
+| # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 20 | **Chatbot text left in the answer** | "I hope this helps! Let me know if..." | Remove it |
-| 21 | **Knowledge-limit disclaimers and guesses** | "While details are limited in available sources..." | State what is known or remove the claim |
-| 22 | **Overly agreeable tone** | "Great question! You're absolutely right!" | Answer directly |
+| 20 | **Lời chào và xã giao của Chatbot** | "Chắc chắn rồi! Dưới đây là phần mở đầu... Hy vọng hữu ích cho bạn!" | "Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu" |
+| 21 | **Tuyên bố giới hạn tri thức và phỏng đoán** | "Chưa công bố công khai, nhiều khả năng nhóm tác giả đã áp dụng nén..." | "Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán" |
+| 22 | **Giọng điệu nịnh nọt, tán đồng thái quá** | "Câu hỏi của bạn rất hay! Bạn hoàn toàn đúng khi nhận định..." | "Chi phí đầu tư phần cứng là một trong những rào cản chính khi triển khai" |
 
-### Filler and hedging
+### Nhóm sáo rỗng và rào đón
 
-| # | Pattern | Before | After |
+| # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 23 | **Filler phrases** | "In order to", "Due to the fact that" | "To", "Because" |
-| 24 | **Too many qualifiers** | "could potentially possibly" | "may" |
-| 25 | **Generic positive endings** | "The future looks bright" | End with a fact or a sourced plan |
+| 23 | **Cụm từ đệm rườm rà** | "Nhằm mục đích để nâng cao độ chính xác, việc áp dụng mô hình là cần thiết" | "Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron" |
+| 24 | **Từ ngữ rào đón, thiếu dứt khoát** | "Kết quả phần nào có thể xem là tương đối khả quan ở mức độ nhất định" | "Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử" |
+| 25 | **Kết bài lạc quan sáo rỗng** | "Tương lai tươi sáng đang mở ra cho ngành AI với những bước tiến vượt bậc" | Kết bài bằng kết quả thực nghiệm cụ thể hoặc phương hướng nghiên cứu |
+| 26 | **Động từ phụ tiếng Trung & thành ngữ sáo ngữ** | "tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu" | "phân tích các mẫu dữ liệu thu thập được" |
+| 27 | **Lên gân triết lý, giả vờ hé lộ chân lý** | "Vấn đề cốt lõi thực chất nằm ở chỗ..." | "Độ trễ hệ thống tăng chủ yếu do..." |
+| 28 | **Thông báo sắp trình bày điều gì** | "Hãy cùng tìm hiểu cơ chế hoạt động..." | "Giao thức TCP đảm bảo truyền dữ liệu tin cậy qua cơ chế bắt tay ba bước" |
+| 29 | **Lặp lại tiêu đề ngay câu đầu tiên** | "### 3.1. Kiến trúc hệ thống\nKiến trúc hệ thống đóng vai trò quan trọng..." | Trình bày trực tiếp nội dung kiến trúc ngay dưới tiêu đề |
+| 30 | **Mô tả phiên bản cũ đã bị loại bỏ** | "Hàm này viết lại để thay thế cách tiếp cận cũ vốn chạy O(n²)" | "Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1)" |
+| 31 | **Câu cụt kịch tính, ngắt câu gãy khúc** | "Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log." | "Hệ thống không ghi nhận lỗi và không cảnh báo, mà chỉ âm thầm ghi log" |
+| 32 | **Ẩn dụ, ví von sáo mòn** | "Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công..." | "Chất lượng tiền xử lý dữ liệu quyết định độ chính xác của mô hình" |
+| 33 | **Mở đầu bộc bạch giả tạo** | "Thành thật mà nói, việc tối ưu thời gian phản hồi là..." | "Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn..." |
+| 34 | **Phòng thủ, giải thích cho thắc mắc không ai hỏi** | "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của RDBMS, nhưng..." | "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ phi cấu trúc" |
+| 35 | **Đưa phương án giả định để tự bác bỏ** | "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ, nhưng..." | "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ khi vận hành" |
 
-## Full example
+## Ví dụ minh họa thực tế (Full example)
 
-*Details such as the month and neighborhood need to come from the writer. If they are missing, Humanizer should ask instead of making them up.*
+**Trước khi sửa (Đậm giọng điệu AI và văn dịch thô):**
+> Mô hình Transformer đóng vai trò vô cùng quan trọng, đánh dấu một bước ngoặt mang tính cách mạng trong quá trình xử lý ngôn ngữ tự nhiên. Theo các chuyên gia, đây là chiếc chìa khóa vạn năng mở ra một kỷ nguyên mới đầy hứa hẹn. Hệ thống xác thực — vốn được phát triển bởi nhóm tác giả dựa trên chuẩn OAuth 2.0 — cho phép phân quyền người dùng một cách tối ưu vượt trội. Bạn có thể thấy nó đạt độ chính xác 94.7% trên tập kiểm thử [1]. Bên cạnh những kết quả đạt được, đề tài vẫn còn tồn tại một số hạn chế nhất định. Trong thời gian tới, chúng tôi sẽ tiếp tục hoàn thiện để hướng tới tương lai tươi sáng.
 
-**Before (AI-sounding):**
-> I recently spent five unforgettable days in Lisbon, and let me tell you — this city completely stole my heart. From the moment I arrived, I knew I was somewhere truly special.
->
-> Nestled along the banks of the Tagus River, Lisbon stands as a vibrant testament to Portugal's enduring spirit, where rich history and modern energy intertwine at every turn. Yes, the famous hills are challenging — my legs certainly felt it! — but every climb rewards you with breathtaking, panoramic views that make it all worthwhile.
->
-> No trip would be complete without riding the iconic Tram 28, winding through the city's most historic neighborhoods. And the food? Simply divine. The original pastéis de nata at Pastéis de Belém are a beloved national treasure, and savoring one still warm was a moment I will never forget.
->
-> But what truly makes Lisbon special isn't just the sights — it's the feeling. Wander a few steps off the main squares and you'll discover a quieter, more authentic side: sun-drenched alleys, charming tiled facades, and friendly locals going about their daily lives, inviting you to slow down and savor every moment.
->
-> Of course, the must-see São Jorge Castle offers stunning views over the rooftops below. The queues can be long, but the experience is absolutely worth it for any history buff or curious traveler.
->
-> Would I go back? Absolutely. Lisbon isn't just a place to visit — it's a place to fall in love with, again and again. If you're dreaming of your next getaway, this is one destination that promises memories to last a lifetime. ✨
+**Sau khi biên tập (Văn phong học thuật tự nhiên, chuẩn mực):**
+> Mô hình Transformer được ứng dụng phổ biến trong các bài toán xử lý ngôn ngữ tự nhiên hiện đại. Hệ thống xác thực được phát triển dựa trên chuẩn OAuth 2.0, nhờ đó cho phép phân quyền người dùng chi tiết, đồng thời dữ liệu đạt độ chính xác 94,7% trên tập kiểm thử [1]. Tuy nhiên, nghiên cứu hiện mới thử nghiệm trên tập dữ liệu 2.000 mẫu và chưa đánh giá được hiệu năng trong điều kiện thiếu sáng.
 
-**After:**
-> I spent five days in Lisbon last October and still have mixed feelings about it. Beautiful, yes. Also harder on the knees than anyone warned me.
->
-> The hills are the whole story and somehow never make the brochures. My hotel was up in Alfama, which photographs beautifully and translates, in practice, to climbing what felt like a six-story staircase every time I wanted coffee. By the second day my calves had opinions. I started planning each walk around which way was downhill, which is a strange way to see a city but probably an honest one.
->
-> Everyone says to ride Tram 28, so I did, wedged against a stranger's backpack for forty minutes while three tour groups filmed the same corner. I would walk the route next time, or go before breakfast. The custard tarts, though, earn the fuss. I had one at a plain little place in Graça, still warm, and for about thirty seconds I understood why people build trips around pastry.
->
-> What I did not expect was how quiet the city gets away from the main squares. Two blocks uphill from any plaza it turns into laundry lines, chipped tile, open windows, and old men watching football with the sound turned up. That is the Lisbon I keep thinking about, not the castle.
->
-> The castle is fine. The view is great, the queue is long, and I spent more time shuffling toward the entrance than looking at anything once I got inside. If I had only two days, I would trade it for an afternoon of getting lost.
->
-> I would go back, but in spring and with better shoes. Lisbon does not bend over backward to make things easy for you. I think I liked that, even when my legs disagreed.
+## Cấu trúc thư mục repository
 
-## Sources
+```text
+.
+├── SKILL.md                          # Prompt chính điều phối kỹ năng và 35 pattern
+├── patterns/
+│   ├── schema.json                   # JSON schema chuẩn hóa định dạng các pattern
+│   ├── layer1-grammar-syntax.yml     # Quy tắc Lớp 1: Ngữ pháp, dấu câu và nhịp điệu
+│   └── layer2-rhetoric-style.yml     # Quy tắc Lớp 2: Tu từ, sáo ngữ AI và văn phong
+├── references/
+│   ├── layer1-grammar-syntax.md      # Tài liệu chi tiết về cú pháp và dấu câu Lớp 1
+│   ├── false-positives.md            # Danh mục các quy ước học thuật không được báo sai
+│   ├── registers.md                  # Hướng dẫn 4 phân hệ văn phong (Học thuật, Kỹ thuật, Công việc, Đời thường)
+│   └── chinese-source.md             # Cẩm nang xử lý văn dịch từ nguồn tài liệu tiếng Trung
+├── benchmarks/
+│   ├── rubric.md                     # Rubric 10 tiêu chí đánh giá chất lượng
+│   └── cases/academic-cases.json     # Bộ ca kiểm thử benchmark tự động
+└── scripts/
+    ├── catalog.py                    # Module duy nhất đọc và nạp YAML catalog
+    ├── validate-package.py           # Script kiểm tra tính nhất quán toàn bộ package
+    ├── validate-patterns.py          # Script kiểm thực catalog YAML theo schema
+    ├── run-benchmark.py              # Script chạy benchmark và chấm điểm mô hình
+    ├── test-kiem-tra.py              # Bộ test hồi quy cho linter
+    └── kiem_tra.py                   # Script linter tự động kiểm tra lỗi cơ học tiếng Việt
+```
 
-- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) is the source for the pattern list.
-- [WikiProject AI Cleanup](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup) maintains the page.
+## Đóng góp và Ghi công (Attributions & Acknowledgments)
 
-## Version history
+Repository này được fork từ **blader/humanizer** và tích hợp các nghiên cứu chuyên sâu về văn phong tiếng Việt từ **vietnamese-humanizer**. Thông tin bản quyền của cả hai tác giả gốc đều được bảo lưu đầy đủ trong [LICENSE](LICENSE) theo đúng giấy phép MIT.
+
+1. **[blader/humanizer](https://github.com/blader/humanizer)** (Giấy phép MIT): Cấu trúc phân loại pattern gốc, tích hợp Wikipedia AI Cleanup và kiến trúc kỹ thuật prompt.
+2. **[vietnamese-humanizer](https://github.com/longhang2004/vietnamese-humanizer)** bởi **longhang2004** (Giấy phép MIT): Thiết kế schema phân tầng Lớp 1 và Lớp 2, phương pháp đánh giá benchmark và hệ thống quy tắc đặc trưng cho tiếng Việt.
+
+## Lịch sử phiên bản (Version history)
 
 <details>
-<summary>Show release notes</summary>
+<summary>Xem nhật ký phát hành</summary>
 
-- **2.11.2** - Removed the plugin symlink and separate Claude Desktop package. Current Claude Code loads the root `SKILL.md` directly, so GitHub's source ZIP now works in Claude Desktop. No change to the 35 patterns.
-- **2.11.1** - Added a Claude Desktop-ready release package with one regular `humanizer/SKILL.md` file. GitHub's source archive still keeps the plugin symlink (fixes #224). No change to the 35 patterns.
-- **2.11.0** - Rewrote all repo guidance, descriptions, checks, and skill instructions in Plain Language. Kept all 35 patterns and their behavior.
-- **2.10.2** - Added the standard `skills/humanizer/` plugin path for Claude Desktop and older loaders. The path links to the root skill, so there is still one prompt (fixes #202).
-- **2.10.1** - Added figurative uses of `gate`, `gated`, and `gating` to §7. Kept real technical uses, such as feature gating and CI quality gates.
-- **2.10.0** - Added patterns #34 and #35 for old drafting ideas left in final text. Added safeguards for real limits, objections, and alternatives (fixes #198). Also improved §24 and the final rewrite step. 35 patterns total.
-- **2.9.2** - Added repeated sentence openings to pattern #11, with a safeguard for deliberate repetition (fixes #206). Expanded §28 to cover casual announcements. 33 patterns total.
-- **2.9.1** - Improved installation and package checks. Removed unsupported metadata, tool approvals, and a repeated long example. 33 patterns total.
-- **2.9.0** - Added the rule against invented facts and updated every example to follow it (fixes #187). Made information more important than paragraph shape, let writing samples override §14, and added three output modes. 33 patterns total.
-- **2.8.3** - Moved the version to `metadata.version` for Agent Skills compatibility. 33 patterns total.
-- **2.8.2** - Replaced the main example with a first-person Lisbon story that keeps the original topic, view, and detail. 33 patterns total.
-- **2.8.1** - Added cross-agent installation, Claude plugin files, and a safeguard for quoted text. 33 patterns total.
-- **2.8.0** - Added patterns #31-33 and expanded pattern #20 to catch chatbot offers. 33 patterns total.
-- **2.7.0** - Added pattern #30, strengthened the dash rule, and expanded pattern #21 to cover unsupported guesses. 30 patterns total.
-- **2.6.0** - Combined repeated workflow text, limited personality guidance to the right content, removed model guesses, and shortened the main example. 29 patterns total.
-- **2.5.1** - Added passive voice and missing subjects. 29 patterns total.
-- **2.5.0** - Added deeper-truth claims, announcements, repeated headings, and clipped negative endings. Tightened the dash rule and corrected the frontmatter. 28 patterns total.
-- **2.4.0** - Added writing-sample matching.
-- **2.3.0** - Added hyphenated word pairs.
-- **2.2.0** - Added a draft check and second rewrite.
-- **2.1.1** - Corrected the curly-quote example.
-- **2.1.0** - Added before/after examples for all 24 patterns.
-- **2.0.0** - Rewrote the skill from the Wikipedia source.
-- **1.0.0** - First release.
+- **2.12.0**: Chuẩn hóa pattern catalog thành nguồn chân lý duy nhất (single source of truth): `scripts/kiem_tra.py` tự động đọc tín hiệu từ `patterns/*.yml` và lọc theo văn phong đã chọn. Khắc phục 3 trường hợp báo oan (từ nối nguyên nhân `bởi vì`, chuỗi 2 câu ngắn, và từ nằm trong ngoặc kép trích dẫn) kèm bài test trong `scripts/test-kiem-tra.py`. Tái cấu trúc benchmark runner hỗ trợ chấm điểm output thực tế bằng `--actual`. Bổ sung 4 quy tắc Lớp 1 (ngày tháng, chuỗi `của` lặp, thừa từ chỉ số nhiều, thừa từ `sẽ`) và tích hợp toàn bộ kiểm tra vào CI.
+- **2.11.2**: Nâng cấp toàn diện thành Humanizer-VietAcademic: tích hợp ngữ pháp/nhịp điệu tiếng Việt, 35 pattern học thuật hóa, danh mục YAML, benchmark runner và tài liệu tham chiếu đa phân hệ.
+- **2.11.1**: Bổ sung gói phát hành tương thích với Claude Desktop.
+- **2.11.0**: Viết lại hướng dẫn prompt theo phong cách Plain Language dễ hiểu.
+- **1.0.0**: Phiên bản phát hành đầu tiên.
 
 </details>
 
-## License
+## Giấy phép (License)
 
-MIT
-
-## Installation
-
-Install Humanizer with the Skills CLI:
-
-```bash
-npx skills add blader/humanizer --global
-```
-
-Leave off `--global` to install Humanizer only in the current project. Add `--agent <name>` or `--agent '*'` to choose which agents receive it, then reload their skills.
-
-Claude Code 2.1.142 or newer can install the plugin instead:
-
-```text
-/plugin marketplace add blader/humanizer
-/plugin install humanizer@humanizer
-```
-
-The plugin command is `/humanizer:humanizer`.
-
-In Claude Desktop, download this repository as a ZIP and upload it as a skill.
-
-For a manual install, copy `SKILL.md` into the agent's skill folder.
+Giấy phép MIT, bao gồm bản quyền của cả hai tác giả gốc. Xem [LICENSE](LICENSE) để biết thêm chi tiết.

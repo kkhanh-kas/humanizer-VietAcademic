@@ -1,0 +1,134 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Humanizer-VietAcademic Pattern Schema",
+  "description": "Schema for Vietnamese Academic writing patterns and AI-cleaning rules. Derived from vietnamese-humanizer and blader/humanizer.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "lop",
+    "category",
+    "finding_type",
+    "scope",
+    "aggregation",
+    "description",
+    "bad_examples",
+    "good_examples"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^VA-(L1|L2)-[0-9]{2}$",
+      "description": "Unique pattern ID (e.g. VA-L1-01, VA-L2-07)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name of the pattern"
+    },
+    "lop": {
+      "type": "integer",
+      "enum": [1, 2],
+      "description": "1: Grammar/Syntax/Punctuation (Layer 1), 2: Rhetoric/AI Fluff (Layer 2)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "punctuation",
+        "syntax",
+        "cadence",
+        "pronouns",
+        "register",
+        "content",
+        "rhetoric",
+        "style",
+        "chatbot",
+        "filler",
+        "hedging"
+      ]
+    },
+    "finding_type": {
+      "type": "string",
+      "enum": ["error", "warning", "preference", "heuristic"],
+      "description": "Severity type (error/warning map to heavy/light mechanical checks)"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["token", "phrase", "sentence", "paragraph", "document"]
+    },
+    "aggregation": {
+      "type": "string",
+      "enum": ["single", "count", "density", "variance"]
+    },
+    "min_occurrences": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Minimum violations before triggering a warning"
+    },
+    "false_positive_risk": {
+      "type": "string",
+      "enum": ["low", "medium", "high"],
+      "default": "low"
+    },
+    "che_do": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["hoc-thuat", "ky-thuat", "cong-viec", "doi-thuong"]
+      },
+      "default": ["hoc-thuat"]
+    },
+    "description": {
+      "type": "string"
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "signals": {
+      "type": "object",
+      "properties": {
+        "regex": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "phrases": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exclude_phrases": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "bad_examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "good_examples": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "mode": {
+                "type": "string",
+                "enum": ["clean_rewrite", "review_comment", "needs_author_decision", "no_change"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

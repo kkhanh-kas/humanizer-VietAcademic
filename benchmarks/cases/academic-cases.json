@@ -1,0 +1,247 @@
+[
+  {
+    "id": "BENCH-VA-001",
+    "che_do": "hoc-thuat",
+    "domain": "khoa-hoc-may-tinh",
+    "input": "Hệ thống xác thực — vốn được phát triển dựa trên chuẩn OAuth 2.0 — cho phép phân quyền người dùng một cách chi tiết. Dữ liệu được mã hóa bởi thuật toán AES-256. Bạn có thể thấy nó đạt độ chính xác 94.7% trên tập kiểm thử [1].",
+    "context": "",
+    "citations": [
+      "[1]"
+    ],
+    "constraints": [
+      "Bảo toàn số thập phân 94,7%",
+      "Bảo toàn thẻ [1]",
+      "Xóa dấu gạch ngang",
+      "Bỏ 'được ... bởi'",
+      "Bỏ đại từ 'bạn', 'nó'"
+    ],
+    "expected_patterns": [
+      "VA-L2-14",
+      "VA-L1-02",
+      "VA-L1-03",
+      "VA-L1-06",
+      "VA-L1-11"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Hệ thống xác thực được phát triển dựa trên chuẩn OAuth 2.0, nhờ đó cho phép phân quyền người dùng chi tiết, đồng thời dữ liệu do thuật toán AES-256 mã hóa tự động và đạt độ chính xác 94,7% trên tập kiểm thử [1].",
+    "must_preserve": [
+      "94,7%",
+      "[1]",
+      "OAuth 2.0",
+      "AES-256"
+    ],
+    "must_not_add": [
+      "nguồn mới",
+      "số liệu mới"
+    ],
+    "blockers": [
+      "Mất hoặc đổi vị trí thẻ trích dẫn [1]",
+      "Đổi mức chắc chắn",
+      "Xuất hiện chữ 'bạn'"
+    ]
+  },
+  {
+    "id": "BENCH-VA-002",
+    "che_do": "hoc-thuat",
+    "domain": "tri-tue-nhan-tao",
+    "input": "Mô hình Transformer đóng vai trò vô cùng quan trọng, đánh dấu bước ngoặt mang tính cách mạng trong quá trình xử lý ngôn ngữ tự nhiên. Theo các chuyên gia, đây là chiếc chìa khóa mở ra tương lai tươi sáng cho ngành AI.",
+    "context": "",
+    "citations": [],
+    "constraints": [
+      "Xóa sáo ngữ thổi phồng",
+      "Xóa nguồn mơ hồ",
+      "Xóa kết luận lạc quan sáo rỗng"
+    ],
+    "expected_patterns": [
+      "VA-L2-01",
+      "VA-L2-04",
+      "VA-L2-05",
+      "VA-L2-25",
+      "VA-L2-32"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Mô hình Transformer được ứng dụng phổ biến trong các bài toán xử lý ngôn ngữ tự nhiên hiện đại.",
+    "must_preserve": [
+      "Transformer",
+      "xử lý ngôn ngữ tự nhiên"
+    ],
+    "must_not_add": [
+      "nguồn bịa đặt",
+      "năm xuất bản không có"
+    ],
+    "blockers": [
+      "Bịa nguồn hoặc tên chuyên gia"
+    ]
+  },
+  {
+    "id": "BENCH-VA-003",
+    "che_do": "hoc-thuat",
+    "domain": "khoa-hoc-du-lieu",
+    "input": "Bên cạnh những kết quả đạt được, đề tài vẫn còn tồn tại một số hạn chế nhất định. Trong thời gian tới, nhóm nghiên cứu sẽ tiếp tục hoàn thiện để đáp ứng tốt hơn nữa nhu cầu thực tiễn.",
+    "context": "Đề tài thử nghiệm trên tập 2.000 ảnh y tế và chưa đánh giá trên ảnh chụp thiếu sáng.",
+    "citations": [],
+    "constraints": [
+      "Giữ mục Hạn chế",
+      "Xóa công thức sáo rỗng",
+      "Đưa ra hạn chế kỹ thuật cụ thể từ context"
+    ],
+    "expected_patterns": [
+      "VA-L2-06",
+      "VA-L2-23"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Mô hình hiện mới thử nghiệm trên tập dữ liệu 2.000 ảnh y tế và chưa đánh giá được hiệu năng trong điều kiện ảnh chụp thiếu sáng.",
+    "must_preserve": [
+      "2.000 ảnh y tế",
+      "thiếu sáng"
+    ],
+    "must_not_add": [
+      "số liệu mới ngoài context"
+    ],
+    "blockers": [
+      "Xóa bỏ hoàn toàn phần hạn chế"
+    ]
+  },
+  {
+    "id": "BENCH-VA-004",
+    "che_do": "hoc-thuat",
+    "domain": "khoa-hoc-may-tinh",
+    "input": "Nhóm nghiên cứu khảo sát 500 người dùng trong sáu tháng, nhờ đó xác định được ba nhóm hành vi truy cập khác nhau. Kết quả này được trình bày ở Chương 4.",
+    "context": "",
+    "citations": [],
+    "constraints": [
+      "Văn bản đã tự nhiên, không được sửa",
+      "Không được tách câu dài thành câu ngắn",
+      "Không được thêm từ nối cho có"
+    ],
+    "expected_patterns": [],
+    "expected_output_mode": "no_change",
+    "expected_output": "Nhóm nghiên cứu khảo sát 500 người dùng trong sáu tháng, nhờ đó xác định được ba nhóm hành vi truy cập khác nhau. Kết quả này được trình bày ở Chương 4.",
+    "must_preserve": [
+      "500 người dùng",
+      "Chương 4"
+    ],
+    "must_not_add": [
+      "từ nối thừa",
+      "câu dẫn nhập mới"
+    ],
+    "blockers": [
+      "Sửa một câu vốn đã đúng",
+      "Tách câu ghép thành nhiều câu ngắn"
+    ]
+  },
+  {
+    "id": "BENCH-VA-005",
+    "che_do": "hoc-thuat",
+    "domain": "an-toan-thong-tin",
+    "input": "Nhiều nghiên cứu chỉ ra rằng tấn công dò mật khẩu chiếm phần lớn sự cố an toàn thông tin trong doanh nghiệp hiện nay.",
+    "context": "Bản thảo không kèm danh mục tài liệu tham khảo cho câu này.",
+    "citations": [],
+    "constraints": [
+      "Không được bịa nguồn để lấp chỗ trống",
+      "Phải trả về nhận xét biên tập thay vì viết lại"
+    ],
+    "expected_patterns": [
+      "VA-L2-05"
+    ],
+    "expected_output_mode": "review_comment",
+    "expected_output": "Câu này quy kết cho “nhiều nghiên cứu” nhưng bản thảo không kèm nguồn nào, vì vậy tác giả cần bổ sung trích dẫn cụ thể hoặc số liệu thống kê đi kèm trước khi giữ lại nhận định về tấn công dò mật khẩu.",
+    "must_preserve": [
+      "tấn công dò mật khẩu"
+    ],
+    "must_not_add": [
+      "tên nghiên cứu không có thật",
+      "số liệu tự nghĩ ra"
+    ],
+    "blockers": [
+      "Bịa nguồn hoặc tên tác giả",
+      "Viết lại câu như thể nguồn đã có sẵn"
+    ]
+  },
+  {
+    "id": "BENCH-VA-006",
+    "che_do": "hoc-thuat",
+    "domain": "khoa-hoc-du-lieu",
+    "input": "Mô hình cho kết quả tốt hơn trên tập dữ liệu mới sau khi nhóm nghiên cứu điều chỉnh tham số.",
+    "context": "Không rõ 'tốt hơn' là so với mô hình cũ hay so với chính nó trước khi điều chỉnh.",
+    "citations": [],
+    "constraints": [
+      "Không được tự chọn một cách hiểu",
+      "Phải nêu rõ hai cách hiểu cho tác giả quyết định"
+    ],
+    "expected_patterns": [],
+    "expected_output_mode": "needs_author_decision",
+    "expected_output": "Cụm “tốt hơn” ở đây có hai cách hiểu dẫn tới hai khẳng định khác nhau, vì vậy tác giả cần chọn một. Cách thứ nhất là mô hình sau điều chỉnh vượt mô hình gốc trên cùng tập dữ liệu, còn cách thứ hai là mô hình đạt kết quả cao hơn trên tập dữ liệu mới so với tập cũ.",
+    "must_preserve": [
+      "tốt hơn"
+    ],
+    "must_not_add": [
+      "chỉ số đo lường không có trong bản thảo"
+    ],
+    "blockers": [
+      "Tự chọn một cách hiểu rồi viết lại",
+      "Thêm số liệu để làm rõ nghĩa"
+    ]
+  },
+  {
+    "id": "BENCH-VA-007",
+    "che_do": "ky-thuat",
+    "domain": "tai-lieu-ky-thuat",
+    "input": "Tệp cấu hình được đọc bởi tiến trình khởi động, và các tham số sẽ được nạp một cách tự động. Bạn hãy chạy npm install trước khi khởi động dịch vụ.",
+    "context": "Tài liệu hướng dẫn cho lập trình viên, cho phép xưng hô 'bạn'.",
+    "citations": [],
+    "constraints": [
+      "Giữ xưng hô 'bạn' vì đây là câu hướng dẫn thao tác",
+      "Bỏ 'được ... bởi' và 'một cách'",
+      "Giữ nguyên lệnh npm install"
+    ],
+    "expected_patterns": [
+      "VA-L1-02",
+      "VA-L1-03"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Tiến trình khởi động đọc tệp cấu hình và nạp tham số tự động. Bạn hãy chạy npm install trước khi khởi động dịch vụ.",
+    "must_preserve": [
+      "npm install",
+      "Bạn"
+    ],
+    "must_not_add": [
+      "bước cài đặt không có trong bản gốc"
+    ],
+    "blockers": [
+      "Xóa xưng hô 'bạn' trong câu hướng dẫn của tài liệu kỹ thuật",
+      "Đổi tên lệnh hoặc tham số"
+    ]
+  },
+  {
+    "id": "BENCH-VA-008",
+    "che_do": "hoc-thuat",
+    "domain": "kiem-thu-bao-oan",
+    "input": "Mẫu dữ liệu được lọc kỹ bởi vì nhiễu nền rất lớn, và chúng tôi giữ lại 2.000 bản ghi hợp lệ. Một người tham gia nhận xét: “Bạn nên thử lại sau.” Chi tiết quy trình lọc trình bày ở Phụ lục A.",
+    "context": "Case này canh gác ba lỗi báo oan đã từng xảy ra.",
+    "citations": [],
+    "constraints": [
+      "'bởi vì' là liên từ nguyên nhân, không phải bị động tác thể",
+      "'chúng tôi' là đại từ học thuật đúng chuẩn",
+      "Chữ 'bạn' nằm trong trích dẫn nguyên văn nên phải giữ",
+      "Hai câu ngắn liền nhau là nhịp hợp lệ"
+    ],
+    "expected_patterns": [],
+    "expected_output_mode": "no_change",
+    "expected_output": "Mẫu dữ liệu được lọc kỹ bởi vì nhiễu nền rất lớn, và chúng tôi giữ lại 2.000 bản ghi hợp lệ. Một người tham gia nhận xét: “Bạn nên thử lại sau.” Chi tiết quy trình lọc trình bày ở Phụ lục A.",
+    "must_preserve": [
+      "bởi vì",
+      "chúng tôi",
+      "“Bạn nên thử lại sau.”",
+      "2.000 bản ghi"
+    ],
+    "must_not_add": [
+      "chú thích biên tập"
+    ],
+    "blockers": [
+      "Đổi 'bởi vì' thành cấu trúc chủ động",
+      "Sửa chữ 'bạn' bên trong trích dẫn nguyên văn",
+      "Gộp hai câu ngắn lại"
+    ]
+  }
+]

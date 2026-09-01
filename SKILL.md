@@ -1,456 +1,417 @@
 ---
-name: humanizer
+name: humanizer-viet-academic
 description: |
-  Rewrite AI-sounding text so it reads naturally without changing what it says.
-  Use when editing or reviewing prose for inflated claims,
-  sales language, vague sources, repetitive structure, stock AI words, passive
-  voice, filler, or chatbot artifacts. Based on Wikipedia's "Signs of AI writing."
+  Rewrite and edit formal Vietnamese prose (academic reports, theses, proposals,
+  technical documentation) to eliminate AI writing patterns, translationese, and
+  fluff while strictly preserving claims and citations.
+  Use when asked to "sửa văn phong học thuật", "viết lại cho mượt", "bỏ bớt văn dịch",
+  "humanize text", or reviewing formal Vietnamese academic papers.
 license: MIT
 metadata:
-  version: "2.11.2"
+  version: "2.12.0"
 ---
 
-# Humanizer: remove AI writing patterns
+# Humanizer-VietAcademic: Remove AI patterns in Vietnamese academic prose
 
-Rewrite AI-sounding text so it reads like the writer, not a chatbot. Do not change what it says or make up details.
+Rewrite AI-sounding or machine-translated Vietnamese text so it reads as natural, formal Vietnamese academic prose written by a scholar. Strictly preserve every claim, data point, and citation without inventing facts.
 
-The patterns below come from Wikipedia's ["Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup.
+## Governing principle
+
+> **When in doubt, join clauses rather than split them.**
+
+English splits clauses with punctuation; Vietnamese connects with words. Natural Vietnamese academic sentences string 3–4 clauses together using commas and connectives. Splitting them into short, clipped sentences is the single most common AI translation fault.
 
 ## What to do
 
-When given text to humanize:
+1. **Find AI and translation patterns.** Check the text against the 35 numbered patterns below.
+2. **Preserve every claim and citation.** Retain all facts, names, dates, numbers, equations, and literature citations (`[1]`, `(Nguyen et al., 2024)`). Never invent facts or citations.
+3. **Ensure Vietnamese academic cadence.** Maintain connective density (4–5 per 100 syllables) and alternate long (median 21 syllables) and short sentences.
+4. **Enforce hard punctuation rules.** Ban unspaced dashes (`—`, `–`) and semicolons (`;`) inside sentences. Require curved quotation marks (`“ ”`) and decimal commas (`94,7%`).
 
-1. **Find AI patterns.** Check the text against the patterns below.
-2. **Keep every claim.** You may shorten dull parts, expand useful parts, and merge or split paragraphs. Keep the information even when you change the structure.
-3. **Do not invent facts.** Do not add a fact, name, number, date, quote, or citation unless it comes from the source or the user. If a sentence needs a missing detail, ask for it or use a simpler sentence. You may add an opinion or reaction when the writer's voice calls for one, but you may not add a factual claim. Fiction is exempt because invented details are part of the task.
-4. **Match the voice.** Use the right tone for the text, such as formal, casual, or technical. Add personality only when the text and the writer call for it.
+## Hard rules for academic Vietnamese
 
-The input type controls what you return. See [How to return the result](#how-to-return-the-result). Use the same rewrite process in every mode.
+- **Connectives:** Use subordinating conjunctions freely inside sentences (*và, là, khi, mà, nếu, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, bên cạnh đó, ngoài ra*). Avoid spoken particles (*vậy nên, thế nên, thì, rồi, á, nhé*).
+- **Passive voice & Pronouns:** Eliminate `được ... bởi` (calque of `be ... by`). Never address the reader as *bạn*. Use *chúng tôi, tác giả, nhóm nghiên cứu* or omit the subject. Replace pronoun *nó* with the specific noun.
+- **Mandatory sections:** Keep required report sections (*Kết luận*, *Hạn chế và hướng phát triển*), but eliminate empty filler inside them.
 
-## Match the writer's voice
+## Bundled resources
 
-If the user provides a writing sample (their own previous writing), analyze it before rewriting:
+Read a file below only when the case calls for it. Do not load them all up front.
 
-1. Read the sample first. Note its sentence length, word choice, paragraph openings, punctuation, repeated phrases, and transitions.
-2. Match those habits. Do not replace casual words with formal ones or remove deliberate quirks.
-3. If there is no sample, use the guidance below.
+- `references/false-positives.md`: valid Vietnamese academic conventions that must never be flagged. Read this before you change any sentence.
+- `references/registers.md`: rules for the technical (`ky-thuat`) and workplace (`cong-viec`) registers. Read this when the text is not an academic paper.
+- `references/chinese-source.md`: extra faults that appear when the source literature is Chinese. Read this when the draft is translated or adapted from Chinese.
+- `references/layer1-grammar-syntax.md`: the full grammar, punctuation, and cadence rules behind the hard rules above.
+- `patterns/layer1-grammar-syntax.yml` and `patterns/layer2-rhetoric-style.yml`: the machine-readable catalog. Each rule has a stable ID, a severity, and a signal regex. Cite the ID when you report a finding.
 
-A writing sample takes priority over these style rules. If the sample uses em dashes, keep them at about the same rate. Do not apply §14 as a ban.
+When you can run shell commands, run `python scripts/kiem_tra.py <file>` first to catch mechanical faults, then edit by hand for cadence. The script reports only what a regex can prove, so it never judges rhythm and it never rewrites text for you.
 
-## Add personality only when it fits
-
-Removing AI patterns is only half the job. The result should still sound like a person.
-
-Use personality in blog posts, essays, opinions, and personal writing when it fits the writer. Keep reference, technical, legal, and factual text neutral. Do not add opinions or first-person language where they do not belong.
-
-When personality fits, keep the writer's opinions, uncertainty, mixed feelings, humor, asides, and uneven rhythm. Never invent facts to make the text feel personal.
+---
 
 ## Content patterns
 
 ### 1. Inflated claims about importance and legacy
 
-**Words to watch:** stands/serves as, is a testament/reminder, a vital/significant/crucial/pivotal/key role/moment, underscores/highlights its importance/significance, reflects broader, symbolizing its ongoing/enduring/lasting, contributing to the, setting the stage for, marking/shaping the, represents/marks a shift, key turning point, evolving landscape, focal point, indelible mark, deeply rooted
-**Problem:** AI writing often claims that ordinary details mark a major change, prove a legacy, or reflect a broad trend.
+**Words to watch:** đóng vai trò quan trọng/then chốt, đánh dấu bước ngoặt, là minh chứng rõ nét/hùng hồn, khẳng định vị thế, mở ra một chương mới, tạo tiền đề vững chắc, góp phần không nhỏ vào, biểu tượng cho
+**Problem:** AI inflates ordinary technical details into historic milestones.
 **Before:**
-> The Statistical Institute of Catalonia was officially established in 1989, marking a pivotal moment in the evolution of regional statistics in Spain. This initiative was part of a broader movement across Spain to decentralize administrative functions and enhance regional governance.
+> Mô hình mạng nơ-ron này được đề xuất vào năm 2021, đánh dấu một bước ngoặt mang tính cách mạng trong quá trình nhận diện hình ảnh, tạo tiền đề vững chắc cho các nghiên cứu tiếp theo.
 **After:**
-> The Statistical Institute of Catalonia was established in 1989, part of a wider decentralization of administrative functions in Spain.
+> Mô hình mạng nơ-ron này được đề xuất vào năm 2021 nhằm phục vụ bài toán nhận diện hình ảnh.
 
 ### 2. Name-dropping to prove importance
 
-**Words to watch:** independent coverage, local/regional/national media outlets, written by a leading expert, active social media presence
-**Problem:** AI writing often lists well-known publications or follower counts to prove that a person matters. The list usually gives no useful context.
+**Words to watch:** các chuyên gia đầu ngành, các tạp chí hàng đầu, phương tiện truyền thông uy tín, được trích dẫn rộng rãi
+**Problem:** AI lists vague authorities instead of concrete citations.
 **Before:**
-> Her views have been cited in The New York Times, BBC, Financial Times, and The Hindu. She maintains an active social media presence with over 500,000 followers.
+> Thuật toán này đã được nhắc đến bởi nhiều chuyên gia đầu ngành và các trang công nghệ uy tín.
 **After:**
-> Her views have been cited in The New York Times and the BBC.
+> Thuật toán này được phân tích chi tiết trong nghiên cứu của LeCun et al. [1].
 
-If the source explains what the person said and where, keep that useful citation. Do not invent context for a shorter version.
+### 3. Shallow analysis with hollow clauses
 
-### 3. Shallow analysis with -ing phrases
-
-**Words to watch:** highlighting/underscoring/emphasizing..., ensuring..., reflecting/symbolizing..., contributing to..., cultivating/fostering..., encompassing..., showcasing...
-**Problem:** AI writing often adds an -ing phrase to make a simple fact sound deeper than it is.
+**Words to watch:** qua đó thể hiện, từ đó khẳng định, góp phần nâng cao, cho thấy sự quan tâm sâu sắc tới, nhằm làm sáng tỏ
+**Problem:** AI adds empty trailing clauses to simulate analytical depth.
 **Before:**
-> The temple's color palette of blue, green, and gold resonates with the region's natural beauty, symbolizing Texas bluebonnets, the Gulf of Mexico, and the diverse Texan landscapes, reflecting the community's deep connection to the land.
+> Hệ thống sử dụng cơ chế xác thực hai lớp, qua đó thể hiện sự quan tâm sâu sắc tới bảo mật và góp phần nâng cao trải nghiệm người dùng.
 **After:**
-> The temple is painted blue, green, and gold, colors meant to evoke Texas bluebonnets and the Gulf of Mexico.
+> Hệ thống sử dụng cơ chế xác thực hai lớp để tăng cường bảo mật tài khoản.
 
-### 4. Sales language
+### 4. Sales language and puffery
 
-**Words to watch:** boasts a, vibrant, rich (figurative), profound, enhancing its, showcasing, exemplifies, commitment to, natural beauty, nestled, in the heart of, groundbreaking (figurative), renowned, breathtaking, must-visit, stunning
-**Problem:** AI writing often sounds like an advertisement, especially when it describes places, culture, products, or organizations.
+**Words to watch:** đột phá, hoàn hảo, mạnh mẽ, toàn diện, tối ưu vượt trội, sâu sắc, phong phú, tuyệt đẹp
+**Problem:** AI uses promotional and emotional adjectives in objective research text.
 **Before:**
-> Nestled within the breathtaking region of Gonder in Ethiopia, Alamata Raya Kobo stands as a vibrant town with a rich cultural heritage and stunning natural beauty.
+> Giải pháp cung cấp một kiến trúc vi dịch vụ vô cùng mạnh mẽ và hoàn hảo, mang lại trải nghiệm tối ưu vượt trội.
 **After:**
-> Alamata Raya Kobo is a town in the Gonder region of Ethiopia.
+> Giải pháp sử dụng kiến trúc vi dịch vụ để giảm độ trễ xử lý dữ liệu.
 
-### 5. Vague sources
+### 5. Vague sources and unattributed claims
 
-**Words to watch:** Industry reports, Observers have cited, Experts argue, Some critics argue, several sources/publications (when few cited)
-**Problem:** AI writing often assigns a claim to unnamed experts, critics, reports, or observers.
+**Words to watch:** theo các chuyên gia, nhiều nghiên cứu chỉ ra rằng, giới quan sát nhận định, theo một số nguồn tin
+**Problem:** AI attributes claims to unnamed experts.
 **Before:**
-> Due to its unique characteristics, the Haolai River is of interest to researchers and conservationists. Experts believe it plays a crucial role in the regional ecosystem.
+> Theo các chuyên gia, việc chuyển dịch sang điện toán đám mây là xu hướng tất yếu của mọi doanh nghiệp.
 **After:**
-> Researchers and conservationists study the Haolai River for its unusual characteristics.
+> Khảo sát của Gartner [2] cho thấy 85% doanh nghiệp đang chuyển dịch hạ tầng lên điện toán đám mây.
 
-Name a real source when the source text provides one. Otherwise, remove the unsupported claim. Never invent a source.
+### 6. Formulaic mandatory sections
 
-### 6. Formulaic challenges and outlook sections
-
-**Words to watch:** Despite its... faces several challenges..., Despite these challenges, Challenges and Legacy, Future Outlook
-**Problem:** AI articles often add a stock section about challenges, future prospects, or continued growth. These sections usually repeat vague claims instead of adding facts.
+**Words to watch:** Bên cạnh những kết quả đạt được, vẫn còn tồn tại một số hạn chế nhất định, trong thời gian tới sẽ tiếp tục hoàn thiện
+**Problem:** Do not delete mandatory academic sections like "Hạn chế và hướng phát triển" (Limitations). Remove the empty cliché and state exact technical constraints.
 **Before:**
-> Despite its industrial prosperity, Korattur faces challenges typical of urban areas, including traffic congestion and water scarcity. Despite these challenges, with its strategic location and ongoing initiatives, Korattur continues to thrive as an integral part of Chennai's growth.
+> Mặc dù đạt kết quả khả quan, đề tài vẫn còn một số hạn chế nhất định. Nhóm nghiên cứu sẽ tiếp tục hoàn thiện trong tương lai.
 **After:**
-> Korattur has recurring traffic congestion and water shortages.
+> Mô hình hiện chỉ thử nghiệm trên tập dữ liệu 2.000 mẫu và chưa đánh giá được hiệu năng trong điều kiện thiếu sáng.
 
-Add details such as dates or public actions only when they come from the source or the user.
+---
 
 ## Language and grammar patterns
 
-### 7. Overused AI words
+### 7. Overused AI words and stock clichés
 
-**High-frequency AI words:** Actually, additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, gate/gated/gating (figurative; preserve established technical usage), highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract noun), pivotal, quietly, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
-**Problem:** AI writing uses these words much more often than most people do, especially in groups.
+**Words to watch:** bức tranh toàn cảnh, đi sâu vào, kiến tạo, nâng tầm, chuyển mình, bứt phá, chìa khóa, nền tảng vững chắc, đòn bẩy, cột mốc, lăng kính, giao thoa
+**Problem:** AI writing clusters specific abstract buzzwords.
 **Before:**
-> Additionally, a distinctive feature of Somali cuisine is the incorporation of camel meat. An enduring testament to Italian colonial influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes have integrated into the traditional diet.
+> Bài viết đi sâu vào bức tranh toàn cảnh của thị trường bán dẫn, qua đó kiến tạo nền tảng vững chắc cho việc hoạch định chính sách.
 **After:**
-> Somali cuisine also includes camel meat, which is considered a delicacy. Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
+> Bài viết phân tích cấu trúc thị trường bán dẫn và tổng hợp các chính sách hỗ trợ hiện hành.
 
 ### 8. Avoiding is and are
 
-**Words to watch:** serves as/stands as/marks/represents [a], boasts/features/offers [a]
-**Problem:** AI writing often replaces simple verbs such as *is*, *are*, and *has* with longer phrases.
+**Words to watch:** đóng vai trò là, được xem là, sở hữu, mang trong mình, được biết đến với tư cách
+**Problem:** Replacing simple verbs (*là*, *có*) with pompous verb phrases.
 **Before:**
-> Gallery 825 serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces and boasts over 3,000 square feet.
+> PostgreSQL đóng vai trò là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở phổ biến.
 **After:**
-> Gallery 825 is LAAA's exhibition space for contemporary art. The gallery has four rooms totaling 3,000 square feet.
+> PostgreSQL là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở.
 
-### 9. Not X but Y and clipped negative endings
-**Problem:** AI writing overuses forms such as "Not only...but..." and "It's not just X, it's Y."
+### 9. Repetitive symmetric structures
 
-It also adds clipped endings such as "no guessing" instead of writing a clear clause.
+**Words to watch:** không chỉ ... mà còn, không phải là ... mà là
+**Problem:** Overusing symmetric parallel templates across multiple sentences.
 **Before:**
-> It's not just about the beat riding under the vocals; it's part of the aggression and atmosphere. It's not merely a song, it's a statement.
+> Thuật toán không chỉ giúp tối ưu bộ nhớ mà còn tăng tốc độ thực thi, không chỉ xử lý số liệu mà còn phân tích ngữ nghĩa.
 **After:**
-> The heavy beat adds to the aggressive tone.
-**Before (tailing negation):**
-> The options come from the selected item, no guessing.
-**After:**
-> The options come from the selected item without forcing the user to guess.
+> Thuật toán tối ưu bộ nhớ, tăng tốc độ thực thi và hỗ trợ phân tích ngữ nghĩa.
 
-### 10. Forced groups of three
-**Problem:** AI writing often forces ideas into groups of three to sound complete.
+### 10. Forced parallel groups
+
+**Problem:** Forcing technical points into artificial groups of three or four symmetrical adjectives/nouns.
 **Before:**
-> The event features keynote sessions, panel discussions, and networking opportunities. Attendees can expect innovation, inspiration, and industry insights.
+> Giao diện cần đảm bảo tính trực quan, tính thẩm mỹ, tính tương tác và tính bảo mật.
 **After:**
-> The event includes talks and panels. There's also time for informal networking between sessions.
+> Giao diện cần trực quan và đảm bảo an toàn thông tin khi thao tác.
 
-### 11. Changing names and repeating sentence openings
-**Problem:** AI writing handles repetition by rule instead of by ear. It may keep renaming the same person or thing. It may also start several sentences with the same subject, often *she* or *he*.
+### 11. Synonym cycling and inconsistent naming
 
-Use one clear name for the same subject. For repeated openings, merge sentences, change the subject when that helps, or begin with the action.
-**Before (synonym cycling):**
-> The protagonist faces many challenges. The main character must overcome obstacles. The central figure eventually triumphs. The hero returns home.
+**Words to watch:** tác giả / người viết / nhà nghiên cứu (alternating within the same paragraph)
+**Problem:** Cycling synonyms mechanically. Use one consistent professional designation.
+**Before:**
+> Nhóm tác giả khảo sát 500 người dùng. Người viết nhận thấy độ trễ cao. Nhà nghiên cứu đề xuất cải tiến thuật toán.
 **After:**
-> The protagonist faces many challenges but eventually triumphs and returns home.
-**Before (repeated openings):**
-> She noted the door. She noted the lock on it. She filed both away.
-**After:**
-> She noted the door and its lock, then filed both away.
-
-Do not ban the repeated word. Fix the repeated sentence pattern. The remaining sentence may still start with "She."
+> Nhóm nghiên cứu khảo sát 500 người dùng, ghi nhận độ trễ hệ thống còn cao và đề xuất hướng tối ưu thuật toán.
 
 ### 12. False from X to Y ranges
-**Problem:** AI writing often uses "from X to Y" when X and Y do not form a real range.
-**Before:**
-> Our journey through the universe has taken us from the singularity of the Big Bang to the grand cosmic web, from the birth and death of stars to the enigmatic dance of dark matter.
-**After:**
-> The book covers the Big Bang, star formation, and current theories about dark matter.
 
-### 13. Passive voice and missing subjects
-**Problem:** AI writing often hides who acts or drops the subject. Use active voice when it makes the actor and action clearer.
+**Words to watch:** từ ... đến ... (used for arbitrary, non-sequential items)
+**Problem:** AI creates false spectrums between unrelated concepts.
 **Before:**
-> No configuration file needed. The results are preserved automatically.
+> Luận văn khảo sát từ cấu trúc vi mạch bán dẫn đến chính sách kinh tế vĩ mô của chính phủ.
 **After:**
-> You do not need a configuration file. The system preserves the results automatically.
+> Luận văn phân tích cấu trúc chuỗi cung ứng vi mạch và các chính sách kinh tế liên quan.
+
+### 13. Passive voice calques and pronouns
+
+**Words to watch:** được ... bởi, bạn, nó, chúng
+**Problem:** Direct calque of English passive voice (`be ... by`) and inappropriate pronouns.
+**Before:**
+> Dữ liệu được thu thập bởi hệ thống. Bạn có thể thấy nó hoạt động rất nhanh.
+**After:**
+> Hệ thống tự động thu thập dữ liệu với tốc độ xử lý dưới 50ms.
+
+---
 
 ## Style patterns
 
-### 14. Em and en dashes
+### 14. Em and en dashes inside sentences
 
-**Rule:** The final rewrite must not contain em dashes (—) or en dashes (–), unless the writer's sample uses them. Replace a dash with a period, comma, colon, or parentheses, or rewrite the sentence. Also check for spaced dashes (` — `) and double hyphens (` -- `) used as dashes.
+**Rule:** Never use `—`, `–`, or spaced ` - ` to break clauses in Vietnamese academic prose. Replace with a comma plus a connective, or split into two sentences. Retain dashes only in unspaced proper nouns, numeric ranges (`1–12 tháng`), and abbreviation glosses.
 **Before:**
-> The term is primarily promoted by Dutch institutions—not by the people themselves. You don't say "Netherlands, Europe" as an address—yet this mislabeling continues—even in official documents.
+> Hệ thống xác thực — vốn phát triển theo chuẩn OAuth 2.0 — cho phép phân quyền chi tiết.
 **After:**
-> The term is primarily promoted by Dutch institutions, not by the people themselves. You don't say "Netherlands, Europe" as an address, yet this mislabeling continues in official documents.
-**Before:**
-> The new policy — announced without warning — affects thousands of workers. The changes -- long overdue according to critics -- will take effect immediately.
-**After:**
-> The new policy, announced without warning, affects thousands of workers. The changes, long overdue according to critics, will take effect immediately.
-
-Before returning the rewrite, search for `—` and `–`. Remove each one unless the writer's sample uses that mark. In that case, match the sample's rate.
+> Hệ thống xác thực được phát triển theo chuẩn OAuth 2.0, nhờ đó cho phép phân quyền chi tiết.
 
 ### 15. Too much bold text
-**Problem:** AI chatbots often bold words and phrases without a clear reason.
+
+**Problem:** Gratuitous bolding across sentences.
 **Before:**
-> It blends **OKRs (Objectives and Key Results)**, **KPIs (Key Performance Indicators)**, and visual strategy tools such as the **Business Model Canvas (BMC)** and **Balanced Scorecard (BSC)**.
+> Mô hình **Transformer** sử dụng cơ chế **Self-Attention** để xử lý **chuỗi văn bản**.
 **After:**
-> It blends OKRs, KPIs, and visual strategy tools like the Business Model Canvas and Balanced Scorecard.
+> Mô hình Transformer sử dụng cơ chế Self-Attention để xử lý chuỗi văn bản.
 
 ### 16. Lists with bold mini-headings
-**Problem:** AI writing often uses vertical lists in which every item starts with a bold label and a colon.
+
+**Problem:** Overusing bullet points where continuous explanatory paragraphs are expected.
 **Before:**
-> - **User Experience:** The user experience has been significantly improved with a new interface.
-> - **Performance:** Performance has been enhanced through optimized algorithms.
-> - **Security:** Security has been strengthened with end-to-end encryption.
+> - **Hiệu năng:** Tốc độ xử lý tăng 20%.
+> - **Chi phí:** Tiết kiệm 15% tài nguyên phần cứng.
 **After:**
-> The update improves the interface, speeds up load times through optimized algorithms, and adds end-to-end encryption.
+> Việc tối ưu thuật toán giúp tăng tốc độ xử lý thêm 20%, đồng thời tiết kiệm 15% tài nguyên phần cứng.
 
 ### 17. Title case in headings
-**Problem:** AI chatbots often capitalize every main word in a heading.
-**Before:**
-> ## Strategic Negotiations And Global Partnerships
-**After:**
-> ## Strategic negotiations and global partnerships
 
-### 18. Emojis
-**Problem:** AI chatbots often add emojis to headings and list items as decoration.
+**Problem:** Capitalizing every word in headings (English style). Vietnamese headings capitalize only the first word and proper nouns, or use ALL CAPS for chapter titles (`CHƯƠNG 2: CƠ SỞ LÝ THUYẾT`).
 **Before:**
-> 🚀 **Launch Phase:** The product launches in Q3
-> 💡 **Key Insight:** Users prefer simplicity
-> ✅ **Next Steps:** Schedule follow-up meeting
+> ## Phân Tích Hiệu Năng Của Thuật Toán Sắp Xếp
 **After:**
-> The product launches in Q3. User research showed a preference for simplicity. Next step: schedule a follow-up meeting.
+> ## Phân tích hiệu năng của thuật toán sắp xếp
 
-### 19. Curly quotation marks
-**Problem:** ChatGPT often uses curly quotes (“...”) where the writer or target format uses straight quotes ("...").
+### 18. Emojis and decorative icons
+
+**Problem:** AI inserts emojis (🚀, 💡, ✅) into formal reports. Remove them.
 **Before:**
-> He said “the project is on track” but others disagreed.
+> 💡 **Kết quả chính:** Mô hình đạt độ chính xác 95%.
 **After:**
-> He said "the project is on track" but others disagreed.
+> Kết quả thử nghiệm cho thấy mô hình đạt độ chính xác 95%.
+
+### 19. Straight quotation marks
+
+**Rule:** Academic Vietnamese strictly uses curved quotation marks (`“ ”`). Replace straight quotes (`" "`).
+**Before:**
+> Phương pháp này được gọi là "học sâu".
+**After:**
+> Phương pháp này được gọi là “học sâu”.
+
+---
 
 ## Chatbot patterns
 
 ### 20. Chatbot text left in the answer
 
-**Words to watch:** I hope this helps, Of course!, Certainly!, You're absolutely right!, Would you like..., Want me to...?, Want me to give examples?, Should I continue?, let me know, here is a...
-**Problem:** A chatbot's greeting, offer, or closing sometimes remains in text that should stand on its own.
+**Words to watch:** Chắc chắn rồi!, Dưới đây là, Hy vọng phần trên hữu ích, Hãy cho mình biết nếu...
+**Problem:** Conversational chatbot artifacts remaining in exported reports.
 **Before:**
-> Here is an overview of the French Revolution. I hope this helps! Let me know if you'd like me to expand on any section.
+> Chắc chắn rồi! Dưới đây là phần mở đầu cho chương 3 của luận văn. Hy vọng nó hữu ích cho bạn!
 **After:**
-> The French Revolution began in 1789 when financial crisis and food shortages led to widespread unrest.
+> Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu.
 
-### 21. Knowledge-limit disclaimers and guesses
+### 21. Knowledge-limit disclaimers and speculative gaps
 
-**Words to watch:** as of [date], Up to my last training update, While specific details are limited/scarce..., based on available information, not publicly available, maintains a low profile, keeps personal details private, prefers to stay out of the spotlight, likely [grew up/studied/began], it is believed that
-**Problem:** Older models may mention the date when their knowledge ends. A model may also explain that it could not find a source, then fill the gap with a plausible guess. State what the source does not show, or remove the sentence. Do not present a guess as a fact.
-**Before (cutoff disclaimer):**
-> While specific details about the company's founding are not extensively documented in readily available sources, it appears to have been established sometime in the 1990s.
+**Words to watch:** Tính đến thời điểm hiện tại, Theo hiểu biết của tôi, Dữ liệu không công khai nhưng có khả năng
+**Problem:** AI confesses cutoff dates or invents speculative filler to plug missing sources.
+**Before:**
+> Thông tin chi tiết về thuật toán chưa được công bố công khai, nhiều khả năng nhóm tác giả đã áp dụng kỹ thuật nén mô hình.
 **After:**
-> The company's founding date is not documented in the available sources. (Or cut the sentence. State a date only if a source provides one.)
-**Before (speculative gap-fill):**
-> Information about her early life is not publicly available, suggesting she maintains a low profile and keeps personal details private. She likely grew up in a middle-class household, which shaped her later interest in education reform.
-**After:**
-> Her early life is not documented in the available sources. (Or omit the section.)
+> Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán.
 
 ### 22. Overly agreeable tone
-**Problem:** AI assistants often praise the user or agree before giving the answer.
+
+**Words to watch:** Câu hỏi rất hay!, Bạn hoàn toàn đúng khi cho rằng
+**Problem:** AI excessively flatters the prompt before presenting information.
 **Before:**
-> Great question! You're absolutely right that this is a complex topic. That's an excellent point about the economic factors.
+> Câu hỏi của bạn rất hay. Bạn hoàn toàn đúng khi nhận định rằng chi phí phần cứng là một rào cản lớn.
 **After:**
-> The economic factors you mentioned are relevant here.
+> Chi phí đầu tư phần cứng là một trong những rào cản chính khi triển khai mô hình ở quy mô lớn.
+
+---
 
 ## Filler and hedging
 
 ### 23. Filler phrases
 
-**Before → After:**
-- "In order to achieve this goal" → "To achieve this"
-- "Due to the fact that it was raining" → "Because it was raining"
-- "At this point in time" → "Now"
-- "In the event that you need help" → "If you need help"
-- "The system has the ability to process" → "The system can process"
-- "It is important to note that the data shows" → "The data shows"
+**Words to watch:** nhằm mục đích để, do bởi vì, trong bối cảnh hiện nay thì, việc ... là điều hết sức cần thiết, có thể nói rằng
+**Problem:** Wordy bureaucratic boilerplate that dilutes technical clarity.
+**Before:**
+> Nhằm mục đích để nâng cao độ chính xác, việc áp dụng mô hình là điều hết sức cần thiết.
+**After:**
+> Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron tích chập.
 
 ### 24. Too many qualifiers
 
-**Phrases to watch:** to be fair, it's also possible, could potentially, might arguably, in some cases it may, this is an inference
-**Problem:** Repeated editing can add one qualifier after another until every claim sounds uncertain. Keep a qualifier only when the source supports it and the meaning needs it. Remove caveats that only repair an earlier overstatement.
+**Words to watch:** phần nào, ở một mức độ nhất định, tương đối, có thể nói là, khá là
+**Problem:** Piling qualifiers until technical assertions become non-committal.
 **Before:**
-> It could potentially possibly be argued that the policy might have some effect on outcomes.
+> Kết quả thử nghiệm phần nào có thể xem là tương đối khả quan ở một mức độ nhất định.
 **After:**
-> The policy may affect outcomes.
+> Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử.
 
 ### 25. Generic positive endings
-**Problem:** AI writing often ends with vague optimism instead of the last useful fact.
-**Before:**
-> The future looks bright for the company. Exciting times lie ahead as they continue their journey toward excellence. This represents a major step in the right direction.
-**After:**
-> (Cut the paragraph. End on the last concrete fact instead of a send-off. If the source states real plans, use those.)
 
-### 26. Too many hyphenated word pairs
-
-**Words to watch:** third-party, cross-functional, client-facing, data-driven, decision-making, well-known, high-quality, real-time, long-term, end-to-end
-**Problem:** AI writing often hyphenates these pairs everywhere. Keep the hyphen before a noun when grammar needs it, as in `a high-quality report`. Drop it after the noun, as in `the report is high quality`.
+**Problem:** Concluding chapters with vague inspirational send-offs instead of technical summaries.
 **Before:**
-> The cross-functional team delivered a high-quality, data-driven report. The team is cross-functional, the report is high-quality, and the methodology is data-driven.
+> Tương lai tươi sáng đang mở ra cho ngành trí tuệ nhân tạo với những bước tiến vượt bậc hướng tới sự hoàn mỹ.
 **After:**
-> The cross-functional team delivered a high-quality, data-driven report. The team is cross functional, the report is high quality, and the methodology is data driven.
+> Nghiên cứu đã hoàn thành mục tiêu xây dựng mô hình phân loại và mở ra hướng tối ưu hóa bộ nhớ cho các thiết bị biên.
+
+### 26. Four-character clichés and bureaucratic wordiness
+
+**Words to watch:** tiến hành thực hiện, tiến hành nghiên cứu đối với, triển khai áp dụng vào trong thực tiễn, muôn màu muôn vẻ
+**Problem:** Bureaucratic helper-verb inflation (calquing Chinese 进行/实现) or poetic idioms.
+**Before:**
+> Nhóm nghiên cứu tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu thu thập được.
+**After:**
+> Nhóm nghiên cứu phân tích các mẫu dữ liệu thu thập được.
 
 ### 27. Pretending to reveal a deeper truth
 
-**Phrases to watch:** The real question is, at its core, in reality, what really matters, fundamentally, the deeper issue, the heart of the matter
-**Problem:** AI writing uses these phrases to make an ordinary point sound like a hidden truth.
+**Words to watch:** Về bản chất, Vấn đề cốt lõi nằm ở chỗ, Xét cho cùng, Thực chất
+**Problem:** Staging routine technical points as profound revelations.
 **Before:**
-> The real question is whether teams can adapt. At its core, what really matters is organizational readiness.
+> Vấn đề cốt lõi thực chất nằm ở chỗ các vi dịch vụ giao tiếp qua mạng có độ trễ cao.
 **After:**
-> The question is whether teams can adapt. That mostly depends on whether the organization is ready to change its habits.
+> Độ trễ hệ thống tăng chủ yếu do chi phí truyền thông qua mạng giữa các vi dịch vụ.
 
 ### 28. Announcing the next point
 
-**Phrases to watch:** Let's dive in, let's explore, let's break this down, here's what you need to know, now let's look at, without further ado, heads up, quick note, before I forget
-**Problem:** AI writing often announces the next point instead of stating it. A casual phrase such as "one thing that bit me" can have the same problem. Remove the announcement, not just its formal tone.
+**Words to watch:** Hãy cùng tìm hiểu, Sau đây chúng ta sẽ đi sâu vào, Trước tiên cần khẳng định rằng
+**Problem:** Conversational meta-commentary announcing upcoming sections.
 **Before:**
-> Let's dive into how caching works in Next.js. Here's what you need to know.
+> Hãy cùng tìm hiểu cơ chế hoạt động của giao thức TCP.
 **After:**
-> Next.js caches data at multiple layers, including request memoization, the data cache, and the router cache.
-**Before (casual register):**
-> One thing that bit me hard, so pay attention to this part: the webpack dev server doesn't send the CORS header by default.
-**After:**
-> The webpack dev server doesn't send the CORS header by default.
+> Giao thức TCP đảm bảo truyền dữ liệu tin cậy thông qua cơ chế bắt tay ba bước.
 
 ### 29. A heading repeated in the first sentence
 
-**Signs to watch:** A heading followed by a one-line paragraph that simply restates the heading before the real content begins.
-**Problem:** AI writing often follows a heading with a sentence that only repeats the heading. Remove the repeated sentence.
+**Problem:** Echoing the heading in a one-line restatement immediately below it.
 **Before:**
-> ## Performance
->
-> Speed matters.
->
-> When users hit a slow page, they leave.
+> ### 3.1. Kiến trúc hệ thống
+> Kiến trúc hệ thống đóng vai trò quan trọng. Hệ thống gồm 3 tầng chính...
 **After:**
-> ## Performance
->
-> When users hit a slow page, they leave.
+> ### 3.1. Kiến trúc hệ thống
+> Hệ thống gồm 3 tầng chính...
 
 ### 30. Writing about the previous version
-**Problem:** Documentation and comments should describe the current behavior. Mention the previous version only in change logs, release notes, migration guides, and other documents about change.
-**Before:**
-> This function was added to replace the previous approach of iterating through all items, which caused O(n²) performance.
-**After:**
-> This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
 
-### 31. Forced punchlines and dramatic fragments
-**Problem:** AI writing often turns each sentence into a dramatic closing line. One short sentence can add emphasis. A row of short fragments usually feels forced.
+**Problem:** Describing discarded iterations in present-tense technical documentation.
 **Before:**
-> Then AlphaEvolve arrived. It had no preference for symmetry. No aesthetic prior. No nostalgia for human taste. The old rules were gone.
+> Hàm này được viết lại để thay thế cho cách tiếp cận cũ vốn chạy vòng lặp tốn O(n²).
 **After:**
-> AlphaEvolve changed the search because it did not favor symmetry or human-looking designs. That made some of the older assumptions less useful.
+> Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1).
+
+### 31. Dramatic fragments and clipped sentence runs
+
+**Problem:** Adjacent clipped sentences mimicking English dramatic syntax. Merge with connectives.
+**Before:**
+> Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log.
+**After:**
+> Hệ thống không ghi nhận lỗi và không phát cảnh báo, mà chỉ âm thầm lưu vào nhật ký hoạt động.
 
 ### 32. Formulaic sayings
 
-**Words to watch:** X is the Y of Z, X becomes a trap, X is not a tool but a mirror, the language of, the currency of, the architecture of
-**Problem:** AI writing often turns an ordinary claim into a saying that sounds deep but adds no detail. Replace the saying with the specific claim.
+**Words to watch:** X là chìa khóa của Y, X là chiếc cầu nối, X là kim chỉ nam cho
+**Problem:** Trite metaphors replacing technical precision.
 **Before:**
-> Symmetry is the language of trust. Efficiency becomes a trap when teams forget the human layer.
+> Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công cho mô hình học máy.
 **After:**
-> Symmetric layouts often feel more predictable to users. Teams can over-optimize workflows and miss how people actually use them.
+> Chất lượng dữ liệu tiền xử lý quyết định trực tiếp đến độ chính xác của mô hình học máy.
 
 ### 33. Fake-candid openings
 
-**Phrases to watch:** Honestly?, Look, Here's the thing, The thing is, Let's be honest, Real talk, when used as standalone hooks or fake-candid pauses before an ordinary point.
-**Problem:** AI writing often starts with a staged pause or claim of honesty before making a routine point. State the point directly.
+**Words to watch:** Thành thật mà nói, Thú thực, Nhìn nhận khách quan thì
+**Problem:** Artificial theatrical pauses before ordinary claims.
 **Before:**
-> Is it worth the price? Honestly? It depends on how often you'll use it.
+> Thành thật mà nói, việc tối ưu thời gian phản hồi là một thách thức không hề đơn giản.
 **After:**
-> Whether it's worth the price depends on how often you'll use it.
+> Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn trong hệ thống phân tán.
 
 ### 34. Answering objections no one raised
 
-**Phrases to watch:** This isn't (mainly/really) about, I'm not saying/arguing/trying to, To be clear, Don't get me wrong, This is not to say, You could argue/frame this differently but, Some might say... but
-**Problem:** AI writing may answer an objection that does not appear in the text. Watch for an unattributed statement about what the writer does not mean, especially when the topic appears nowhere else. A direct claim such as "the API is not thread-safe" is not this pattern.
+**Words to watch:** Điều này không có nghĩa là, Chúng tôi không phủ nhận, Đừng hiểu nhầm rằng
+**Problem:** Defending against unstated criticisms. State the technical constraint directly.
 **Before:**
-> This isn't mainly about prompt length, and I'm not arguing that documentation doesn't matter. You could categorize the problem another way, but the issue is whether the agent can use the instruction when it acts.
+> Điều này không có nghĩa là chúng tôi phủ nhận vai trò của cơ sở dữ liệu quan hệ, nhưng cơ sở dữ liệu NoSQL phù hợp hơn trong trường hợp này.
 **After:**
-> The issue is whether the agent can use the instruction when it acts.
-
-Remove only the unsupported defense. If it contains a real claim, state that claim directly. Keep an objection when the text names its source or answers it in full.
+> Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ dữ liệu phi cấu trúc của đề tài.
 
 ### 35. Rejecting fake alternatives
 
-**Phrases to watch:** A tempting option/approach would be, One might be tempted to, An obvious approach would be, You might think... but, It would be easy to just, Some would suggest
-**Problem:** AI writing may introduce an option that no reader would consider, reject it in a clause, and never mention it again. This often leaves an old drafting idea in the final text. Remove the fake option and state the real constraint directly.
+**Words to watch:** Một phương án dễ nghĩ đến là, Người ta có thể bị cám dỗ bởi, Có ý kiến cho rằng nên
+**Problem:** Introducing and immediately dismissing arbitrary strawman options.
 **Before:**
-> Session tokens are rotated every 24 hours. A tempting approach would be to rotate them by restarting the auth service on a cron job, but that would drop every active session. Rotation happens in place, and clients refresh transparently.
+> Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ để xóa bộ nhớ tạm, nhưng điều đó làm gián đoạn người dùng. Hệ thống áp dụng cơ chế giải phóng bộ nhớ tự động.
 **After:**
-> Session tokens are rotated every 24 hours, in place, and clients refresh transparently.
-
-One rejected option may be valid. Several short, unrelated rejections are a stronger sign. Ask what new information each sentence adds. If it only records an earlier edit, rewrite the paragraph around its main point.
-
-## Check for false positives
-
-### What not to flag
-
-A person may use some of these patterns. Do not treat any item below as proof by itself:
-
-- **Perfect grammar and consistent style.** Many writers are professionals or have been edited. Polish does not equal AI.
-- **Mixed casual and formal styles.** This can reflect the writer's field, age, or personal habits.
-- **"Bland" or "robotic" prose.** AI prose has *specific* tells. Generic dryness without those tells is just dry writing.
-- **Formal or academic words.** §7 lists specific words that AI writing overuses. Do not simplify every formal word.
-- **Letter-style opening or closing on a comment.** Salutations and sign-offs predate ChatGPT by centuries.
-- **Common transition words in isolation.** *Additionally*, *moreover*, *consequently* are AI-coded only when piled up. One *however* is not a tell.
-- **Curly quotes alone.** macOS, Word, Google Docs, and most CMSes auto-curl by default. Curly quotes only count when stacked with other tells.
-- **Em dashes alone.** Many editors and journalists use them often. Em dashes are evidence only when paired with formulaic sales-y rhythm.
-- **One short sentence for emphasis.** Flag dramatic fragments only when several appear in a row.
-- **Deliberate repeated openings.** Writers may repeat an opening to build rhythm or pressure, as in "She came. She saw. She conquered." Change it only when the repetition adds nothing.
-- **"Honestly" or "look" mid-sentence.** These are ordinary in casual writing. The tell is the standalone theatrical opener, not the word itself.
-- **Useful limits and disclaimers.** Keep scope statements, legal and safety notices, real corrections, named objections, replies, and FAQ answers.
-- **Real alternatives.** Keep options that a reader may consider in a design document, tutorial, or argument. Remove only an unlikely option that the text dismisses and never uses again.
-- **Unsourced claims.** Most of the web is unsourced. Lack of citations doesn't prove anything.
-- **Correct, complex formatting.** Visual editors and templates produce clean output without any AI.
-- **Secondhand text.** Do not rewrite watched phrases inside quotations, titles, proper names, or examples where the phrase is being discussed rather than used.
-
-When unsure, look for several patterns together. One em dash proves nothing. Several stock patterns in the same passage are stronger evidence.
-
-### Human details to keep
-
-These details often carry the writer's voice. Keep them unless they hurt the meaning:
-
-- **Specific, unusual details.** Keep a real address, an odd quote, or a phrase such as "the lawyer who used to work upstairs from my dentist."
-- **Mixed feelings and unresolved tension.** Keep lines such as "I think this is mostly good, but it bothers me, and I can't fully explain why."
-- **Dated, era-bound references.** Slang, memes, or in-jokes that map to a specific year and subculture. Models lag by a year or more.
-- **Deliberate first-person choices.** Keep a cut or word choice when the writer can explain why it belongs.
-- **Variety in sentence length.** Real writing alternates short and long. AI writing tends toward an even, mid-length cadence.
-- **Genuine asides, parentheticals, or self-corrections.** "(I keep wanting to say 'almost' here, but it really was certain.)" Models rarely interrupt themselves like this.
-- **Edits made before November 30, 2022.** ChatGPT's public launch. Anything older than that is, with very rare exceptions, not AI-written.
+> Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ trong lúc vận hành để tránh gián đoạn dịch vụ.
 
 ---
 
+## Check for false positives
+
+Do NOT flag or alter the following valid Vietnamese academic conventions:
+
+- **Long, compound sentences:** Median 21 syllables (up to 40–50 syllables with clear subordinate clauses) is standard academic style.
+- **Sino-Vietnamese terminology:** Prefer *khả năng xác minh* over colloquial *khả năng kiểm tra lại được*.
+- **Subject ellipsis:** Natural in Vietnamese when context is established (e.g., *"Qua đó, giảm sự phụ thuộc vào bên trung gian."*).
+- **Pure "được":** Natural and frequent; flag ONLY the `được ... bởi` agentive passive frame.
+- **High connective density:** 4–5 connectives per 100 syllables is correct and necessary.
+- **All-caps chapter headings:** `CHƯƠNG 2: CƠ SỞ LÝ THUYẾT` is standard Vietnamese report formatting.
+- **Curved quotation marks:** `“ ”` is the required standard.
+- **Academic citations and symbols:** Never alter `[...]`, `(...)`, mathematical formulas, or verbatim quoted sources.
+
+---
+
+## Output modes
+
+Depending on the input quality and source availability, produce output in one of four modes:
+
+1. **`clean_rewrite` (Default):** The rewrite directly replaces the original text when meaning is unambiguous and facts/citations are intact.
+2. **`review_comment`:** When a sentence lacks required citations, dates, or data points, return a targeted reviewer comment rather than fabricating details.
+3. **`needs_author_decision`:** When the original phrasing is ambiguous and multiple interpretations yield different factual assertions, present the options to the author.
+4. **`no_change`:** When the input prose is already natural, grammatical, and free of AI fluff, leave it untouched rather than introducing unnecessary stylistic churn.
+
 ## How to return the result
 
-**Pasted text (default).** Return the draft, a short list of remaining AI patterns, and the final rewrite.
+**Pasted text (default):** Return the draft, a list of identified issues, and the final polished rewrite.
 
-**File mode.** When the user names a file, run the full rewrite process but write only the final text to the file. Change prose only. Keep code blocks, YAML metadata, data, and link targets unchanged. Then give the user a short summary.
+**File mode:** When editing a file, modify only prose in place. Preserve code blocks, math equations, tables, YAML metadata, and citations. Provide a brief 3–5 line summary of changes.
 
-**Embedded mode.** When another task uses this skill for a pull request, commit message, or document, return only the final text.
+**Embedded mode:** When invoked inside a broader task or pipeline, return only the final rewritten prose.
 
 ## Rewrite process
 
-1. Read the source and mark each AI pattern.
-2. Write a draft. Read it aloud. Check the rhythm, details, simple verbs such as *is* and *has*, and the right level of formality.
-3. Ask two questions:
-   - **"What still sounds AI-generated?"**
-   - **"Did the rewrite add or remove any fact, name, number, date, quote, citation, ranking, or other claim?"**
-   Treat any unsupported addition or lost claim as an error.
-4. Write the final version. State each point naturally instead of patching one flagged phrase at a time. If a sentence stays awkward, rewrite the paragraph around its main point. Apply the dash rule in §14.
-
-Return the result required by [How to return the result](#how-to-return-the-result).
-
-## Source
-
-This skill is based on [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. Its patterns come from reviews of AI-generated text on Wikipedia.
-
-Wikipedia's main point: "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+1. Identify AI patterns and syntactic translationese against the 35 patterns.
+2. Draft the revision: join clauses using subordinating connectives, eliminate fluff, and balance sentence rhythm.
+3. Self-check with two mandatory questions:
+   - *"Does this sound like natural Vietnamese academic prose or a machine translation?"*
+   - *"Were any facts, numbers, dates, claims, or citation tags (`[...]`) added, altered, or lost?"*
+4. Output the result per the selected mode.

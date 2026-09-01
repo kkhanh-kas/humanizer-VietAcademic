@@ -1,0 +1,402 @@
+# Layer 1: Vietnamese Academic Grammar, Syntax, Punctuation and Cadence
+# ID range: VA-L1-01 to VA-L1-19
+
+- id: VA-L1-01
+  name: Connective Density
+  lop: 1
+  category: cadence
+  finding_type: warning
+  scope: document
+  aggregation: density
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Maintain a connective density of 4 to 5 connectives per 100 syllables in academic prose.
+  explanation: Vietnamese connects ideas with words inside clauses rather than leaving sentences isolated.
+  bad_examples:
+    - "Hệ thống sử dụng cơ chế xác thực hai lớp. Người dùng phải nhập mã OTP. Quá trình đăng nhập hoàn tất. Dữ liệu được bảo vệ."
+  good_examples:
+    - "Hệ thống sử dụng cơ chế xác thực hai lớp, theo đó người dùng phải nhập mã OTP để hoàn tất quá trình đăng nhập và bảo vệ dữ liệu."
+
+- id: VA-L1-02
+  name: Passive Voice Calque (được ... bởi)
+  lop: 1
+  category: syntax
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec, doi-thuong]
+  description: Eliminate the frame 'được ... bởi', which is a mechanical calque of English 'be ... by'.
+  explanation: Single 'được' is valid, and only the agentive pairing with 'bởi' is unnatural. Convert to active voice or use 'do ... thực hiện'. The causal conjunctions 'bởi vì', 'bởi lẽ', 'bởi thế' and 'bởi vậy' are a different word and must not be flagged.
+  signals:
+    regex:
+      - "\\bđược\\b(?:(?!\\bđược\\b)[^.!?\\n]){0,60}?\\bbởi\\b(?!\\s+(?:vì|lẽ|thế|vậy))"
+  bad_examples:
+    - "Dữ liệu được thu thập bởi hệ thống cảm biến."
+  good_examples:
+    - "Hệ thống cảm biến tự động thu thập dữ liệu."
+    - "Dữ liệu do hệ thống cảm biến thu thập."
+
+- id: VA-L1-03
+  name: Adverbial Calque (một cách)
+  lop: 1
+  category: syntax
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec, doi-thuong]
+  description: Remove 'một cách' before adjectives when translating English '-ly' adverbs.
+  signals:
+    regex:
+      - "\\bmột\\s+cách\\s+\\S+"
+  bad_examples:
+    - "Thuật toán xử lý một cách hiệu quả các yêu cầu đồng thời."
+  good_examples:
+    - "Thuật toán xử lý hiệu quả các yêu cầu đồng thời."
+
+- id: VA-L1-04
+  name: Excessive Nominalization
+  lop: 1
+  category: syntax
+  finding_type: warning
+  scope: document
+  aggregation: density
+  min_occurrences: 3
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Reduce overuse of nominalization markers (sự, việc, tính, quá trình).
+  signals:
+    regex:
+      - "\\b(sự|việc|tính|quá\\s+trình)\\s+[a-zà-ỹ]"
+  bad_examples:
+    - "Việc ứng dụng AI vào quá trình phát hiện xâm nhập mang lại sự cải thiện đáng kể về mặt hiệu năng."
+  good_examples:
+    - "Ứng dụng AI vào phát hiện xâm nhập giúp cải thiện hiệu năng rõ rệt."
+
+- id: VA-L1-05
+  name: Semicolon Prohibition
+  lop: 1
+  category: punctuation
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Academic Vietnamese strictly uses commas and periods; semicolons are borrowed punctuation indicating translationese.
+  signals:
+    regex:
+      - ";"
+  bad_examples:
+    - "Mô hình đạt độ chính xác 95%; thời gian huấn luyện giảm 30%."
+  good_examples:
+    - "Mô hình đạt độ chính xác 95%, đồng thời thời gian huấn luyện giảm 30%."
+
+- id: VA-L1-06
+  name: Vietnamese Number Conventions
+  lop: 1
+  category: punctuation
+  finding_type: warning
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Use decimal comma (94,7%) and period thousands separator (187.700.000) in formal Vietnamese.
+  signals:
+    regex:
+      - "(?<![\\w.])\\d+\\.\\d+\\s*(?:%|(?:tỷ|triệu|nghìn|USD|VNĐ|đồng|kg|km|m|giây|phút|giờ|lần)\\b)"
+  bad_examples:
+    - "Độ chính xác đạt 94.7% trên tập kiểm thử."
+  good_examples:
+    - "Độ chính xác đạt 94,7% trên tập kiểm thử."
+
+- id: VA-L1-07
+  name: Clipped Sentence Runs
+  lop: 1
+  category: cadence
+  finding_type: error
+  scope: paragraph
+  aggregation: count
+  min_occurrences: 3
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Avoid three or more adjacent short clipped sentences. Join them with connectives and commas.
+  explanation: Two adjacent short sentences are valid academic cadence, because about 20% of Vietnamese academic sentences run under 8 syllables. Only a run of three or more reads as English syntax.
+  bad_examples:
+    - "Hệ thống không cảnh báo. Không ghi nhận lỗi. Không dừng tiến trình. Chỉ âm thầm ghi log."
+  good_examples:
+    - "Hệ thống không cảnh báo và không ghi nhận lỗi, mà chỉ âm thầm lưu vào nhật ký hoạt động."
+
+- id: VA-L1-08
+  name: Colloquial Particles in Formal Register
+  lop: 1
+  category: register
+  finding_type: error
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Prohibit spoken particles (ạ, nhé, nha, nhỉ, đấy, thôi, kiểu như, á) in academic text.
+  signals:
+    regex:
+      - "(?:^|\\s)(ạ|nhé|nha|nhỉ|đấy|thôi|hen|ừ|ờ|kiểu như|á)(?=[\\s,.!?]|$)"
+  bad_examples:
+    - "Mô hình này hoạt động khá ổn đấy nhé."
+  good_examples:
+    - "Mô hình hoạt động ổn định trên tập kiểm thử."
+
+- id: VA-L1-09
+  name: Balanced Sino-Vietnamese Terminology
+  lop: 1
+  category: style
+  finding_type: preference
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Use Sino-Vietnamese for academic concepts and terms; use pure Vietnamese for verbs and connectives.
+  bad_examples:
+    - "Cái khả năng kiểm tra lại được của hệ thống là rất cao."
+  good_examples:
+    - "Khả năng xác minh của hệ thống đạt mức độ tin cậy cao."
+
+- id: VA-L1-10
+  name: English Technical Terms Preservation
+  lop: 1
+  category: style
+  finding_type: preference
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Preserve established technical terms (smart contract, blockchain, token, metadata) without forced literal translation.
+  bad_examples:
+    - "Hệ thống triển khai hợp đồng thông minh trên nền tảng chuỗi khối để quản lý mã thông báo."
+  good_examples:
+    - "Hệ thống triển khai smart contract trên nền tảng Ethereum để tự động hóa giao dịch."
+
+- id: VA-L1-11
+  name: Academic Pronouns and Third-Person Register
+  lop: 1
+  category: pronouns
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Ban second-person 'bạn' and inanimate pronoun 'nó' in academic prose. Use 'chúng tôi', 'tác giả', 'nhóm nghiên cứu' or ellipsis.
+  signals:
+    regex:
+      - "\\b(bạn|các bạn)\\b"
+  bad_examples:
+    - "Bạn có thể thấy thuật toán chạy rất nhanh và nó tối ưu bộ nhớ."
+  good_examples:
+    - "Kết quả thực nghiệm cho thấy thuật toán có tốc độ xử lý cao và tối ưu bộ nhớ."
+
+- id: VA-L1-12
+  name: Continuous Prose Over Bullet Lists
+  lop: 1
+  category: cadence
+  finding_type: preference
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Prefer continuous paragraphs connected with logical subordinators over vertical bulleted lists.
+  bad_examples:
+    - "- Ưu điểm: Tốc độ xử lý cao.\n- Nhược điểm: Tốn bộ nhớ."
+  good_examples:
+    - "Mô hình có ưu điểm là tốc độ xử lý nhanh, song nhược điểm là yêu cầu dung lượng bộ nhớ lớn khi huấn luyện."
+
+- id: VA-L1-13
+  name: Subordinating Connectives Usage
+  lop: 1
+  category: cadence
+  finding_type: preference
+  scope: sentence
+  aggregation: density
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Connect clauses using formal subordinating conjunctions (và, là, khi, mà, nếu, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên).
+  explanation: The phrase list below is the connective inventory the linter counts for density in VA-L1-01. Keep the two rules on one list.
+  signals:
+    phrases:
+      - "và"
+      - "nhưng"
+      - "hoặc"
+      - "còn"
+      - "mà"
+      - "vì"
+      - "bởi vì"
+      - "do đó"
+      - "vì vậy"
+      - "vì thế"
+      - "bởi vậy"
+      - "vậy nên"
+      - "thế nên"
+      - "cho nên"
+      - "nên"
+      - "tuy nhiên"
+      - "tuy vậy"
+      - "mặc dù"
+      - "dù"
+      - "trong khi"
+      - "ngoài ra"
+      - "hơn nữa"
+      - "bên cạnh đó"
+      - "đồng thời"
+      - "nhờ đó"
+      - "nhờ vậy"
+      - "từ đó"
+      - "qua đó"
+      - "nhìn chung"
+      - "nói chung"
+      - "tóm lại"
+      - "cuối cùng"
+      - "trước hết"
+      - "sau đó"
+      - "rồi"
+      - "thì"
+      - "là"
+      - "nếu"
+      - "khi"
+  bad_examples:
+    - "Dữ liệu được làm sạch. Vậy nên mô hình học tốt hơn."
+  good_examples:
+    - "Dữ liệu được làm sạch trước khi huấn luyện, nhờ đó nâng cao độ chính xác của mô hình."
+
+- id: VA-L1-14
+  name: Curved Quotation Marks Standard
+  lop: 1
+  category: punctuation
+  finding_type: warning
+  scope: token
+  aggregation: count
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Academic Vietnamese requires curved quotation marks (“ ”) rather than straight quotes (" ").
+  signals:
+    regex:
+      - '"'
+  exceptions:
+    - "Dấu nháy đơn trong tên riêng tiếng Anh (LeCun's) không phải lỗi."
+  bad_examples:
+    - 'Khái niệm "học sâu" xuất hiện từ nhiều năm trước.'
+  good_examples:
+    - 'Khái niệm “học sâu” xuất hiện từ nhiều năm trước.'
+
+- id: VA-L1-15
+  name: Chinese Helper-Verb Calque Elimination
+  lop: 1
+  category: syntax
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, doi-thuong]
+  description: Remove redundant helper-verb constructions calqued from Chinese (tiến hành thực hiện, triển khai áp dụng vào trong).
+  signals:
+    regex:
+      - "\\b(tiến\\s+hành\\s+thực\\s+hiện|tiến\\s+hành\\s+nghiên\\s+cứu\\s+đối\\s+với|triển\\s+khai\\s+áp\\s+dụng\\s+vào\\s+trong)\\b"
+  bad_examples:
+    - "Nhóm nghiên cứu tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu."
+  good_examples:
+    - "Nhóm nghiên cứu phân tích các mẫu dữ liệu thu thập được."
+
+- id: VA-L1-16
+  name: English Date Format
+  lop: 1
+  category: punctuation
+  finding_type: warning
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec, doi-thuong]
+  description: Write dates as ngày/tháng/năm (18/6/2026). Reject month-first order and English month names.
+  explanation: The signal below only fires when the second number is above 12, so the date can only be read month first. An ambiguous date such as 6/7/2026 is left alone.
+  signals:
+    regex:
+      - "\\b(?:0?[1-9]|1[0-2])/(?:1[3-9]|2\\d|3[01])/\\d{4}\\b"
+      - "\\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s*\\d{4}\\b"
+  exceptions:
+    - "Ngày viết đúng chuẩn Việt Nam (18/6/2026) và ngày mơ hồ (6/7/2026) không phải lỗi."
+  bad_examples:
+    - "Hệ thống được nghiệm thu vào 06/18/2026 theo biên bản bàn giao."
+    - "The dataset was released on June 18, 2026."
+  good_examples:
+    - "Hệ thống được nghiệm thu vào ngày 18/6/2026 theo biên bản bàn giao."
+
+- id: VA-L1-17
+  name: Chained Possessive 'của'
+  lop: 1
+  category: syntax
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Do not chain two or more 'của' inside one noun phrase. Drop the redundant links or reorder the phrase.
+  explanation: Vietnamese marks possession by word order, so 'của' is only needed where the relation would otherwise be unclear. Chained 'của' is a calque of the English 'of' chain and of the Chinese 的 chain.
+  signals:
+    regex:
+      - "\\bcủa\\b[^,.!?\\n]{1,30}?\\bcủa\\b"
+  exceptions:
+    - "Hai 'của' thuộc hai cụm danh từ khác nhau, cách nhau bởi dấu phẩy, là hợp lệ."
+  bad_examples:
+    - "Hiệu năng của mô hình của hệ thống của nhóm nghiên cứu vẫn chưa ổn định."
+  good_examples:
+    - "Hiệu năng mô hình do nhóm nghiên cứu xây dựng vẫn chưa ổn định."
+
+- id: VA-L1-18
+  name: Redundant Plural Marker
+  lop: 1
+  category: syntax
+  finding_type: preference
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Drop 'các' or 'những' before mass nouns. Vietnamese does not mark plural the way English marks '-s'.
+  explanation: Machine translation copies the English plural onto nouns that have no singular form in Vietnamese, such as dữ liệu, thông tin, kiến thức.
+  signals:
+    regex:
+      - "\\b(?:các|những)\\s+(?:dữ\\s+liệu|thông\\s+tin|kiến\\s+thức|nội\\s+dung|sự\\s+thay\\s+đổi)\\b"
+  exceptions:
+    - "'các' trước danh từ đếm được (các mô hình, các nghiên cứu) là hoàn toàn đúng."
+  bad_examples:
+    - "Các dữ liệu thu thập được cho thấy những sự thay đổi rõ rệt về hành vi truy cập."
+  good_examples:
+    - "Dữ liệu thu thập được cho thấy hành vi truy cập thay đổi rõ rệt."
+
+- id: VA-L1-19
+  name: Redundant Future Marker 'sẽ'
+  lop: 1
+  category: syntax
+  finding_type: preference
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat]
+  description: Drop 'sẽ' when reporting results that already exist. Vietnamese does not need a tense marker where the context sets the time.
+  explanation: The marker is copied from the English future tense. Keep it only for genuine future work such as the Hướng phát triển section.
+  bad_examples:
+    - "Sau khi huấn luyện, mô hình sẽ đạt độ chính xác 95% trên tập kiểm thử."
+  good_examples:
+    - "Sau khi huấn luyện, mô hình đạt độ chính xác 95% trên tập kiểm thử."

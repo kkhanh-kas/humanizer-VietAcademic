@@ -76,11 +76,66 @@ pattern_numbers = [
 if pattern_numbers != list(range(1, 36)):
     raise SystemExit(f"Number SKILL.md patterns from 1 through 35: {pattern_numbers}")
 
-readme_numbers = {
-    int(number) for number in re.findall(r"(?m)^\| ([0-9]+) \|", README)
-}
+def group_patterns(text: str, heading: str, row: str) -> dict[str, list[int]]:
+    """Map each section heading to the pattern numbers listed under it."""
+    groups: dict[str, list[int]] = {}
+    current: str | None = None
+    for line in text.splitlines():
+        found_heading = re.match(heading, line)
+        if found_heading:
+            current = found_heading.group(1).strip()
+            groups.setdefault(current, [])
+            continue
+        found_row = re.match(row, line)
+        if found_row and current is not None:
+            groups[current].append(int(found_row.group(1)))
+    return {name: numbers for name, numbers in groups.items() if numbers}
+
+
+skill_groups = group_patterns(SKILL, r"^## (.+)$", r"^### ([0-9]+)\. ")
+readme_groups = group_patterns(README, r"^### (.+)$", r"^\| ([0-9]+) \|")
+# Compare the groupings, not the heading text, so the README can be written in
+# any language while SKILL.md stays in English.
+if list(readme_groups.values()) != list(skill_groups.values()):
+    raise SystemExit(
+        "Split the README pattern tables into the same groups, in the same order, "
+        "as the sections of SKILL.md. "
+        f"SKILL.md has {list(skill_groups.values())} "
+        f"but README.md has {list(readme_groups.values())}"
+    )
+
+readme_numbers = {number for numbers in readme_groups.values() for number in numbers}
 if readme_numbers != set(range(1, 36)):
     raise SystemExit("List patterns 1 through 35 in the README table")
+
+required_paths = (
+    "patterns/schema.json",
+    "patterns/layer1-grammar-syntax.yml",
+    "patterns/layer2-rhetoric-style.yml",
+    "references/false-positives.md",
+    "references/registers.md",
+    "references/chinese-source.md",
+    "references/layer1-grammar-syntax.md",
+    "benchmarks/rubric.md",
+    "benchmarks/cases/academic-cases.json",
+    "scripts/catalog.py",
+    "scripts/kiem_tra.py",
+    "scripts/test-kiem-tra.py",
+    "scripts/validate-patterns.py",
+    "scripts/run-benchmark.py",
+)
+missing_paths = [path for path in required_paths if not (ROOT / path).exists()]
+if missing_paths:
+    raise SystemExit("Add the missing bundled files: " + ", ".join(missing_paths))
+
+unreferenced = [
+    path for path in required_paths
+    if path not in SKILL and path.rsplit("/", 1)[-1] not in README
+]
+if unreferenced:
+    raise SystemExit(
+        "Reference every bundled file from SKILL.md or README.md: " + ", ".join(unreferenced)
+    )
 
 if len(SKILL.splitlines()) > 500:
     raise SystemExit("Keep SKILL.md at 500 lines or fewer")

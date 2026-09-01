@@ -1,0 +1,731 @@
+# Layer 2: Vietnamese Rhetoric, Style and AI Writing Patterns
+# ID range: VA-L2-01 to VA-L2-35 (maps 1-to-1 to SKILL.md numbered patterns)
+
+- id: VA-L2-01
+  name: Inflated Importance and Legacy
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove hyperbolic claims asserting that ordinary details mark major historical shifts, milestones, or testaments.
+  signals:
+    phrases:
+      - "đóng vai trò quan trọng"
+      - "đóng vai trò then chốt"
+      - "đánh dấu bước ngoặt"
+      - "minh chứng rõ nét"
+      - "minh chứng hùng hồn"
+      - "khẳng định vị thế"
+      - "mở ra một chương mới"
+      - "tạo tiền đề vững chắc"
+      - "góp phần không nhỏ vào"
+      - "biểu tượng cho"
+  bad_examples:
+    - "Mô hình mạng nơ-ron này được đề xuất vào năm 2021, đánh dấu một bước ngoặt mang tính cách mạng trong quá trình nhận diện hình ảnh, tạo tiền đề vững chắc cho các nghiên cứu tiếp theo."
+  good_examples:
+    - "Mô hình mạng nơ-ron này được đề xuất vào năm 2021 nhằm phục vụ bài toán nhận diện hình ảnh."
+
+- id: VA-L2-02
+  name: Name-Dropping to Prove Importance
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Avoid listing vague prestigious authorities or follower counts to artificially substantiate claims.
+  signals:
+    phrases:
+      - "các chuyên gia đầu ngành"
+      - "các tạp chí hàng đầu"
+      - "phương tiện truyền thông uy tín"
+      - "được trích dẫn rộng rãi"
+  bad_examples:
+    - "Thuật toán này đã được nhắc đến bởi nhiều chuyên gia đầu ngành và các trang công nghệ uy tín."
+  good_examples:
+    - "Thuật toán này được phân tích chi tiết trong nghiên cứu của LeCun et al. [1]."
+
+- id: VA-L2-03
+  name: Shallow Analysis with Hollow Clauses
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Eliminate superficial trailing clauses tacked on to simulate analytical depth.
+  signals:
+    phrases:
+      - "qua đó thể hiện"
+      - "từ đó khẳng định"
+      - "góp phần nâng cao"
+      - "cho thấy sự quan tâm sâu sắc tới"
+      - "nhằm làm sáng tỏ"
+  bad_examples:
+    - "Hệ thống sử dụng cơ chế xác thực hai lớp, qua đó thể hiện sự quan tâm sâu sắc tới bảo mật và góp phần nâng cao trải nghiệm người dùng."
+  good_examples:
+    - "Hệ thống sử dụng cơ chế xác thực hai lớp để tăng cường bảo mật tài khoản."
+
+- id: VA-L2-04
+  name: Sales Language and Puffery
+  lop: 2
+  category: style
+  finding_type: error
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Strip promotional, hyperbolic, and emotionally charged marketing adjectives.
+  signals:
+    phrases:
+      - "đột phá"
+      - "hoàn hảo"
+      - "mạnh mẽ"
+      - "toàn diện"
+      - "tối ưu vượt trội"
+      - "sâu sắc"
+      - "phong phú"
+      - "tuyệt đẹp"
+  bad_examples:
+    - "Giải pháp cung cấp một kiến trúc vi dịch vụ vô cùng mạnh mẽ và hoàn hảo, mang lại trải nghiệm tối ưu vượt trội."
+  good_examples:
+    - "Giải pháp sử dụng kiến trúc vi dịch vụ để giảm độ trễ xử lý dữ liệu."
+
+- id: VA-L2-05
+  name: Vague Sources and Unattributed Claims
+  lop: 2
+  category: content
+  finding_type: error
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Do not attribute factual claims to unnamed experts or vague bodies. Provide exact citations or state facts directly.
+  signals:
+    phrases:
+      - "theo các chuyên gia"
+      - "nhiều nghiên cứu chỉ ra rằng"
+      - "nhiều nghiên cứu cho thấy"
+      - "giới quan sát nhận định"
+      - "theo một số nguồn tin"
+  bad_examples:
+    - "Theo các chuyên gia, việc chuyển dịch sang điện toán đám mây là xu hướng tất yếu của mọi doanh nghiệp."
+  good_examples:
+    - "Khảo sát của Gartner [2] cho thấy 85% doanh nghiệp đang chuyển dịch hạ tầng lên điện toán đám mây."
+
+- id: VA-L2-06
+  name: Formulaic Mandatory Sections Fluff
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Preserve mandatory report sections (Hạn chế / Hướng phát triển) while removing empty formulaic filler inside them.
+  signals:
+    phrases:
+      - "Bên cạnh những kết quả đạt được"
+      - "vẫn còn tồn tại một số hạn chế nhất định"
+      - "trong thời gian tới sẽ tiếp tục hoàn thiện"
+  bad_examples:
+    - "Mặc dù đạt kết quả khả quan, đề tài vẫn còn một số hạn chế nhất định. Nhóm nghiên cứu sẽ tiếp tục hoàn thiện trong tương lai."
+  good_examples:
+    - "Mô hình hiện chỉ thử nghiệm trên tập dữ liệu 2.000 mẫu và chưa đánh giá được hiệu năng trong điều kiện thiếu sáng."
+
+- id: VA-L2-07
+  name: Overused AI Words and Stock Clichés
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Replace abstract metaphorical buzzwords with direct technical terminology.
+  signals:
+    phrases:
+      - "bức tranh toàn cảnh"
+      - "đi sâu vào"
+      - "kiến tạo"
+      - "nâng tầm"
+      - "chuyển mình"
+      - "bứt phá"
+      - "chìa khóa"
+      - "nền tảng vững chắc"
+      - "đòn bẩy"
+      - "cột mốc"
+      - "lăng kính"
+      - "giao thoa"
+  bad_examples:
+    - "Bài viết đi sâu vào bức tranh toàn cảnh của thị trường bán dẫn, qua đó kiến tạo nền tảng vững chắc cho việc hoạch định chính sách."
+  good_examples:
+    - "Bài viết phân tích cấu trúc thị trường bán dẫn và tổng hợp các chính sách hỗ trợ hiện hành."
+
+- id: VA-L2-08
+  name: Avoiding Is and Are (Là / Có)
+  lop: 2
+  category: syntax
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Use simple verbs 'là' and 'có' instead of inflated multi-word substitutes.
+  signals:
+    phrases:
+      - "đóng vai trò là"
+      - "được xem là"
+      - "sở hữu"
+      - "mang trong mình"
+      - "được biết đến với tư cách"
+  bad_examples:
+    - "PostgreSQL đóng vai trò là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở phổ biến."
+  good_examples:
+    - "PostgreSQL là hệ quản trị cơ sở dữ liệu quan hệ mã nguồn mở."
+
+- id: VA-L2-09
+  name: Repetitive Symmetric Structures
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: sentence
+  aggregation: count
+  min_occurrences: 2
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat]
+  description: Avoid repeating symmetric paired templates like 'không chỉ ... mà còn' across sentences.
+  signals:
+    regex:
+      - "không\\s+chỉ\\b[^.!?\\n]{0,80}?\\bmà\\s+còn\\b|không\\s+phải\\s+là\\b[^.!?\\n]{0,60}?\\bmà\\s+là\\b"
+  bad_examples:
+    - "Thuật toán không chỉ giúp tối ưu bộ nhớ mà còn tăng tốc độ thực thi, không chỉ xử lý số liệu mà còn phân tích ngữ nghĩa."
+  good_examples:
+    - "Thuật toán tối ưu bộ nhớ, tăng tốc độ thực thi và hỗ trợ phân tích ngữ nghĩa."
+
+- id: VA-L2-10
+  name: Forced Parallel Groups
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat]
+  description: Avoid forcing technical descriptions into rigid triads or quartets of abstract nouns/adjectives.
+  bad_examples:
+    - "Giao diện cần đảm bảo tính trực quan, tính thẩm mỹ, tính tương tác và tính bảo mật."
+  good_examples:
+    - "Giao diện cần trực quan và đảm bảo an toàn thông tin khi thao tác."
+
+- id: VA-L2-11
+  name: Synonym Cycling and Inconsistent Naming
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Use consistent terminology for the same entity rather than cycling synonyms arbitrarily.
+  bad_examples:
+    - "Nhóm tác giả khảo sát 500 người dùng. Người viết nhận thấy độ trễ cao. Nhà nghiên cứu đề xuất cải tiến thuật toán."
+  good_examples:
+    - "Nhóm nghiên cứu khảo sát 500 người dùng, ghi nhận độ trễ hệ thống còn cao và đề xuất hướng tối ưu thuật toán."
+
+- id: VA-L2-12
+  name: False From X to Y Ranges
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Do not construct artificial 'từ X đến Y' continuums between unrelated concepts.
+  signals:
+    regex:
+      - "\\btừ\\b[^.!?\\n]{0,60}?\\bđến\\b"
+  exceptions:
+    - "Khoảng thời gian và khoảng số thật (từ năm 2020 đến năm 2024) là cách viết đúng."
+  bad_examples:
+    - "Luận văn khảo sát từ cấu trúc vi mạch bán dẫn đến chính sách kinh tế vĩ mô của chính phủ."
+  good_examples:
+    - "Luận văn phân tích cấu trúc chuỗi cung ứng vi mạch và các chính sách kinh tế liên quan."
+
+- id: VA-L2-13
+  name: Passive Voice Calques and Pronouns
+  lop: 2
+  category: syntax
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Convert English passive voice calques to active constructions and eliminate second-person 'bạn'.
+  signals:
+    regex:
+      - "\\b(?:bạn|các bạn|nó)\\b|\\bchúng\\b(?!\\s+(?:tôi|ta))|\\bđược\\b[^.!?\\n]{0,50}?\\bbởi\\b(?!\\s+(?:vì|lẽ|thế|vậy))"
+  exceptions:
+    - "'chúng tôi' và 'chúng ta' là đại từ học thuật đúng chuẩn, không phải lỗi."
+    - "'bởi vì', 'bởi lẽ', 'bởi thế', 'bởi vậy' là liên từ nguyên nhân, không phải bị động tác thể."
+  bad_examples:
+    - "Dữ liệu được thu thập bởi hệ thống. Bạn có thể thấy nó hoạt động rất nhanh."
+  good_examples:
+    - "Hệ thống tự động thu thập dữ liệu với tốc độ xử lý dưới 50ms."
+
+- id: VA-L2-14
+  name: Em and En Dashes Inside Sentences
+  lop: 2
+  category: punctuation
+  finding_type: error
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec], doi-thuong
+  description: Ban em dashes (—), en dashes (–), and spaced hyphens ( - ) inside clauses. Use commas with connectives.
+  signals:
+    regex:
+      - "(?<=\\s)[-–—](?=\\s)"
+  bad_examples:
+    - "Hệ thống xác thực — vốn phát triển theo chuẩn OAuth 2.0 — cho phép phân quyền chi tiết."
+  good_examples:
+    - "Hệ thống xác thực được phát triển theo chuẩn OAuth 2.0, nhờ đó cho phép phân quyền chi tiết."
+
+- id: VA-L2-15
+  name: Too Much Bold Text
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: phrase
+  aggregation: count
+  min_occurrences: 3
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Remove gratuitous bold formatting from ordinary technical nouns and acronyms.
+  bad_examples:
+    - "Mô hình **Transformer** sử dụng cơ chế **Self-Attention** để xử lý **chuỗi văn bản**."
+  good_examples:
+    - "Mô hình Transformer sử dụng cơ chế Self-Attention để xử lý chuỗi văn bản."
+
+- id: VA-L2-16
+  name: Lists with Bold Mini-Headings
+  lop: 2
+  category: style
+  finding_type: preference
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Transform formulaic bullet lists with bold mini-headers into continuous prose.
+  bad_examples:
+    - "- **Hiệu năng:** Tốc độ xử lý tăng 20%.\n- **Chi phí:** Tiết kiệm 15% tài nguyên phần cứng."
+  good_examples:
+    - "Việc tối ưu thuật toán giúp tăng tốc độ xử lý thêm 20%, đồng thời tiết kiệm 15% tài nguyên phần cứng."
+
+- id: VA-L2-17
+  name: Title Case in Headings
+  lop: 2
+  category: punctuation
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Vietnamese headings capitalize only the first word and proper nouns, or use ALL CAPS for chapter titles.
+  bad_examples:
+    - "## Phân Tích Hiệu Năng Của Thuật Toán Sắp Xếp"
+  good_examples:
+    - "## Phân tích hiệu năng của thuật toán sắp xếp"
+
+- id: VA-L2-18
+  name: Emojis and Decorative Icons
+  lop: 2
+  category: style
+  finding_type: error
+  scope: token
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove emojis and decorative icons completely from formal documents.
+  bad_examples:
+    - "💡 **Kết quả chính:** Mô hình đạt độ chính xác 95%."
+  good_examples:
+    - "Kết quả thử nghiệm cho thấy mô hình đạt độ chính xác 95%."
+
+- id: VA-L2-19
+  name: Straight Quotation Marks Replacement
+  lop: 2
+  category: punctuation
+  finding_type: warning
+  scope: token
+  aggregation: count
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Use curved quotation marks (“ ”) in Vietnamese academic text; replace straight quotes.
+  signals:
+    regex:
+      - '"'
+  exceptions:
+    - "Dấu nháy đơn trong tên riêng tiếng Anh (LeCun's) không phải lỗi."
+  bad_examples:
+    - 'Phương pháp này được gọi là "học sâu".'
+  good_examples:
+    - 'Phương pháp này được gọi là “học sâu”.'
+
+- id: VA-L2-20
+  name: Chatbot Conversational Artifacts
+  lop: 2
+  category: chatbot
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove conversational chatbot greetings, sign-offs, and offers from generated text.
+  signals:
+    phrases:
+      - "Chắc chắn rồi!"
+      - "Dưới đây là"
+      - "Hy vọng phần trên hữu ích"
+      - "Hãy cho mình biết nếu"
+  bad_examples:
+    - "Chắc chắn rồi! Dưới đây là phần mở đầu cho chương 3 của luận văn. Hy vọng nó hữu ích cho bạn!"
+  good_examples:
+    - "Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu."
+
+- id: VA-L2-21
+  name: Knowledge-Limit Disclaimers and Guesses
+  lop: 2
+  category: chatbot
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Eliminate cutoff date disclaimers and speculative attempts to fill data gaps.
+  signals:
+    phrases:
+      - "Tính đến thời điểm hiện tại"
+      - "Theo hiểu biết của tôi"
+      - "Dữ liệu không công khai nhưng có khả năng"
+  bad_examples:
+    - "Thông tin chi tiết về thuật toán chưa được công bố công khai, nhiều khả năng nhóm tác giả đã áp dụng kỹ thuật nén mô hình."
+  good_examples:
+    - "Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán."
+
+- id: VA-L2-22
+  name: Overly Agreeable Flattery Tone
+  lop: 2
+  category: chatbot
+  finding_type: error
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove chatbot praise or agreeable filler before delivering substantive content.
+  signals:
+    phrases:
+      - "Câu hỏi rất hay!"
+      - "Bạn hoàn toàn đúng khi cho rằng"
+  bad_examples:
+    - "Câu hỏi của bạn rất hay. Bạn hoàn toàn đúng khi nhận định rằng chi phí phần cứng là một rào cản lớn."
+  good_examples:
+    - "Chi phí đầu tư phần cứng là một trong những rào cản chính khi triển khai mô hình ở quy mô lớn."
+
+- id: VA-L2-23
+  name: Wordy Filler Phrases
+  lop: 2
+  category: filler
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Eliminate bureaucratic boilerplate phrases that dilute technical precision.
+  signals:
+    phrases:
+      - "nhằm mục đích để"
+      - "do bởi vì"
+      - "trong bối cảnh hiện nay thì"
+      - "việc ... là điều hết sức cần thiết"
+      - "có thể nói rằng"
+  bad_examples:
+    - "Nhằm mục đích để nâng cao độ chính xác, việc áp dụng mô hình là điều hết sức cần thiết."
+  good_examples:
+    - "Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron tích chập."
+
+- id: VA-L2-24
+  name: Excessive Qualifiers and Hedging
+  lop: 2
+  category: hedging
+  finding_type: warning
+  scope: phrase
+  aggregation: count
+  min_occurrences: 2
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Remove excessive qualifiers and repeated hedging preambles that make technical assertions hesitant.
+  explanation: The linter counts a phrase below only when it repeats, because one qualifier is fine and a repeated one is the clearest sign of machine prose.
+  signals:
+    phrases:
+      - "phần nào"
+      - "ở một mức độ nhất định"
+      - "tương đối"
+      - "có thể nói là"
+      - "khá là"
+      - "điều này cho thấy rằng"
+      - "điều này cho thấy"
+      - "có thể thấy rằng"
+      - "có thể nói rằng"
+      - "đáng chú ý là"
+      - "không thể phủ nhận rằng"
+      - "không thể phủ nhận"
+      - "một điều quan trọng là"
+      - "cần lưu ý rằng"
+      - "về cơ bản thì"
+      - "về bản chất thì"
+  bad_examples:
+    - "Kết quả thử nghiệm phần nào có thể xem là tương đối khả quan ở một mức độ nhất định."
+  good_examples:
+    - "Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử."
+
+- id: VA-L2-25
+  name: Generic Inspirational Endings
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Conclude sections on concrete technical findings rather than generic inspirational optimism.
+  bad_examples:
+    - "Tương lai tươi sáng đang mở ra cho ngành trí tuệ nhân tạo với những bước tiến vượt bậc hướng tới sự hoàn mỹ."
+  good_examples:
+    - "Nghiên cứu đã hoàn thành mục tiêu xây dựng mô hình phân loại và mở ra hướng tối ưu hóa bộ nhớ cho các thiết bị biên."
+
+- id: VA-L2-26
+  name: Four-Character Clichés and Helper Verbs
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Strip verbose helper verbs (tiến hành thực hiện) and poetic four-character idioms.
+  signals:
+    phrases:
+      - "tiến hành thực hiện"
+      - "tiến hành nghiên cứu đối với"
+      - "triển khai áp dụng vào trong thực tiễn"
+      - "muôn màu muôn vẻ"
+  bad_examples:
+    - "Nhóm nghiên cứu tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu thu thập được."
+  good_examples:
+    - "Nhóm nghiên cứu phân tích các mẫu dữ liệu thu thập được."
+
+- id: VA-L2-27
+  name: Pretending to Reveal Deeper Truths
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Remove pretentious framing phrases staging routine points as deep revelations.
+  signals:
+    phrases:
+      - "Về bản chất"
+      - "Vấn đề cốt lõi nằm ở chỗ"
+      - "Xét cho cùng"
+      - "Thực chất"
+  bad_examples:
+    - "Vấn đề cốt lõi thực chất nằm ở chỗ các vi dịch vụ giao tiếp qua mạng có độ trễ cao."
+  good_examples:
+    - "Độ trễ hệ thống tăng chủ yếu do chi phí truyền thông qua mạng giữa các vi dịch vụ."
+
+- id: VA-L2-28
+  name: Announcing the Next Point
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: State technical points directly instead of announcing what will be explored next.
+  signals:
+    phrases:
+      - "Hãy cùng tìm hiểu"
+      - "Sau đây chúng ta sẽ đi sâu vào"
+      - "Trước tiên cần khẳng định rằng"
+  bad_examples:
+    - "Hãy cùng tìm hiểu cơ chế hoạt động của giao thức TCP."
+  good_examples:
+    - "Giao thức TCP đảm bảo truyền dữ liệu tin cậy thông qua cơ chế bắt tay ba bước."
+
+- id: VA-L2-29
+  name: Heading Repeated in First Sentence
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove redundant opening sentences that merely repeat the heading immediately above.
+  bad_examples:
+    - "### 3.1. Kiến trúc hệ thống\nKiến trúc hệ thống đóng vai trò quan trọng. Hệ thống gồm 3 tầng chính..."
+  good_examples:
+    - "### 3.1. Kiến trúc hệ thống\nHệ thống gồm 3 tầng chính..."
+
+- id: VA-L2-30
+  name: Presenting Discarded Versions
+  lop: 2
+  category: content
+  finding_type: warning
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Describe current technical behavior rather than recounting replaced historical iterations.
+  bad_examples:
+    - "Hàm này được viết lại để thay thế cho cách tiếp cận cũ vốn chạy vòng lặp tốn O(n²)."
+  good_examples:
+    - "Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1)."
+
+- id: VA-L2-31
+  name: Dramatic Fragments and Clipped Cadence
+  lop: 2
+  category: cadence
+  finding_type: error
+  scope: paragraph
+  aggregation: count
+  min_occurrences: 2
+  false_positive_risk: low
+  che_do: [hoc-thuat]
+  description: Merge adjacent short dramatic sentence fragments into unified clauses using connectives.
+  bad_examples:
+    - "Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log."
+  good_examples:
+    - "Hệ thống không ghi nhận lỗi và không phát cảnh báo, mà chỉ âm thầm lưu vào nhật ký hoạt động."
+
+- id: VA-L2-32
+  name: Formulaic Metaphorical Sayings
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Replace trite metaphors (X là chìa khóa của Y) with direct empirical claims.
+  signals:
+    phrases:
+      - "là chiếc chìa khóa"
+      - "là chìa khóa"
+      - "là chiếc cầu nối"
+      - "là kim chỉ nam"
+  bad_examples:
+    - "Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công cho mô hình học máy."
+  good_examples:
+    - "Chất lượng dữ liệu tiền xử lý quyết định trực tiếp đến độ chính xác của mô hình học máy."
+
+- id: VA-L2-33
+  name: Fake-Candid Theatrical Openings
+  lop: 2
+  category: chatbot
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Remove artificial conversational pauses claiming honesty before standard points.
+  signals:
+    phrases:
+      - "Thành thật mà nói"
+      - "Thú thực"
+      - "Nhìn nhận khách quan thì"
+  bad_examples:
+    - "Thành thật mà nói, việc tối ưu thời gian phản hồi là một thách thức không hề đơn giản."
+  good_examples:
+    - "Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn trong hệ thống phân tán."
+
+- id: VA-L2-34
+  name: Answering Unraised Objections
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Remove defensive preamble answering unprompted objections; state technical decisions directly.
+  signals:
+    phrases:
+      - "Điều này không có nghĩa là"
+      - "Chúng tôi không phủ nhận"
+      - "Đừng hiểu nhầm rằng"
+  bad_examples:
+    - "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của cơ sở dữ liệu quan hệ, nhưng cơ sở dữ liệu NoSQL phù hợp hơn trong trường hợp này."
+  good_examples:
+    - "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ dữ liệu phi cấu trúc của đề tài."
+
+- id: VA-L2-35
+  name: Rejecting Fake Strawman Alternatives
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: paragraph
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Remove fabricated options introduced only to be dismissed immediately; state the actual architecture.
+  signals:
+    phrases:
+      - "Một phương án dễ nghĩ đến là"
+      - "Người ta có thể bị cám dỗ bởi"
+      - "Có ý kiến cho rằng nên"
+  bad_examples:
+    - "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ để xóa bộ nhớ tạm, nhưng điều đó làm gián đoạn người dùng. Hệ thống áp dụng cơ chế giải phóng bộ nhớ tự động."
+  good_examples:
+    - "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ trong lúc vận hành để tránh gián đoạn dịch vụ."
