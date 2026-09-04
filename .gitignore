@@ -1,7 +1,3 @@
 __pycache__/
 *.py[cod]
 .DS_Store
-
-# Ghi chú kế hoạch, giữ ở máy chứ không đưa lên repo
-KE-HOACH-NANG-CAP.md
-KE-HOACH-VIET-HOA.md

@@ -56,3 +56,18 @@ Use Plain Language in code comments, prompts, documentation, descriptions, valid
 - Keep the YAML metadata valid.
 - Treat the prompt below the metadata as the product.
 - Prefer a short, clear instruction over another exception or repeated explanation.
+
+## Open items
+
+These three items are planned but not built. They are recorded here because the
+upgrade notes that held them are no longer kept in this repo.
+
+- **The linter has no machine-readable output.** `scripts/kiem_tra.py` prints a
+  report for a reader only. Add a `--format json` flag so `scripts/run-benchmark.py`
+  can score a run without parsing that text.
+- **`exclude_phrases` does nothing.** `patterns/schema.json` declares the field and
+  `scripts/catalog.py` reads it, but no script applies it. Either make the linter
+  subtract those phrases from a signal match, or drop the field from the schema.
+- **Benchmark coverage is half the target.** `benchmarks/cases/academic-cases.json`
+  holds 10 cases for the `hoc-thuat` register. The target is 20, drawn from real
+  research prose.
