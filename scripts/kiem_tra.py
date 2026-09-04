@@ -137,6 +137,8 @@ MA_PATTERN = {
     "bi-dong-trung": "VA-L1-15",
     "ngay-thang": "VA-L1-16",
     "chuoi-cua": "VA-L1-17",
+    "ngoac-dien-giai": "VA-L2-36",
+    "tham-chieu-ngoac": "VA-L1-20",
 }
 
 GACH_CHEN = catalog.bien_dich(CATALOG, "VA-L2-14")
@@ -152,6 +154,10 @@ XUNG_HO_BAN = catalog.bien_dich(CATALOG, "VA-L1-11")
 BI_DONG_TRUNG_RE = catalog.bien_dich(CATALOG, "VA-L1-15")
 NGAY_THANG = catalog.bien_dich(CATALOG, "VA-L1-16")
 CHUOI_CUA = catalog.bien_dich(CATALOG, "VA-L1-17")
+THAM_CHIEU_NGOAC = catalog.bien_dich(CATALOG, "VA-L1-20")
+# Không dùng cờ re.I: luật này phân biệt chữ hoa với chữ thường ngay sau dấu ngoặc,
+# vì trích dẫn và chú thích hình bảng luôn mở đầu bằng chữ hoa.
+NGOAC_DIEN_GIAI = catalog.bien_dich(CATALOG, "VA-L2-36", co=0)
 
 THOI_PHONG_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-01")
 SAO_NGU_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-07")
@@ -229,6 +235,18 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
             for m in XUNG_HO_BAN.finditer(d):
                 G("xung-ho", i, m.group(0), "Không xưng hô 'bạn' trong văn học thuật. "
                   "Dùng 'chúng tôi', 'tác giả' hoặc lược chủ ngữ.")
+        if bat("tham-chieu-ngoac"):
+            for m in THAM_CHIEU_NGOAC.finditer(d):
+                # Signal chỉ khớp "(mục ", nên trích thêm chữ phía sau để phân biệt hai chỗ.
+                G("tham-chieu-ngoac", i, d[m.start():m.start() + 30],
+                  "Dẫn chỉ mục bằng 'ở mục', 'tại mục' hoặc 'trình bày ở mục', không đóng khung trong ngoặc. "
+                  "Chú thích hình, bảng, phụ lục thì giữ nguyên trong ngoặc.")
+        if bat("ngoac-dien-giai"):
+            for m in NGOAC_DIEN_GIAI.finditer(d):
+                G("ngoac-dien-giai", i, m.group(0)[:90],
+                  "Mệnh đề tiếng Việt nằm trong ngoặc đơn. Gỡ ra thành lời văn nối bằng liên từ, "
+                  "chỉ để lại thuật ngữ tiếng Anh trong ngoặc. Chú giải thuật ngữ thì giữ nguyên.",
+                  muc="nhe")
 
     if bat("ngoac-kep"):
         n_ngoac = sum(len(NGOAC_THANG.findall(d)) for _, d in dv)
@@ -335,7 +353,9 @@ TEN = {
     "xung-ho": "Xưng hô 'bạn' trong văn học thuật",
     "bi-dong-trung": "Thừa động từ phụ 'tiến hành/thực hiện'",
     "ngay-thang": "Ngày tháng viết kiểu Anh",
-    "chuoi-cua": "Chuỗi 'của' lồng nhau"
+    "chuoi-cua": "Chuỗi 'của' lồng nhau",
+    "ngoac-dien-giai": "Diễn giải nhét trong ngoặc đơn",
+    "tham-chieu-ngoac": "Chỉ mục tham chiếu để trong ngoặc"
 }
 
 

@@ -50,6 +50,13 @@ PHAI_BAO = [
      "Bộ dữ liệu công bố ngày June 18, 2026 trên kho lưu trữ mở.", "ngay-thang"),
     ("Chuỗi 'của' lồng nhau",
      "Hiệu năng của mô hình của hệ thống vẫn chưa ổn định.", "chuoi-cua"),
+    ("Mệnh đề tiếng Việt nhét trong ngoặc đơn",
+     "Tiêu biểu nhất là kỹ thuật Top-k (chỉ giữ lại k từ có xác suất cao nhất).",
+     "ngoac-dien-giai"),
+    ("Chỉ mục tham chiếu để trong ngoặc",
+     "Ràng buộc này chi phối số lần lặp thí nghiệm (mục 3.2).", "tham-chieu-ngoac"),
+    ("Chỉ mục tham chiếu dạng lệnh ref của LaTeX",
+     "Các giới hạn về khả năng tái lập (mục \ref{sec:hanche}).", "tham-chieu-ngoac"),
 ]
 
 # (mô tả, văn bản, mã lỗi không được xuất hiện)
@@ -87,6 +94,27 @@ KHONG_DUOC_BAO = [
     ("Một 'của' duy nhất là bình thường",
      "Hiệu năng của mô hình vẫn chưa ổn định trên tập kiểm thử.",
      "chuoi-cua"),
+    ("Chú giải thuật ngữ tiếng Anh trong ngoặc",
+     "Cơ chế tự chú ý (self-attention) là nền tảng của kiến trúc Transformer.",
+     "ngoac-dien-giai"),
+    ("Trích dẫn tên tác giả tiếng Việt trong ngoặc",
+     "Kết quả này đã được kiểm chứng trong nghiên cứu trước (Nguyễn và cộng sự, 2024).",
+     "ngoac-dien-giai"),
+    ("Chú thích phụ lục trong ngoặc",
+     "Bộ dữ liệu đầy đủ (Phụ lục A) gồm 2.000 bản ghi hợp lệ.",
+     "ngoac-dien-giai"),
+    ("Ký hiệu thống kê trong ngoặc",
+     "Khác biệt giữa hai nhóm có ý nghĩa thống kê (p < 0,05) trên toàn bộ mẫu.",
+     "ngoac-dien-giai"),
+    ("Chú thích hình trong ngoặc",
+     "Kiến trúc hệ thống (Hình 2.1) gồm ba tầng xử lý nối tiếp nhau.",
+     "tham-chieu-ngoac"),
+    ("Dẫn tường minh bằng 'xem thêm'",
+     "Chi tiết quy trình lọc (xem thêm mục 3.2) được mô tả đầy đủ trong báo cáo.",
+     "tham-chieu-ngoac"),
+    ("Chỉ mục dẫn đúng cách thì không báo",
+     "Ràng buộc này chi phối số lần lặp thí nghiệm trình bày ở mục 3.2.",
+     "tham-chieu-ngoac"),
 ]
 
 

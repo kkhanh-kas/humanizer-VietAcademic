@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "humanizer",
   "description": "Rewrite AI-sounding or machine-translated Vietnamese text into natural, formal academic prose while preserving facts and citations.",
-  "version": "2.12.0",
+  "version": "2.13.0",
   "author": {
     "name": "blader",
     "url": "https://github.com/blader"

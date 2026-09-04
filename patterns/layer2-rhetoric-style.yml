@@ -1,5 +1,8 @@
 # Layer 2: Vietnamese Rhetoric, Style and AI Writing Patterns
-# ID range: VA-L2-01 to VA-L2-35 (maps 1-to-1 to SKILL.md numbered patterns)
+# ID range: VA-L2-01 to VA-L2-36
+# VA-L2-01 to VA-L2-19 dùng chung số với SKILL.md. Từ VA-L2-20 trở đi thì lệch,
+# vì SKILL.md chèn thêm hai pattern ở vị trí 20 và 21 từ bản 2.13.0.
+# Mã ID là tay nắm ổn định, số thứ tự trong SKILL.md thì không.
 
 - id: VA-L2-01
   name: Inflated Importance and Legacy
@@ -729,3 +732,32 @@
     - "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ để xóa bộ nhớ tạm, nhưng điều đó làm gián đoạn người dùng. Hệ thống áp dụng cơ chế giải phóng bộ nhớ tự động."
   good_examples:
     - "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ trong lúc vận hành để tránh gián đoạn dịch vụ."
+
+- id: VA-L2-36
+  name: Diễn giải nhét trong ngoặc đơn
+  lop: 2
+  category: style
+  finding_type: warning
+  scope: sentence
+  aggregation: count
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat, cong-viec]
+  description: Dấu ngoặc đơn chỉ được chứa chú giải thuật ngữ nước ngoài hoặc từ viết tắt. Nếu bên trong ngoặc là một mệnh đề tiếng Việt có động từ thì phải gỡ ra thành lời văn, nối bằng liên từ, chỉ để lại thuật ngữ tiếng Anh trong ngoặc.
+  explanation: Cùng bản chất với VA-L2-14 (gạch ngang giữa câu). Tiếng Anh tách mệnh đề bằng dấu, tiếng Việt nối mệnh đề bằng từ, nên ngoặc đơn cũng là một cách tách. Signal chỉ bắt phần trong ngoặc mở đầu bằng chữ thường, có dấu tiếng Việt và dài từ 5 từ trở lên, vì trích dẫn và chú thích hình bảng luôn mở đầu bằng chữ hoa.
+  signals:
+    regex:
+      - "\((?!xem\b)[a-zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ][^)]*[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ][^)]*?(?:\s+[^)\s]+){4,}\)"
+  exceptions:
+    - "Chú giải thuật ngữ thuần tiếng Anh, không dấu tiếng Việt: (self-attention), (system prompt)."
+    - "Cụm nguyên nghĩa kèm viết tắt: (multi-agent system, MAS)."
+    - "Trích dẫn và tên riêng tiếng Việt: (Nguyễn và cộng sự, 2024)."
+    - "Chú thích hình, bảng, phụ lục, công thức: (Hình 2.1), (Bảng 3.4), (Phụ lục A)."
+    - "Đơn vị, khoảng số, ký hiệu toán: (n = 30), (p < 0,05)."
+    - "Cụm danh từ thuần Việt dài, không có động từ: (mô hình sinh văn bản). Signal vẫn bắt, nhưng đây là chú giải hợp lệ, phải giữ."
+  bad_examples:
+    - "Tiêu biểu nhất là kỹ thuật Top-k (chỉ giữ lại k từ có xác suất cao nhất)."
+    - "Nếu mô hình luôn chọn từ có xác suất cao nhất (cách làm này gọi là giải mã tham lam, greedy decoding), văn bản sẽ nhàm chán."
+  good_examples:
+    - "Tiêu biểu nhất là kỹ thuật Top-k, chỉ giữ lại k từ có xác suất cao nhất."
+    - "Nếu mô hình luôn chọn từ có xác suất cao nhất, cách làm được gọi là giải mã tham lam (greedy decoding), thì văn bản sẽ nhàm chán."

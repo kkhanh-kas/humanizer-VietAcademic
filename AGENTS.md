@@ -10,7 +10,7 @@ Keep the skill portable. Do not write instructions that limit it to one or two a
 
 ## Key files
 
-- `SKILL.md` is the repo's only skill file and the prompt agents read. It contains portable YAML metadata, 35 numbered patterns, their examples, and pointers to the bundled files below.
+- `SKILL.md` is the repo's only skill file and the prompt agents read. It contains portable YAML metadata, 37 numbered patterns, their examples, and pointers to the bundled files below.
 - `README.md` explains installation, use, patterns, and version history.
 - `patterns/*.yml` is the machine-readable rule catalog. Each rule carries an ID, a severity, the registers it applies to, and its signal regex or phrase list.
 - `patterns/schema.json` defines the shape and the allowed enum values for those rules.
@@ -26,7 +26,7 @@ Keep the skill portable. Do not write instructions that limit it to one or two a
 
 Keep `SKILL.md` and `README.md` in sync.
 
-- **Patterns:** The skill has 35 numbered patterns. If you add, remove, or renumber a pattern, update the README table, heading, validator, and every pattern reference. Keep each pattern in the same section in both files, because the validator compares the groupings.
+- **Patterns:** The skill has 37 numbered patterns. If you add, remove, or renumber a pattern, update the README table, heading, validator, and every pattern reference. Keep each pattern in the same section in both files, because the validator compares the groupings.
 - **One source per rule:** Define a signal regex or phrase list once, in `patterns/*.yml`. Do not copy it into a script. `scripts/kiem_tra.py` maps its own error codes to pattern IDs and reads the signals from the catalog.
 - **Registers:** The `che_do` field decides which registers a rule applies to, and the linter skips a rule outside them. Update `references/registers.md` when you change that field.
 - **False positives:** A rule that fires on valid academic Vietnamese is a defect. Add the counter-example to `scripts/test-kiem-tra.py` before you narrow the rule.

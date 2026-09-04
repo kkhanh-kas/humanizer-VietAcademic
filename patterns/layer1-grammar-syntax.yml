@@ -1,5 +1,5 @@
 # Layer 1: Vietnamese Academic Grammar, Syntax, Punctuation and Cadence
-# ID range: VA-L1-01 to VA-L1-19
+# ID range: VA-L1-01 to VA-L1-20
 
 - id: VA-L1-01
   name: Connective Density
@@ -400,3 +400,29 @@
     - "Sau khi huấn luyện, mô hình sẽ đạt độ chính xác 95% trên tập kiểm thử."
   good_examples:
     - "Sau khi huấn luyện, mô hình đạt độ chính xác 95% trên tập kiểm thử."
+
+- id: VA-L1-20
+  name: Chỉ mục tham chiếu để trong ngoặc
+  lop: 1
+  category: punctuation
+  finding_type: warning
+  scope: sentence
+  aggregation: count
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Tham chiếu tới một mục khác trong cùng tài liệu phải được dẫn bằng cụm từ 'ở mục', 'tại mục' hoặc 'trình bày ở mục', không đóng khung trong ngoặc đơn.
+  explanation: Chú thích hình, bảng, phụ lục và công thức trong ngoặc là quy ước hợp lệ và phải giữ nguyên. Luật này chỉ áp cho mục, phần, tiểu mục và chương. Cụm '(xem thêm mục 3.2)' cũng hợp lệ vì signal đòi tên đơn vị đứng ngay sau dấu ngoặc.
+  signals:
+    regex:
+      - "\((mục|phần|tiểu mục|chương)\s"
+      - "\((mục|phần|tiểu mục|chương)\s*\\ref\{"
+  exceptions:
+    - "Chú thích hình, bảng, phụ lục, công thức: (Hình 2.1), (Bảng 3.4), (Phụ lục A), (công thức 2.3)."
+    - "Chú thích dẫn tường minh: (xem thêm mục 3.2)."
+  bad_examples:
+    - "Ràng buộc này chi phối số lần lặp thí nghiệm (mục 3.2)."
+    - "Các giới hạn về khả năng tái lập (mục \ref{sec:hanche})."
+  good_examples:
+    - "Ràng buộc này chi phối số lần lặp thí nghiệm trình bày ở mục 3.2."
+    - "Các giới hạn về khả năng tái lập được nêu tại mục \ref{sec:hanche}."

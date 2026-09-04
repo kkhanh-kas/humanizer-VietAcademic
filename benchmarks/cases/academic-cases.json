@@ -243,5 +243,70 @@
       "Sửa chữ 'bạn' bên trong trích dẫn nguyên văn",
       "Gộp hai câu ngắn lại"
     ]
+  },
+  {
+    "id": "BENCH-VA-009",
+    "che_do": "hoc-thuat",
+    "domain": "tri-tue-nhan-tao",
+    "input": "Tiêu biểu nhất là kỹ thuật Top-k (chỉ giữ lại k từ có xác suất cao nhất) và Top-p hay nucleus sampling, chỉ giữ lại nhóm các từ đứng đầu có tổng xác suất đạt một ngưỡng p nhất định.",
+    "context": "Hai mục song song nhưng được mô tả theo hai kiểu khác nhau, một cái trong ngoặc và một cái ngoài ngoặc.",
+    "citations": [],
+    "constraints": [
+      "Gỡ mệnh đề tiếng Việt ra khỏi ngoặc đơn",
+      "Giữ nguyên tên kỹ thuật Top-k và Top-p",
+      "Giữ nguyên chú giải thuật ngữ nucleus sampling",
+      "Mô tả hai kỹ thuật song song theo cùng một kiểu"
+    ],
+    "expected_patterns": [
+      "VA-L2-36"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Tiêu biểu nhất là hai kỹ thuật Top-k và Top-p, hay còn gọi là nucleus sampling. Top-k chỉ giữ lại k từ có xác suất cao nhất, còn Top-p giữ lại nhóm các từ đứng đầu cho tới khi tổng xác suất của chúng chạm một ngưỡng p định trước.",
+    "must_preserve": [
+      "Top-k",
+      "Top-p",
+      "nucleus sampling"
+    ],
+    "must_not_add": [
+      "kỹ thuật giải mã không có trong bản gốc",
+      "ngưỡng số cụ thể"
+    ],
+    "blockers": [
+      "Xóa mất chú giải thuật ngữ nucleus sampling",
+      "Đổi ý nghĩa của ngưỡng xác suất p",
+      "Vẫn để mệnh đề tiếng Việt nằm trong ngoặc đơn"
+    ]
+  },
+  {
+    "id": "BENCH-VA-010",
+    "che_do": "hoc-thuat",
+    "domain": "phuong-phap-nghien-cuu",
+    "input": "Ràng buộc này chi phối cả cách xác định số lần lặp thí nghiệm (mục 3.2) lẫn các giới hạn về khả năng tái lập (mục 6.2), trong khi chú thích kiến trúc hệ thống (Hình 2.1) vẫn giữ nguyên trong ngoặc.",
+    "context": "Case này vừa bắt lỗi chỉ mục trong ngoặc vừa canh gác chú thích hình, vốn là quy ước hợp lệ.",
+    "citations": [],
+    "constraints": [
+      "Dẫn chỉ mục bằng 'ở mục' hoặc 'trình bày tại mục'",
+      "Giữ nguyên chú thích hình trong ngoặc",
+      "Giữ nguyên số hiệu mục 3.2 và 6.2"
+    ],
+    "expected_patterns": [
+      "VA-L1-20"
+    ],
+    "expected_output_mode": "clean_rewrite",
+    "expected_output": "Ràng buộc này chi phối cả cách xác định số lần lặp thí nghiệm ở mục 3.2 lẫn các giới hạn về khả năng tái lập trình bày tại mục 6.2, trong khi chú thích kiến trúc hệ thống (Hình 2.1) vẫn giữ nguyên trong ngoặc.",
+    "must_preserve": [
+      "mục 3.2",
+      "mục 6.2",
+      "(Hình 2.1)"
+    ],
+    "must_not_add": [
+      "mục tham chiếu mới",
+      "số hiệu hình mới"
+    ],
+    "blockers": [
+      "Đổi số hiệu mục",
+      "Bỏ dấu ngoặc của chú thích hình (Hình 2.1)",
+      "Vẫn để chỉ mục trong ngoặc đơn"
+    ]
   }
 ]

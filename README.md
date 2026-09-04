@@ -4,7 +4,7 @@ Humanizer-VietAcademic là công cụ tối ưu hóa văn phong học thuật ti
 
 ## Cách thức hoạt động
 
-Humanizer-VietAcademic xây dựng bộ 35 pattern trên cơ sở danh mục [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) của Wikipedia, kết hợp với hệ thống quy chuẩn ngữ pháp, nhịp điệu và dấu câu của văn bản học thuật tiếng Việt.
+Humanizer-VietAcademic xây dựng bộ 37 pattern trên cơ sở danh mục [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) của Wikipedia, kết hợp với hệ thống quy chuẩn ngữ pháp, nhịp điệu và dấu câu của văn bản học thuật tiếng Việt.
 
 > **Nguyên lý cốt lõi:** *Khi phân vân, hãy ghép mệnh đề thay vì tách câu.*
 
@@ -74,7 +74,7 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 3. **`needs_author_decision`:** Đặt câu hỏi và đưa ra các lựa chọn cho tác giả khi câu gốc mơ hồ và có nhiều cách hiểu kỹ thuật khác nhau.
 4. **`no_change`:** Giữ nguyên văn bản gốc khi câu chữ đã tự nhiên, chuẩn xác và không mắc lỗi AI.
 
-## Bộ 35 pattern
+## Bộ 37 pattern
 
 ### Nhóm nội dung
 
@@ -109,32 +109,34 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 | 17 | **Viết hoa kiểu Title Case ở tiêu đề** | "## Phân Tích Hiệu Năng Của Thuật Toán" | "## Phân tích hiệu năng của thuật toán" |
 | 18 | **Sử dụng Emoji và biểu tượng trang trí** | "💡 **Kết quả chính:** Đạt 95%" | "Kết quả thử nghiệm cho thấy mô hình đạt độ chính xác 95%" |
 | 19 | **Dấu ngoặc kép thẳng** | `gọi là "học sâu"` | `gọi là “học sâu”` |
+| 20 | **Diễn giải nhét trong ngoặc đơn** | "kỹ thuật Top-k (chỉ giữ lại k từ có xác suất cao nhất)" | "kỹ thuật Top-k, chỉ giữ lại k từ có xác suất cao nhất" |
+| 21 | **Chỉ mục tham chiếu để trong ngoặc** | "số lần lặp thí nghiệm (mục 3.2)" | "số lần lặp thí nghiệm trình bày ở mục 3.2" |
 
 ### Nhóm dấu vết chatbot
 
 | # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 20 | **Lời chào và xã giao của Chatbot** | "Chắc chắn rồi! Dưới đây là phần mở đầu... Hy vọng hữu ích cho bạn!" | "Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu" |
-| 21 | **Tuyên bố giới hạn tri thức và phỏng đoán** | "Chưa công bố công khai, nhiều khả năng nhóm tác giả đã áp dụng nén..." | "Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán" |
-| 22 | **Giọng điệu nịnh nọt, tán đồng thái quá** | "Câu hỏi của bạn rất hay! Bạn hoàn toàn đúng khi nhận định..." | "Chi phí đầu tư phần cứng là một trong những rào cản chính khi triển khai" |
+| 22 | **Lời chào và xã giao của Chatbot** | "Chắc chắn rồi! Dưới đây là phần mở đầu... Hy vọng hữu ích cho bạn!" | "Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu" |
+| 23 | **Tuyên bố giới hạn tri thức và phỏng đoán** | "Chưa công bố công khai, nhiều khả năng nhóm tác giả đã áp dụng nén..." | "Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán" |
+| 24 | **Giọng điệu nịnh nọt, tán đồng thái quá** | "Câu hỏi của bạn rất hay! Bạn hoàn toàn đúng khi nhận định..." | "Chi phí đầu tư phần cứng là một trong những rào cản chính khi triển khai" |
 
 ### Nhóm sáo rỗng và rào đón
 
 | # | Pattern | Trước khi sửa | Sau khi sửa |
 |---|---------|--------|-------|
-| 23 | **Cụm từ đệm rườm rà** | "Nhằm mục đích để nâng cao độ chính xác, việc áp dụng mô hình là cần thiết" | "Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron" |
-| 24 | **Từ ngữ rào đón, thiếu dứt khoát** | "Kết quả phần nào có thể xem là tương đối khả quan ở mức độ nhất định" | "Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử" |
-| 25 | **Kết bài lạc quan sáo rỗng** | "Tương lai tươi sáng đang mở ra cho ngành AI với những bước tiến vượt bậc" | Kết bài bằng kết quả thực nghiệm cụ thể hoặc phương hướng nghiên cứu |
-| 26 | **Động từ phụ tiếng Trung & thành ngữ sáo ngữ** | "tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu" | "phân tích các mẫu dữ liệu thu thập được" |
-| 27 | **Lên gân triết lý, giả vờ hé lộ chân lý** | "Vấn đề cốt lõi thực chất nằm ở chỗ..." | "Độ trễ hệ thống tăng chủ yếu do..." |
-| 28 | **Thông báo sắp trình bày điều gì** | "Hãy cùng tìm hiểu cơ chế hoạt động..." | "Giao thức TCP đảm bảo truyền dữ liệu tin cậy qua cơ chế bắt tay ba bước" |
-| 29 | **Lặp lại tiêu đề ngay câu đầu tiên** | "### 3.1. Kiến trúc hệ thống\nKiến trúc hệ thống đóng vai trò quan trọng..." | Trình bày trực tiếp nội dung kiến trúc ngay dưới tiêu đề |
-| 30 | **Mô tả phiên bản cũ đã bị loại bỏ** | "Hàm này viết lại để thay thế cách tiếp cận cũ vốn chạy O(n²)" | "Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1)" |
-| 31 | **Câu cụt kịch tính, ngắt câu gãy khúc** | "Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log." | "Hệ thống không ghi nhận lỗi và không cảnh báo, mà chỉ âm thầm ghi log" |
-| 32 | **Ẩn dụ, ví von sáo mòn** | "Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công..." | "Chất lượng tiền xử lý dữ liệu quyết định độ chính xác của mô hình" |
-| 33 | **Mở đầu bộc bạch giả tạo** | "Thành thật mà nói, việc tối ưu thời gian phản hồi là..." | "Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn..." |
-| 34 | **Phòng thủ, giải thích cho thắc mắc không ai hỏi** | "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của RDBMS, nhưng..." | "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ phi cấu trúc" |
-| 35 | **Đưa phương án giả định để tự bác bỏ** | "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ, nhưng..." | "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ khi vận hành" |
+| 25 | **Cụm từ đệm rườm rà** | "Nhằm mục đích để nâng cao độ chính xác, việc áp dụng mô hình là cần thiết" | "Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron" |
+| 26 | **Từ ngữ rào đón, thiếu dứt khoát** | "Kết quả phần nào có thể xem là tương đối khả quan ở mức độ nhất định" | "Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử" |
+| 27 | **Kết bài lạc quan sáo rỗng** | "Tương lai tươi sáng đang mở ra cho ngành AI với những bước tiến vượt bậc" | Kết bài bằng kết quả thực nghiệm cụ thể hoặc phương hướng nghiên cứu |
+| 28 | **Động từ phụ tiếng Trung & thành ngữ sáo ngữ** | "tiến hành thực hiện việc phân tích đối với các mẫu dữ liệu" | "phân tích các mẫu dữ liệu thu thập được" |
+| 29 | **Lên gân triết lý, giả vờ hé lộ chân lý** | "Vấn đề cốt lõi thực chất nằm ở chỗ..." | "Độ trễ hệ thống tăng chủ yếu do..." |
+| 30 | **Thông báo sắp trình bày điều gì** | "Hãy cùng tìm hiểu cơ chế hoạt động..." | "Giao thức TCP đảm bảo truyền dữ liệu tin cậy qua cơ chế bắt tay ba bước" |
+| 31 | **Lặp lại tiêu đề ngay câu đầu tiên** | "### 3.1. Kiến trúc hệ thống\nKiến trúc hệ thống đóng vai trò quan trọng..." | Trình bày trực tiếp nội dung kiến trúc ngay dưới tiêu đề |
+| 32 | **Mô tả phiên bản cũ đã bị loại bỏ** | "Hàm này viết lại để thay thế cách tiếp cận cũ vốn chạy O(n²)" | "Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1)" |
+| 33 | **Câu cụt kịch tính, ngắt câu gãy khúc** | "Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log." | "Hệ thống không ghi nhận lỗi và không cảnh báo, mà chỉ âm thầm ghi log" |
+| 34 | **Ẩn dụ, ví von sáo mòn** | "Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công..." | "Chất lượng tiền xử lý dữ liệu quyết định độ chính xác của mô hình" |
+| 35 | **Mở đầu bộc bạch giả tạo** | "Thành thật mà nói, việc tối ưu thời gian phản hồi là..." | "Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn..." |
+| 36 | **Phòng thủ, giải thích cho thắc mắc không ai hỏi** | "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của RDBMS, nhưng..." | "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ phi cấu trúc" |
+| 37 | **Đưa phương án giả định để tự bác bỏ** | "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ, nhưng..." | "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ khi vận hành" |
 
 ## Ví dụ minh họa thực tế (Full example)
 
@@ -148,7 +150,7 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 
 ```text
 .
-├── SKILL.md                          # Prompt chính điều phối kỹ năng và 35 pattern
+├── SKILL.md                          # Prompt chính điều phối kỹ năng và 37 pattern
 ├── patterns/
 │   ├── schema.json                   # JSON schema chuẩn hóa định dạng các pattern
 │   ├── layer1-grammar-syntax.yml     # Quy tắc Lớp 1: Ngữ pháp, dấu câu và nhịp điệu
@@ -182,6 +184,7 @@ Repository này được fork từ **blader/humanizer** và tích hợp các ngh
 <details>
 <summary>Xem nhật ký phát hành</summary>
 
+- **2.13.0**: Bổ sung 2 pattern về dấu ngoặc đơn, nâng tổng số lên 37. `VA-L2-36` bắt mệnh đề tiếng Việt bị nhét vào trong ngoặc thay vì viết thành lời văn, `VA-L1-20` bắt chỉ mục tham chiếu kiểu `(mục 3.2)` lẽ ra phải dẫn bằng `ở mục 3.2`. Cả hai đã nối vào `scripts/kiem_tra.py` và có case hồi quy chống báo oan cho trích dẫn, chú thích hình bảng và chú giải thuật ngữ tiếng Anh. Hai pattern chèn vào vị trí 20 và 21 trong nhóm văn phong, các pattern cũ từ 20 đến 35 dồn thành 22 đến 37, riêng mã ID trong `patterns/*.yml` giữ nguyên.
 - **2.12.0**: Chuẩn hóa pattern catalog thành nguồn chân lý duy nhất (single source of truth): `scripts/kiem_tra.py` tự động đọc tín hiệu từ `patterns/*.yml` và lọc theo văn phong đã chọn. Khắc phục 3 trường hợp báo oan (từ nối nguyên nhân `bởi vì`, chuỗi 2 câu ngắn, và từ nằm trong ngoặc kép trích dẫn) kèm bài test trong `scripts/test-kiem-tra.py`. Tái cấu trúc benchmark runner hỗ trợ chấm điểm output thực tế bằng `--actual`. Bổ sung 4 quy tắc Lớp 1 (ngày tháng, chuỗi `của` lặp, thừa từ chỉ số nhiều, thừa từ `sẽ`) và tích hợp toàn bộ kiểm tra vào CI.
 - **2.11.2**: Nâng cấp toàn diện thành Humanizer-VietAcademic: tích hợp ngữ pháp/nhịp điệu tiếng Việt, 35 pattern học thuật hóa, danh mục YAML, benchmark runner và tài liệu tham chiếu đa phân hệ.
 - **2.11.1**: Bổ sung gói phát hành tương thích với Claude Desktop.

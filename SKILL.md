@@ -8,7 +8,7 @@ description: |
   "humanize text", or reviewing formal Vietnamese academic papers.
 license: MIT
 metadata:
-  version: "2.12.0"
+  version: "2.13.0"
 ---
 
 # Humanizer-VietAcademic: Remove AI patterns in Vietnamese academic prose
@@ -23,7 +23,7 @@ English splits clauses with punctuation; Vietnamese connects with words. Natural
 
 ## What to do
 
-1. **Find AI and translation patterns.** Check the text against the 35 numbered patterns below.
+1. **Find AI and translation patterns.** Check the text against the 37 numbered patterns below.
 2. **Preserve every claim and citation.** Retain all facts, names, dates, numbers, equations, and literature citations (`[1]`, `(Nguyen et al., 2024)`). Never invent facts or citations.
 3. **Ensure Vietnamese academic cadence.** Maintain connective density (4–5 per 100 syllables) and alternate long (median 21 syllables) and short sentences.
 4. **Enforce hard punctuation rules.** Ban unspaced dashes (`—`, `–`) and semicolons (`;`) inside sentences. Require curved quotation marks (`“ ”`) and decimal commas (`94,7%`).
@@ -223,11 +223,29 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Phương pháp này được gọi là “học sâu”.
 
+### 20. Explanations parked inside parentheses
+
+**Rule:** Parentheses may hold a term gloss (a foreign-language term or an abbreviation) but never a Vietnamese clause. If the material inside the parens has a verb, fold it back into the sentence with a connective and leave only the foreign term in the brackets.
+**Problem:** Same fault as #14, with brackets instead of a dash. It also creates asymmetry, because parallel items end up described in two different shapes, one bracketed and one not.
+**Before:**
+> Tiêu biểu nhất là kỹ thuật Top-$k$ (chỉ giữ lại $k$ từ có xác suất cao nhất) và Top-$p$ hay nucleus sampling, chỉ giữ lại nhóm các từ đứng đầu có tổng xác suất đạt một ngưỡng $p$.
+**After:**
+> Tiêu biểu nhất là hai kỹ thuật Top-$k$ và Top-$p$, hay còn gọi là nucleus sampling. Top-$k$ chỉ giữ lại $k$ từ có xác suất cao nhất, còn Top-$p$ giữ lại nhóm các từ đứng đầu cho tới khi tổng xác suất của chúng chạm một ngưỡng $p$ định trước.
+
+### 21. Cross-references bracketed instead of introduced
+
+**Rule:** A reference to another section of the same document belongs in the sentence. Introduce it with *ở mục*, *tại mục*, *trình bày ở mục*, or *xem mục*. Do not park it in parentheses as `(mục 3.2)`.
+**Exception:** Figure, table, appendix, and equation callouts keep their parentheses: `(Hình 2.1)`, `(Bảng 3.4)`, `(Phụ lục A)`, `(công thức 2.3)`.
+**Before:**
+> Ràng buộc này chi phối cả cách xác định số lần lặp thí nghiệm (mục 3.2) lẫn các giới hạn về khả năng tái lập (mục 6.2).
+**After:**
+> Ràng buộc này chi phối cả cách xác định số lần lặp thí nghiệm ở mục 3.2 lẫn các giới hạn về khả năng tái lập trình bày tại mục 6.2.
+
 ---
 
 ## Chatbot patterns
 
-### 20. Chatbot text left in the answer
+### 22. Chatbot text left in the answer
 
 **Words to watch:** Chắc chắn rồi!, Dưới đây là, Hy vọng phần trên hữu ích, Hãy cho mình biết nếu...
 **Problem:** Conversational chatbot artifacts remaining in exported reports.
@@ -236,7 +254,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu.
 
-### 21. Knowledge-limit disclaimers and speculative gaps
+### 23. Knowledge-limit disclaimers and speculative gaps
 
 **Words to watch:** Tính đến thời điểm hiện tại, Theo hiểu biết của tôi, Dữ liệu không công khai nhưng có khả năng
 **Problem:** AI confesses cutoff dates or invents speculative filler to plug missing sources.
@@ -245,7 +263,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán.
 
-### 22. Overly agreeable tone
+### 24. Overly agreeable tone
 
 **Words to watch:** Câu hỏi rất hay!, Bạn hoàn toàn đúng khi cho rằng
 **Problem:** AI excessively flatters the prompt before presenting information.
@@ -258,7 +276,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 
 ## Filler and hedging
 
-### 23. Filler phrases
+### 25. Filler phrases
 
 **Words to watch:** nhằm mục đích để, do bởi vì, trong bối cảnh hiện nay thì, việc ... là điều hết sức cần thiết, có thể nói rằng
 **Problem:** Wordy bureaucratic boilerplate that dilutes technical clarity.
@@ -267,7 +285,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron tích chập.
 
-### 24. Too many qualifiers
+### 26. Too many qualifiers
 
 **Words to watch:** phần nào, ở một mức độ nhất định, tương đối, có thể nói là, khá là
 **Problem:** Piling qualifiers until technical assertions become non-committal.
@@ -276,7 +294,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử.
 
-### 25. Generic positive endings
+### 27. Generic positive endings
 
 **Problem:** Concluding chapters with vague inspirational send-offs instead of technical summaries.
 **Before:**
@@ -284,7 +302,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nghiên cứu đã hoàn thành mục tiêu xây dựng mô hình phân loại và mở ra hướng tối ưu hóa bộ nhớ cho các thiết bị biên.
 
-### 26. Four-character clichés and bureaucratic wordiness
+### 28. Four-character clichés and bureaucratic wordiness
 
 **Words to watch:** tiến hành thực hiện, tiến hành nghiên cứu đối với, triển khai áp dụng vào trong thực tiễn, muôn màu muôn vẻ
 **Problem:** Bureaucratic helper-verb inflation (calquing Chinese 进行/实现) or poetic idioms.
@@ -293,7 +311,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nhóm nghiên cứu phân tích các mẫu dữ liệu thu thập được.
 
-### 27. Pretending to reveal a deeper truth
+### 29. Pretending to reveal a deeper truth
 
 **Words to watch:** Về bản chất, Vấn đề cốt lõi nằm ở chỗ, Xét cho cùng, Thực chất
 **Problem:** Staging routine technical points as profound revelations.
@@ -302,7 +320,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Độ trễ hệ thống tăng chủ yếu do chi phí truyền thông qua mạng giữa các vi dịch vụ.
 
-### 28. Announcing the next point
+### 30. Announcing the next point
 
 **Words to watch:** Hãy cùng tìm hiểu, Sau đây chúng ta sẽ đi sâu vào, Trước tiên cần khẳng định rằng
 **Problem:** Conversational meta-commentary announcing upcoming sections.
@@ -311,7 +329,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Giao thức TCP đảm bảo truyền dữ liệu tin cậy thông qua cơ chế bắt tay ba bước.
 
-### 29. A heading repeated in the first sentence
+### 31. A heading repeated in the first sentence
 
 **Problem:** Echoing the heading in a one-line restatement immediately below it.
 **Before:**
@@ -321,7 +339,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 > ### 3.1. Kiến trúc hệ thống
 > Hệ thống gồm 3 tầng chính...
 
-### 30. Writing about the previous version
+### 32. Writing about the previous version
 
 **Problem:** Describing discarded iterations in present-tense technical documentation.
 **Before:**
@@ -329,7 +347,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1).
 
-### 31. Dramatic fragments and clipped sentence runs
+### 33. Dramatic fragments and clipped sentence runs
 
 **Problem:** Adjacent clipped sentences mimicking English dramatic syntax. Merge with connectives.
 **Before:**
@@ -337,7 +355,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Hệ thống không ghi nhận lỗi và không phát cảnh báo, mà chỉ âm thầm lưu vào nhật ký hoạt động.
 
-### 32. Formulaic sayings
+### 34. Formulaic sayings
 
 **Words to watch:** X là chìa khóa của Y, X là chiếc cầu nối, X là kim chỉ nam cho
 **Problem:** Trite metaphors replacing technical precision.
@@ -346,7 +364,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Chất lượng dữ liệu tiền xử lý quyết định trực tiếp đến độ chính xác của mô hình học máy.
 
-### 33. Fake-candid openings
+### 35. Fake-candid openings
 
 **Words to watch:** Thành thật mà nói, Thú thực, Nhìn nhận khách quan thì
 **Problem:** Artificial theatrical pauses before ordinary claims.
@@ -355,7 +373,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn trong hệ thống phân tán.
 
-### 34. Answering objections no one raised
+### 36. Answering objections no one raised
 
 **Words to watch:** Điều này không có nghĩa là, Chúng tôi không phủ nhận, Đừng hiểu nhầm rằng
 **Problem:** Defending against unstated criticisms. State the technical constraint directly.
@@ -364,7 +382,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ dữ liệu phi cấu trúc của đề tài.
 
-### 35. Rejecting fake alternatives
+### 37. Rejecting fake alternatives
 
 **Words to watch:** Một phương án dễ nghĩ đến là, Người ta có thể bị cám dỗ bởi, Có ý kiến cho rằng nên
 **Problem:** Introducing and immediately dismissing arbitrary strawman options.
@@ -409,7 +427,7 @@ Depending on the input quality and source availability, produce output in one of
 
 ## Rewrite process
 
-1. Identify AI patterns and syntactic translationese against the 35 patterns.
+1. Identify AI patterns and syntactic translationese against the 37 patterns.
 2. Draft the revision: join clauses using subordinating connectives, eliminate fluff, and balance sentence rhythm.
 3. Self-check with two mandatory questions:
    - *"Does this sound like natural Vietnamese academic prose or a machine translation?"*

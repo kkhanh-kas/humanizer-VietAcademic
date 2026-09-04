@@ -73,8 +73,8 @@ pattern_numbers = [
     int(number)
     for number in re.findall(r"(?m)^### ([0-9]+)\. ", SKILL)
 ]
-if pattern_numbers != list(range(1, 36)):
-    raise SystemExit(f"Number SKILL.md patterns from 1 through 35: {pattern_numbers}")
+if pattern_numbers != list(range(1, 38)):
+    raise SystemExit(f"Number SKILL.md patterns from 1 through 37: {pattern_numbers}")
 
 def group_patterns(text: str, heading: str, row: str) -> dict[str, list[int]]:
     """Map each section heading to the pattern numbers listed under it."""
@@ -105,8 +105,8 @@ if list(readme_groups.values()) != list(skill_groups.values()):
     )
 
 readme_numbers = {number for numbers in readme_groups.values() for number in numbers}
-if readme_numbers != set(range(1, 36)):
-    raise SystemExit("List patterns 1 through 35 in the README table")
+if readme_numbers != set(range(1, 38)):
+    raise SystemExit("List patterns 1 through 37 in the README table")
 
 required_paths = (
     "patterns/schema.json",
