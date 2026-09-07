@@ -1,5 +1,5 @@
 # Layer 1: Vietnamese Academic Grammar, Syntax, Punctuation and Cadence
-# ID range: VA-L1-01 to VA-L1-20
+# ID range: VA-L1-01 to VA-L1-21
 
 - id: VA-L1-01
   name: Connective Density
@@ -426,3 +426,28 @@
   good_examples:
     - "Ràng buộc này chi phối số lần lặp thí nghiệm trình bày ở mục 3.2."
     - "Các giới hạn về khả năng tái lập được nêu tại mục \ref{sec:hanche}."
+
+- id: VA-L1-21
+  name: Dịch thô thuật ngữ sang từ lệch ngành
+  lop: 1
+  category: style
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat]
+  description: Không dịch thuật ngữ tiếng Anh bằng nghĩa từ điển đầu tiên khi nghĩa đó thuộc ngành khác hoặc là từ người Việt hiếm dùng.
+  explanation: 'literature' phải dịch là 'tài liệu', 'tài liệu nghiên cứu', 'các nghiên cứu trước' hoặc 'công trình đã công bố'. 'Y văn' là từ của ngành y, chỉ đúng trong bài lâm sàng và y học. 'State of the art' dịch là 'mức tiên tiến hiện nay' hoặc 'các phương pháp tốt nhất hiện nay', không phải 'trạng thái nghệ thuật'.
+  signals:
+    phrases:
+      - "y văn"
+      - "trạng thái nghệ thuật"
+  exceptions:
+    - "Bài y học và lâm sàng giữ nguyên 'y văn', vì đó là thuật ngữ chuẩn của ngành."
+  bad_examples:
+    - "Tổng quan y văn cho thấy vẫn còn khoảng trống trong y văn về khả năng diễn giải của mô hình."
+    - "Các phương pháp đạt trạng thái nghệ thuật vẫn chưa xử lý được nhiễu nền."
+  good_examples:
+    - "Tổng quan tài liệu cho thấy các nghiên cứu trước còn bỏ ngỏ khả năng diễn giải của mô hình."
+    - "Các phương pháp tốt nhất hiện nay vẫn chưa xử lý được nhiễu nền."

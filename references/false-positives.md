@@ -35,3 +35,7 @@ This reference defines valid Vietnamese academic conventions that must **NEVER**
 ### 8. Parenthetical Term Glosses and Figure Callouts
 - **Standard:** Parentheses holding a foreign-language term (`(self-attention)`), a full-form-plus-abbreviation pair (`(multi-agent system, MAS)`), a figure, table, appendix or equation callout (`(Hình 2.1)`, `(Bảng 3.4)`, `(Phụ lục A)`), a Vietnamese noun phrase with no verb (`(mô hình sinh văn bản)`), a citation (`(Nguyễn và cộng sự, 2024)`), or a statistic (`(n = 30)`, `(p < 0,05)`).
 - **Rule:** Flag a parenthesis ONLY when its content is a Vietnamese clause carrying a verb (VA-L2-36), or a bare section pointer such as `(mục 3.2)` (VA-L1-20). Never strip a term gloss. When a clause must come out of the brackets, shrink the parenthesis back to the foreign term instead of deleting it.
+
+### 9. Field Terms Used in Their Own Field
+- **Standard:** *“Y văn”* is the standard word for *literature* in medical and clinical writing.
+- **Rule:** Flag it (VA-L1-21) only outside medicine, where *tài liệu* or *các nghiên cứu trước* is the natural choice. The same logic applies to every domain term: judge it against the field of the draft, not against the dictionary.

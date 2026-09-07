@@ -25,6 +25,8 @@ This reference details the foundational grammatical, punctuation, and structural
 | `VA-L1-17` | Chained `của` | Syntax | Phrase | Warning | Never chain two `của` inside one noun phrase |
 | `VA-L1-18` | Plural Marker | Syntax | Phrase | Preference | Drop `các`/`những` before mass nouns (`dữ liệu`, `thông tin`) |
 | `VA-L1-19` | Future Marker | Syntax | Phrase | Preference | Drop `sẽ` when reporting results that already exist |
+| `VA-L1-20` | Bracketed Cross-Reference | Punctuation | Sentence | Warning | Introduce a section pointer with `ở mục 3.2`; do not park it as `(mục 3.2)` |
+| `VA-L1-21` | Field-Mismatched Terms | Style | Phrase | Warning | Translate `literature` as `tài liệu`, not `y văn`, outside medical writing |
 
 ---
 
@@ -42,6 +44,11 @@ Vietnamese academic sentences maintain cohesion through subordinating conjunctio
 
 ### 3. Punctuation Invariants (`VA-L1-05`, `VA-L1-06`, `VA-L1-14`, `VA-L1-16`)
 - **No dashes inside sentences:** Do not use `—`, `–`, or spaced ` - ` to interrupt a sentence. Replace with commas plus connectives.
-- **No semicolons:** Vietnamese prose requires only commas and periods.
+- **No semicolons:** Vietnamese prose requires only commas and periods. A semicolon stays only inside code blocks, formulas, and verbatim quotations.
 - **Curved quotation marks:** Always use `“ ”` instead of `" "`.
 - **Dates:** Write `18/6/2026`, never `06/18/2026` and never `June 18, 2026`.
+
+### 4. Field-Mismatched Terms (`VA-L1-21`)
+An English academic term must be rendered with the word its Vietnamese field actually uses, not the first dictionary match.
+- **`literature`:** write *tài liệu*, *tài liệu nghiên cứu*, *các nghiên cứu trước*, or *công trình đã công bố*. *Y văn* belongs to medicine and is correct only in medical and clinical papers.
+- **`state of the art`:** write *mức tiên tiến hiện nay* or *các phương pháp tốt nhất hiện nay*, never *trạng thái nghệ thuật*.

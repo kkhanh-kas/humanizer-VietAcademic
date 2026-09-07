@@ -57,6 +57,10 @@ PHAI_BAO = [
      "Ràng buộc này chi phối số lần lặp thí nghiệm (mục 3.2).", "tham-chieu-ngoac"),
     ("Chỉ mục tham chiếu dạng lệnh ref của LaTeX",
      "Các giới hạn về khả năng tái lập (mục \ref{sec:hanche}).", "tham-chieu-ngoac"),
+    ("'y văn' là bản dịch thô của 'literature'",
+     "Tổng quan y văn cho thấy vấn đề này chưa được giải quyết triệt để.", "thuat-ngu-lech"),
+    ("'trạng thái nghệ thuật' là bản dịch thô của 'state of the art'",
+     "Các phương pháp đạt trạng thái nghệ thuật vẫn chưa xử lý được nhiễu nền.", "thuat-ngu-lech"),
 ]
 
 # (mô tả, văn bản, mã lỗi không được xuất hiện)
@@ -115,6 +119,12 @@ KHONG_DUOC_BAO = [
     ("Chỉ mục dẫn đúng cách thì không báo",
      "Ràng buộc này chi phối số lần lặp thí nghiệm trình bày ở mục 3.2.",
      "tham-chieu-ngoac"),
+    ("Cách dịch đúng của 'literature' thì không báo",
+     "Tổng quan tài liệu cho thấy các nghiên cứu trước còn bỏ ngỏ vấn đề này.",
+     "thuat-ngu-lech"),
+    ("Chữ 'y' nằm giữa một từ khác thì không báo",
+     "Bộ phận khảo sát trực thuộc công ty Văn Lang, phụ trách thu thập dữ liệu hiện trường.",
+     "thuat-ngu-lech"),
 ]
 
 

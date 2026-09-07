@@ -8,7 +8,7 @@ description: |
   "humanize text", or reviewing formal Vietnamese academic papers.
 license: MIT
 metadata:
-  version: "2.13.0"
+  version: "2.14.0"
 ---
 
 # Humanizer-VietAcademic: Remove AI patterns in Vietnamese academic prose
@@ -23,16 +23,17 @@ English splits clauses with punctuation; Vietnamese connects with words. Natural
 
 ## What to do
 
-1. **Find AI and translation patterns.** Check the text against the 37 numbered patterns below.
+1. **Find AI and translation patterns.** Check the text against the 38 numbered patterns below.
 2. **Preserve every claim and citation.** Retain all facts, names, dates, numbers, equations, and literature citations (`[1]`, `(Nguyen et al., 2024)`). Never invent facts or citations.
 3. **Ensure Vietnamese academic cadence.** Maintain connective density (4–5 per 100 syllables) and alternate long (median 21 syllables) and short sentences.
-4. **Enforce hard punctuation rules.** Ban unspaced dashes (`—`, `–`) and semicolons (`;`) inside sentences. Require curved quotation marks (`“ ”`) and decimal commas (`94,7%`).
+4. **Enforce hard punctuation rules.** Ban dashes (`—`, `–`, ` - `) and semicolons (`;`) inside sentences. Require curved quotation marks (`“ ”`) and decimal commas (`94,7%`).
 
 ## Hard rules for academic Vietnamese
 
 - **Connectives:** Use subordinating conjunctions freely inside sentences (*và, là, khi, mà, nếu, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, bên cạnh đó, ngoài ra*). Avoid spoken particles (*vậy nên, thế nên, thì, rồi, á, nhé*).
 - **Passive voice & Pronouns:** Eliminate `được ... bởi` (calque of `be ... by`). Never address the reader as *bạn*. Use *chúng tôi, tác giả, nhóm nghiên cứu* or omit the subject. Replace pronoun *nó* with the specific noun.
 - **Mandatory sections:** Keep required report sections (*Kết luận*, *Hạn chế và hướng phát triển*), but eliminate empty filler inside them.
+- **Terminology:** Translate an English term with the word its Vietnamese field uses. Write *tài liệu* or *các nghiên cứu trước* for *literature*, and keep *y văn* for medical writing only.
 
 ## Bundled resources
 
@@ -170,19 +171,33 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Hệ thống tự động thu thập dữ liệu với tốc độ xử lý dưới 50ms.
 
+### 14. Terms translated word for word into the wrong field
+
+**Words to watch:** y văn, tổng quan y văn, khoảng trống y văn (for *literature*), trạng thái nghệ thuật (for *state of the art*), văn liệu, tính mạnh mẽ (for *robustness*)
+**Problem:** AI renders an English academic term with the first dictionary match, and the match belongs to another field or is a word Vietnamese writers rarely use. *Literature* is the common case: *y văn* is medical vocabulary, so it is wrong everywhere except clinical writing. Write what a Vietnamese researcher in that field would write: *tài liệu*, *tài liệu nghiên cứu*, *các nghiên cứu trước*, *công trình đã công bố*.
+**Exception:** Keep *y văn* in medical and clinical papers, where it is the standard term.
+**Before:**
+> Tổng quan y văn cho thấy vẫn còn khoảng trống trong y văn về khả năng diễn giải của mô hình, và các phương pháp đạt trạng thái nghệ thuật vẫn chưa giải quyết được vấn đề này.
+**After:**
+> Tổng quan tài liệu cho thấy các nghiên cứu trước còn bỏ ngỏ khả năng diễn giải của mô hình, và ngay cả những phương pháp tốt nhất hiện nay cũng chưa giải quyết được vấn đề này.
+
 ---
 
 ## Style patterns
 
-### 14. Em and en dashes inside sentences
+### 15. Dashes and semicolons inside sentences
 
-**Rule:** Never use `—`, `–`, or spaced ` - ` to break clauses in Vietnamese academic prose. Replace with a comma plus a connective, or split into two sentences. Retain dashes only in unspaced proper nouns, numeric ranges (`1–12 tháng`), and abbreviation glosses.
+**Rule:** Never use `—`, `–`, spaced ` - `, or `;` to break clauses in Vietnamese academic prose. Replace each with a comma plus a connective, or split into two sentences. Retain dashes only in unspaced proper nouns, numeric ranges (`1–12 tháng`), and abbreviation glosses. The semicolon has no exception in prose: it survives only inside code blocks, formulas, and verbatim quotations.
 **Before:**
 > Hệ thống xác thực — vốn phát triển theo chuẩn OAuth 2.0 — cho phép phân quyền chi tiết.
 **After:**
 > Hệ thống xác thực được phát triển theo chuẩn OAuth 2.0, nhờ đó cho phép phân quyền chi tiết.
+**Before:**
+> Mô hình đạt độ chính xác 95%; thời gian huấn luyện giảm 30%.
+**After:**
+> Mô hình đạt độ chính xác 95%, đồng thời thời gian huấn luyện giảm 30%.
 
-### 15. Too much bold text
+### 16. Too much bold text
 
 **Problem:** Gratuitous bolding across sentences.
 **Before:**
@@ -190,7 +205,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Mô hình Transformer sử dụng cơ chế Self-Attention để xử lý chuỗi văn bản.
 
-### 16. Lists with bold mini-headings
+### 17. Lists with bold mini-headings
 
 **Problem:** Overusing bullet points where continuous explanatory paragraphs are expected.
 **Before:**
@@ -199,7 +214,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Việc tối ưu thuật toán giúp tăng tốc độ xử lý thêm 20%, đồng thời tiết kiệm 15% tài nguyên phần cứng.
 
-### 17. Title case in headings
+### 18. Title case in headings
 
 **Problem:** Capitalizing every word in headings (English style). Vietnamese headings capitalize only the first word and proper nouns, or use ALL CAPS for chapter titles (`CHƯƠNG 2: CƠ SỞ LÝ THUYẾT`).
 **Before:**
@@ -207,7 +222,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > ## Phân tích hiệu năng của thuật toán sắp xếp
 
-### 18. Emojis and decorative icons
+### 19. Emojis and decorative icons
 
 **Problem:** AI inserts emojis (🚀, 💡, ✅) into formal reports. Remove them.
 **Before:**
@@ -215,7 +230,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Kết quả thử nghiệm cho thấy mô hình đạt độ chính xác 95%.
 
-### 19. Straight quotation marks
+### 20. Straight quotation marks
 
 **Rule:** Academic Vietnamese strictly uses curved quotation marks (`“ ”`). Replace straight quotes (`" "`).
 **Before:**
@@ -223,16 +238,16 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Phương pháp này được gọi là “học sâu”.
 
-### 20. Explanations parked inside parentheses
+### 21. Explanations parked inside parentheses
 
 **Rule:** Parentheses may hold a term gloss (a foreign-language term or an abbreviation) but never a Vietnamese clause. If the material inside the parens has a verb, fold it back into the sentence with a connective and leave only the foreign term in the brackets.
-**Problem:** Same fault as #14, with brackets instead of a dash. It also creates asymmetry, because parallel items end up described in two different shapes, one bracketed and one not.
+**Problem:** Same fault as #15, with brackets instead of a dash. It also creates asymmetry, because parallel items end up described in two different shapes, one bracketed and one not.
 **Before:**
 > Tiêu biểu nhất là kỹ thuật Top-$k$ (chỉ giữ lại $k$ từ có xác suất cao nhất) và Top-$p$ hay nucleus sampling, chỉ giữ lại nhóm các từ đứng đầu có tổng xác suất đạt một ngưỡng $p$.
 **After:**
 > Tiêu biểu nhất là hai kỹ thuật Top-$k$ và Top-$p$, hay còn gọi là nucleus sampling. Top-$k$ chỉ giữ lại $k$ từ có xác suất cao nhất, còn Top-$p$ giữ lại nhóm các từ đứng đầu cho tới khi tổng xác suất của chúng chạm một ngưỡng $p$ định trước.
 
-### 21. Cross-references bracketed instead of introduced
+### 22. Cross-references bracketed instead of introduced
 
 **Rule:** A reference to another section of the same document belongs in the sentence. Introduce it with *ở mục*, *tại mục*, *trình bày ở mục*, or *xem mục*. Do not park it in parentheses as `(mục 3.2)`.
 **Exception:** Figure, table, appendix, and equation callouts keep their parentheses: `(Hình 2.1)`, `(Bảng 3.4)`, `(Phụ lục A)`, `(công thức 2.3)`.
@@ -245,7 +260,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 
 ## Chatbot patterns
 
-### 22. Chatbot text left in the answer
+### 23. Chatbot text left in the answer
 
 **Words to watch:** Chắc chắn rồi!, Dưới đây là, Hy vọng phần trên hữu ích, Hãy cho mình biết nếu...
 **Problem:** Conversational chatbot artifacts remaining in exported reports.
@@ -254,7 +269,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Chương 3 trình bày chi tiết về kiến trúc hệ thống và quy trình xử lý dữ liệu.
 
-### 23. Knowledge-limit disclaimers and speculative gaps
+### 24. Knowledge-limit disclaimers and speculative gaps
 
 **Words to watch:** Tính đến thời điểm hiện tại, Theo hiểu biết của tôi, Dữ liệu không công khai nhưng có khả năng
 **Problem:** AI confesses cutoff dates or invents speculative filler to plug missing sources.
@@ -263,7 +278,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nhóm tác giả không công bố chi tiết thông số kỹ thuật của thuật toán.
 
-### 24. Overly agreeable tone
+### 25. Overly agreeable tone
 
 **Words to watch:** Câu hỏi rất hay!, Bạn hoàn toàn đúng khi cho rằng
 **Problem:** AI excessively flatters the prompt before presenting information.
@@ -276,7 +291,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 
 ## Filler and hedging
 
-### 25. Filler phrases
+### 26. Filler phrases
 
 **Words to watch:** nhằm mục đích để, do bởi vì, trong bối cảnh hiện nay thì, việc ... là điều hết sức cần thiết, có thể nói rằng
 **Problem:** Wordy bureaucratic boilerplate that dilutes technical clarity.
@@ -285,7 +300,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Để nâng cao độ chính xác, nghiên cứu áp dụng mô hình mạng nơ-ron tích chập.
 
-### 26. Too many qualifiers
+### 27. Too many qualifiers
 
 **Words to watch:** phần nào, ở một mức độ nhất định, tương đối, có thể nói là, khá là
 **Problem:** Piling qualifiers until technical assertions become non-committal.
@@ -294,7 +309,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Kết quả thử nghiệm cho thấy mô hình hoạt động ổn định trên tập kiểm thử.
 
-### 27. Generic positive endings
+### 28. Generic positive endings
 
 **Problem:** Concluding chapters with vague inspirational send-offs instead of technical summaries.
 **Before:**
@@ -302,7 +317,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nghiên cứu đã hoàn thành mục tiêu xây dựng mô hình phân loại và mở ra hướng tối ưu hóa bộ nhớ cho các thiết bị biên.
 
-### 28. Four-character clichés and bureaucratic wordiness
+### 29. Four-character clichés and bureaucratic wordiness
 
 **Words to watch:** tiến hành thực hiện, tiến hành nghiên cứu đối với, triển khai áp dụng vào trong thực tiễn, muôn màu muôn vẻ
 **Problem:** Bureaucratic helper-verb inflation (calquing Chinese 进行/实现) or poetic idioms.
@@ -311,7 +326,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Nhóm nghiên cứu phân tích các mẫu dữ liệu thu thập được.
 
-### 29. Pretending to reveal a deeper truth
+### 30. Pretending to reveal a deeper truth
 
 **Words to watch:** Về bản chất, Vấn đề cốt lõi nằm ở chỗ, Xét cho cùng, Thực chất
 **Problem:** Staging routine technical points as profound revelations.
@@ -320,7 +335,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Độ trễ hệ thống tăng chủ yếu do chi phí truyền thông qua mạng giữa các vi dịch vụ.
 
-### 30. Announcing the next point
+### 31. Announcing the next point
 
 **Words to watch:** Hãy cùng tìm hiểu, Sau đây chúng ta sẽ đi sâu vào, Trước tiên cần khẳng định rằng
 **Problem:** Conversational meta-commentary announcing upcoming sections.
@@ -329,7 +344,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Giao thức TCP đảm bảo truyền dữ liệu tin cậy thông qua cơ chế bắt tay ba bước.
 
-### 31. A heading repeated in the first sentence
+### 32. A heading repeated in the first sentence
 
 **Problem:** Echoing the heading in a one-line restatement immediately below it.
 **Before:**
@@ -339,7 +354,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 > ### 3.1. Kiến trúc hệ thống
 > Hệ thống gồm 3 tầng chính...
 
-### 32. Writing about the previous version
+### 33. Writing about the previous version
 
 **Problem:** Describing discarded iterations in present-tense technical documentation.
 **Before:**
@@ -347,7 +362,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Hàm sử dụng cấu trúc bảng băm để đạt độ phức tạp tìm kiếm O(1).
 
-### 33. Dramatic fragments and clipped sentence runs
+### 34. Dramatic fragments and clipped sentence runs
 
 **Problem:** Adjacent clipped sentences mimicking English dramatic syntax. Merge with connectives.
 **Before:**
@@ -355,7 +370,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Hệ thống không ghi nhận lỗi và không phát cảnh báo, mà chỉ âm thầm lưu vào nhật ký hoạt động.
 
-### 34. Formulaic sayings
+### 35. Formulaic sayings
 
 **Words to watch:** X là chìa khóa của Y, X là chiếc cầu nối, X là kim chỉ nam cho
 **Problem:** Trite metaphors replacing technical precision.
@@ -364,7 +379,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Chất lượng dữ liệu tiền xử lý quyết định trực tiếp đến độ chính xác của mô hình học máy.
 
-### 35. Fake-candid openings
+### 36. Fake-candid openings
 
 **Words to watch:** Thành thật mà nói, Thú thực, Nhìn nhận khách quan thì
 **Problem:** Artificial theatrical pauses before ordinary claims.
@@ -373,7 +388,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn trong hệ thống phân tán.
 
-### 36. Answering objections no one raised
+### 37. Answering objections no one raised
 
 **Words to watch:** Điều này không có nghĩa là, Chúng tôi không phủ nhận, Đừng hiểu nhầm rằng
 **Problem:** Defending against unstated criticisms. State the technical constraint directly.
@@ -382,7 +397,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 **After:**
 > Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ dữ liệu phi cấu trúc của đề tài.
 
-### 37. Rejecting fake alternatives
+### 38. Rejecting fake alternatives
 
 **Words to watch:** Một phương án dễ nghĩ đến là, Người ta có thể bị cám dỗ bởi, Có ý kiến cho rằng nên
 **Problem:** Introducing and immediately dismissing arbitrary strawman options.
@@ -427,9 +442,12 @@ Depending on the input quality and source availability, produce output in one of
 
 ## Rewrite process
 
-1. Identify AI patterns and syntactic translationese against the 37 patterns.
+1. Identify AI patterns and syntactic translationese against the 38 patterns.
 2. Draft the revision: join clauses using subordinating connectives, eliminate fluff, and balance sentence rhythm.
-3. Self-check with two mandatory questions:
+3. Scan the finished text for the mechanical faults, because these survive a careful rewrite most often:
+   - Search for `;`, `—`, `–`, ` - `, and `"`. Every hit outside a code block, formula, or verbatim quotation must go.
+   - Search for terms translated word for word into the wrong field, starting with *y văn*.
+4. Self-check with two mandatory questions:
    - *"Does this sound like natural Vietnamese academic prose or a machine translation?"*
    - *"Were any facts, numbers, dates, claims, or citation tags (`[...]`) added, altered, or lost?"*
-4. Output the result per the selected mode.
+5. Output the result per the selected mode.

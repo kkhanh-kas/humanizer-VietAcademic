@@ -139,6 +139,7 @@ MA_PATTERN = {
     "chuoi-cua": "VA-L1-17",
     "ngoac-dien-giai": "VA-L2-36",
     "tham-chieu-ngoac": "VA-L1-20",
+    "thuat-ngu-lech": "VA-L1-21",
 }
 
 GACH_CHEN = catalog.bien_dich(CATALOG, "VA-L2-14")
@@ -162,6 +163,7 @@ NGOAC_DIEN_GIAI = catalog.bien_dich(CATALOG, "VA-L2-36", co=0)
 THOI_PHONG_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-01")
 SAO_NGU_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-07")
 NGUON_MO_HO_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-05")
+THUAT_NGU_LECH_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L1-21")
 
 TU_NOI = CATALOG["VA-L1-13"]["phrases"]
 TU_NOI_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L1-13")
@@ -217,6 +219,12 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
         if bat("nguon-mo-ho"):
             for m in NGUON_MO_HO_RE.finditer(d):
                 G("nguon-mo-ho", i, m.group(0), "Nguồn mơ hồ. Dẫn trích dẫn cụ thể ([1]) hoặc nêu thẳng sự kiện.")
+        if bat("thuat-ngu-lech"):
+            for m in THUAT_NGU_LECH_RE.finditer(d):
+                G("thuat-ngu-lech", i, m.group(0),
+                  "Thuật ngữ dịch thô sang từ lệch ngành. 'literature' là 'tài liệu', "
+                  "'các nghiên cứu trước' hoặc 'công trình đã công bố'. Bài y học giữ nguyên 'y văn'.",
+                  muc="nhe")
         if bat("ngay-thang"):
             for m in NGAY_THANG.finditer(d):
                 G("ngay-thang", i, m.group(0),
@@ -355,7 +363,8 @@ TEN = {
     "ngay-thang": "Ngày tháng viết kiểu Anh",
     "chuoi-cua": "Chuỗi 'của' lồng nhau",
     "ngoac-dien-giai": "Diễn giải nhét trong ngoặc đơn",
-    "tham-chieu-ngoac": "Chỉ mục tham chiếu để trong ngoặc"
+    "tham-chieu-ngoac": "Chỉ mục tham chiếu để trong ngoặc",
+    "thuat-ngu-lech": "Thuật ngữ dịch thô lệch ngành"
 }
 
 
