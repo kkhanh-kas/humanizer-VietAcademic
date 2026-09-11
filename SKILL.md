@@ -8,7 +8,7 @@ description: |
   "humanize text", or reviewing formal Vietnamese academic papers.
 license: MIT
 metadata:
-  version: "2.14.0"
+  version: "3.0.0"
 ---
 
 # Humanizer-VietAcademic: Remove AI patterns in Vietnamese academic prose
@@ -17,20 +17,20 @@ Rewrite AI-sounding or machine-translated Vietnamese text so it reads as natural
 
 ## Governing principle
 
-> **When in doubt, join clauses rather than split them.**
+> **Join clauses that depend on each other. Split a sentence that carries more than two claims.**
 
-English splits clauses with punctuation; Vietnamese connects with words. Natural Vietnamese academic sentences string 3–4 clauses together using commas and connectives. Splitting them into short, clipped sentences is the single most common AI translation fault.
+English splits clauses with punctuation, while Vietnamese connects them with words, so a run of short, clipped sentences is the most common AI translation fault. The opposite fault is just as common after a rewrite: one sentence that stacks three or four claims behind a chain of connectives. Join a cause to its effect and a claim to its condition. Start a new sentence when the next clause makes a new point.
 
 ## What to do
 
-1. **Find AI and translation patterns.** Check the text against the 38 numbered patterns below.
+1. **Find AI and translation patterns.** Check the text against the 41 numbered patterns below.
 2. **Preserve every claim and citation.** Retain all facts, names, dates, numbers, equations, and literature citations (`[1]`, `(Nguyen et al., 2024)`). Never invent facts or citations.
-3. **Ensure Vietnamese academic cadence.** Maintain connective density (4–5 per 100 syllables) and alternate long (median 21 syllables) and short sentences.
+3. **Ensure Vietnamese academic cadence.** Alternate long (median 21 syllables) and short sentences. Treat connective density as a floor: below 3 per 100 syllables the sentences stand apart, but never add a connective to reach a number.
 4. **Enforce hard punctuation rules.** Ban dashes (`—`, `–`, ` - `) and semicolons (`;`) inside sentences. Require curved quotation marks (`“ ”`) and decimal commas (`94,7%`).
 
 ## Hard rules for academic Vietnamese
 
-- **Connectives:** Use subordinating conjunctions freely inside sentences (*và, là, khi, mà, nếu, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, bên cạnh đó, ngoài ra*). Avoid spoken particles (*vậy nên, thế nên, thì, rồi, á, nhé*).
+- **Connectives:** Use subordinating conjunctions inside sentences (*và, là, khi, mà, nếu, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, vì thế, cho nên, bên cạnh đó, ngoài ra*). Prefer these common words to literary ones such as *song* (pattern 39). Avoid spoken particles (*vậy nên, thế nên, rồi, á, nhé*). *Thì* is valid in a condition or topic frame (*nếu … thì*, *mẫu nào … thì*) and wrong only as filler (*trong bối cảnh hiện nay thì*).
 - **Passive voice & Pronouns:** Eliminate `được ... bởi` (calque of `be ... by`). Never address the reader as *bạn*. Use *chúng tôi, tác giả, nhóm nghiên cứu* or omit the subject. Replace pronoun *nó* with the specific noun.
 - **Mandatory sections:** Keep required report sections (*Kết luận*, *Hạn chế và hướng phát triển*), but eliminate empty filler inside them.
 - **Terminology:** Translate an English term with the word its Vietnamese field uses. Write *tài liệu* or *các nghiên cứu trước* for *literature*, and keep *y văn* for medical writing only.
@@ -391,7 +391,7 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 ### 37. Answering objections no one raised
 
 **Words to watch:** Điều này không có nghĩa là, Chúng tôi không phủ nhận, Đừng hiểu nhầm rằng
-**Problem:** Defending against unstated criticisms. State the technical constraint directly.
+**Problem:** Defending against unstated criticisms. State the technical constraint directly. A paragraph with three or more *chứ không* or *thay vì* is the same fault in small (`VA-L2-37`): keep one only where it blocks a real misreading.
 **Before:**
 > Điều này không có nghĩa là chúng tôi phủ nhận vai trò của cơ sở dữ liệu quan hệ, nhưng cơ sở dữ liệu NoSQL phù hợp hơn trong trường hợp này.
 **After:**
@@ -408,15 +408,48 @@ When you can run shell commands, run `python scripts/kiem_tra.py <file>` first t
 
 ---
 
+## Voice patterns
+
+These three appear most after a rewrite asked to sound "more academic", so check them last, on your own output.
+
+### 39. Register inflation
+
+**Words to watch:** song (as a connective), khuyết, suy xuyển, tường minh hóa, bao hàm, xác lập, triệt để, nghiêm ngặt, trọn vẹn, hiển nhiên
+**Problem:** Plain words swapped for rare Sino-Vietnamese ones, plus intensifiers. The text gets heavier, not more precise. Keep the plain word when the meaning is the same.
+**Before:**
+> Kết quả được tường minh hóa trong Bảng 4.2, song phương pháp đề xuất vẫn khuyết khả năng xử lý dữ liệu thời gian thực, và điều này hiển nhiên không làm suy xuyển giá trị của nghiên cứu.
+**After:**
+> Bảng 4.2 trình bày kết quả thử nghiệm. Tuy nhiên, phương pháp đề xuất chưa xử lý được dữ liệu thời gian thực, và hạn chế này không làm giảm giá trị của nghiên cứu.
+
+### 40. Narrating the writer's reasoning
+
+**Words to watch:** đọc theo cột, đọc theo hàng, hiện ra bằng mắt, phát biểu được thành, nên phần đó không nhắc lại tại đây
+**Problem:** The text describes how the writer reads a table or builds an argument, when the reader needs only what the table shows. Outline notes and the reasons behind a layout belong to the writer. State the finding.
+**Before:**
+> Đọc theo cột, cột nào cũng đã có thuật toán đạt yêu cầu. Đọc theo hàng thì không hàng nào đạt đủ, và chỗ trống hiện ra bằng mắt thay vì phải khẳng định bằng lời.
+**After:**
+> Tiêu chí nào trong bảng cũng có ít nhất một thuật toán đáp ứng, nhưng chưa thuật toán nào đáp ứng đủ cả bốn tiêu chí.
+
+### 41. English idioms in Vietnamese words
+
+**Words to watch:** chạm vào (touch on), phủ hết (cover), hai nửa của vấn đề (both halves), thả vào (drop in), dựng công cụ đo (build an instrument)
+**Problem:** The sentence keeps an English metaphor and swaps in Vietnamese words. Each word is correct, but Vietnamese does not say it this way. Name the plain relation: *liên quan tới, đáp ứng đủ, đưa vào, xây dựng*.
+**Before:**
+> Ba kỹ thuật nén đều chạm vào bài toán tiết kiệm băng thông ở một điểm nào đó, nhưng không kỹ thuật nào phủ hết, và bộ nén chỉ được thả vào ở tầng truyền tải.
+**After:**
+> Ba kỹ thuật nén đều giải quyết một phần bài toán tiết kiệm băng thông, tuy nhiên chưa kỹ thuật nào giải quyết đầy đủ, và bộ nén chỉ được đưa vào ở tầng truyền tải.
+
+---
+
 ## Check for false positives
 
 Do NOT flag or alter the following valid Vietnamese academic conventions:
 
-- **Long, compound sentences:** Median 21 syllables (up to 40–50 syllables with clear subordinate clauses) is standard academic style.
-- **Sino-Vietnamese terminology:** Prefer *khả năng xác minh* over colloquial *khả năng kiểm tra lại được*.
+- **Long, compound sentences:** Median 21 syllables (up to 40–50 syllables with clear subordinate clauses) is standard academic style. Length alone is never the fault, stacked claims are.
+- **Sino-Vietnamese terminology:** Prefer *khả năng xác minh* over colloquial *khả năng kiểm tra lại được*. This covers terms and concepts, not plain verbs and connectives (pattern 39).
 - **Subject ellipsis:** Natural in Vietnamese when context is established (e.g., *"Qua đó, giảm sự phụ thuộc vào bên trung gian."*).
 - **Pure "được":** Natural and frequent; flag ONLY the `được ... bởi` agentive passive frame.
-- **High connective density:** 4–5 connectives per 100 syllables is correct and necessary.
+- **Connective density:** 4–5 connectives per 100 syllables is normal. Never flag it, and never add connectives to reach it.
 - **All-caps chapter headings:** `CHƯƠNG 2: CƠ SỞ LÝ THUYẾT` is standard Vietnamese report formatting.
 - **Curved quotation marks:** `“ ”` is the required standard.
 - **Academic citations and symbols:** Never alter `[...]`, `(...)`, mathematical formulas, or verbatim quoted sources.
@@ -442,12 +475,13 @@ Depending on the input quality and source availability, produce output in one of
 
 ## Rewrite process
 
-1. Identify AI patterns and syntactic translationese against the 38 patterns.
-2. Draft the revision: join clauses using subordinating connectives, eliminate fluff, and balance sentence rhythm.
+1. Identify AI patterns and syntactic translationese against the 41 patterns.
+2. Draft the revision: join dependent clauses, split sentences that stack claims, eliminate fluff, and keep the plain word.
 3. Scan the finished text for the mechanical faults, because these survive a careful rewrite most often:
    - Search for `;`, `—`, `–`, ` - `, and `"`. Every hit outside a code block, formula, or verbatim quotation must go.
    - Search for terms translated word for word into the wrong field, starting with *y văn*.
-4. Self-check with two mandatory questions:
+4. Self-check with three mandatory questions:
    - *"Does this sound like natural Vietnamese academic prose or a machine translation?"*
+   - *"Did I swap a plain word for a rarer one, or describe my reasoning instead of the finding?"*
    - *"Were any facts, numbers, dates, claims, or citation tags (`[...]`) added, altered, or lost?"*
 5. Output the result per the selected mode.

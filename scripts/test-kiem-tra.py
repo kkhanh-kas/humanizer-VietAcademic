@@ -61,6 +61,20 @@ PHAI_BAO = [
      "Tổng quan y văn cho thấy vấn đề này chưa được giải quyết triệt để.", "thuat-ngu-lech"),
     ("'trạng thái nghệ thuật' là bản dịch thô của 'state of the art'",
      "Các phương pháp đạt trạng thái nghệ thuật vẫn chưa xử lý được nhiễu nền.", "thuat-ngu-lech"),
+    ("Câu cụt liền nhau dù mỗi câu nằm một dòng",
+     "Hệ thống không cảnh báo.\nKhông ghi nhận lỗi.\nChỉ ghi log.", "cau-cut"),
+    ("Bị động bị ngắt dòng giữa chừng",
+     "Dữ liệu được thu thập\nbởi hệ thống cảm biến.", "bi-dong"),
+    ("'song' đứng làm từ nối",
+     "Mô hình xử lý nhanh, song cần nhiều bộ nhớ khi huấn luyện.", "nang-giong"),
+    ("'tường minh hóa' thay cho chữ thường",
+     "Kết quả được tường minh hóa trong Bảng 4.2.", "nang-giong"),
+    ("Kể cách đọc bảng thay vì nêu kết quả",
+     "Đọc theo cột, tiêu chí nào cũng có thuật toán đạt yêu cầu.", "ke-cach-nghi"),
+    ("Ba lần gạt bỏ trong một đoạn",
+     "Mô hình học từ dữ liệu thật chứ không phải dữ liệu tổng hợp, dùng bộ nhớ ngắn hạn "
+     "thay vì bộ nhớ dài hạn, nên kết quả phản ánh hành vi thật chứ không phải hành vi được cấu hình.",
+     "phan-de-day"),
 ]
 
 # (mô tả, văn bản, mã lỗi không được xuất hiện)
@@ -125,6 +139,39 @@ KHONG_DUOC_BAO = [
     ("Chữ 'y' nằm giữa một từ khác thì không báo",
      "Bộ phận khảo sát trực thuộc công ty Văn Lang, phụ trách thu thập dữ liệu hiện trường.",
      "thuat-ngu-lech"),
+    ("Dòng chú thích LaTeX có gạch ngang",
+     "% GHI CHÚ — bản nháp chưa duyệt\nMô hình đạt độ chính xác cao trên tập kiểm thử.",
+     "gach-ngang"),
+    ("Dòng chú thích LaTeX có chấm phẩy",
+     "% việc cần làm: đọc lại; đối chiếu nguồn\nMô hình đạt độ chính xác cao trên tập kiểm thử.",
+     "cham-phay"),
+    ("Mỗi mục danh sách là một đoạn riêng",
+     "- Tốc độ cao.\n- Tốn bộ nhớ.\n- Dễ cài đặt.",
+     "cau-cut"),
+    ("'song song' không phải từ nối",
+     "Hệ thống gồm hai luồng xử lý, song song với luồng chính là một luồng giám sát.",
+     "nang-giong"),
+    ("'song phương' không phải từ nối",
+     "Nhóm tác giả dùng bảng hỏi tin cậy song phương cho cả hai nhóm.",
+     "nang-giong"),
+    ("Hai lần gạt bỏ trong một đoạn là bình thường",
+     "Mô hình học từ dữ liệu thật chứ không phải dữ liệu tổng hợp, và dùng bộ nhớ ngắn hạn "
+     "thay vì bộ nhớ dài hạn.",
+     "phan-de-day"),
+    ("'thì' trong khung điều kiện là văn viết hợp lệ",
+     "Mẫu nào thiếu nhãn thì sẽ được loại khỏi tập huấn luyện.",
+     "lech-register"),
+]
+
+# Ngắt dòng cứng giữa câu, như trong file LaTeX, không được làm đổi số câu.
+# (mô tả, văn bản một dòng, cùng văn bản đó bị ngắt dòng)
+NGAT_DONG = [
+    ("Câu vắt qua nhiều dòng",
+     "Hệ thống gồm ba tầng xử lý nối tiếp nhau và mỗi tầng có bộ đệm riêng. Tầng cuối ghi kết quả.",
+     "Hệ thống gồm ba tầng xử lý\nnối tiếp nhau và mỗi tầng có bộ\nđệm riêng. Tầng cuối ghi kết quả."),
+    ("Hàng bảng LaTeX không phải văn xuôi",
+     "Hệ thống gồm ba tầng xử lý nối tiếp nhau.",
+     "Hệ thống gồm ba tầng xử lý nối tiếp nhau.\n\nMô hình A & Có & Không \\\\\nMô hình B & Không &"),
 ]
 
 
@@ -135,6 +182,7 @@ THEO_CHE_DO = [
     ("doi-thuong", "Độ chính xác đạt 94.7% trong lần chạy vừa rồi.", None, "so-thap-phan"),
     ("hoc-thuat", "Độ chính xác đạt 94.7% trong lần chạy vừa rồi.", "so-thap-phan", None),
     ("doi-thuong", "Bài viết được chỉnh sửa bởi biên tập viên.", "bi-dong", None),
+    ("doi-thuong", "Trời mưa to, song đường vẫn đông.", None, "nang-giong"),
 ]
 
 
@@ -169,9 +217,16 @@ def main():
         if khong_duoc and khong_duoc in co:
             that_bai.append(f"[chế độ {che_do}] không được báo '{khong_duoc}' cho «{text}»")
 
-    tong = len(PHAI_BAO) + len(KHONG_DUOC_BAO) + len(THEO_CHE_DO)
+    for mo_ta, mot_dong, ngat_dong in NGAT_DONG:
+        a = kiem_tra.quet(mot_dong)[1]
+        b = kiem_tra.quet(ngat_dong)[1]
+        if (a["so_cau"], a["so_am_tiet"]) != (b["so_cau"], b["so_am_tiet"]):
+            that_bai.append(f"[ngắt dòng] {mo_ta}: {a['so_cau']} câu/{a['so_am_tiet']} âm tiết "
+                            f"thành {b['so_cau']} câu/{b['so_am_tiet']} âm tiết")
+
+    tong = len(PHAI_BAO) + len(KHONG_DUOC_BAO) + len(THEO_CHE_DO) + len(NGAT_DONG)
     print(f"Chạy {tong} case ({len(PHAI_BAO)} phải báo, {len(KHONG_DUOC_BAO)} không được báo, "
-          f"{len(THEO_CHE_DO)} theo chế độ)")
+          f"{len(THEO_CHE_DO)} theo chế độ, {len(NGAT_DONG)} ngắt dòng)")
     print("=" * 68)
     if that_bai:
         for t in that_bai:

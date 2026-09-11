@@ -1,7 +1,9 @@
 # Layer 2: Vietnamese Rhetoric, Style and AI Writing Patterns
-# ID range: VA-L2-01 to VA-L2-36
+# ID range: VA-L2-01 to VA-L2-40
 # VA-L2-01 to VA-L2-19 dùng chung số với SKILL.md. Từ VA-L2-20 trở đi thì lệch,
 # vì SKILL.md chèn thêm hai pattern ở vị trí 20 và 21 từ bản 2.13.0.
+# Từ bản 3.0.0: VA-L2-37 thuộc pattern 37 của SKILL.md, còn VA-L2-38 đến VA-L2-40
+# là pattern 39 đến 41 trong nhóm giọng văn.
 # Mã ID là tay nắm ổn định, số thứ tự trong SKILL.md thì không.
 
 - id: VA-L2-01
@@ -761,3 +763,85 @@
   good_examples:
     - "Tiêu biểu nhất là kỹ thuật Top-k, chỉ giữ lại k từ có xác suất cao nhất."
     - "Nếu mô hình luôn chọn từ có xác suất cao nhất, cách làm được gọi là giải mã tham lam (greedy decoding), thì văn bản sẽ nhàm chán."
+
+- id: VA-L2-37
+  name: Gạt bỏ dày đặc trong một đoạn
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: paragraph
+  aggregation: count
+  min_occurrences: 3
+  false_positive_risk: medium
+  che_do: [hoc-thuat, ky-thuat]
+  description: Một đoạn văn dùng từ ba lần "chứ không" hoặc "thay vì" trở lên đang gạt bỏ những cách hiểu chưa ai nêu ra. Chỉ giữ chỗ chặn một cách hiểu sai có thật, còn lại nói thẳng điều đúng.
+  explanation: Đây là dạng nhỏ của VA-L2-34. Mỗi lần dùng riêng lẻ thì hợp lệ, nên linter chỉ đếm theo đoạn và chỉ báo từ lần thứ ba.
+  signals:
+    phrases:
+      - "chứ không"
+      - "thay vì"
+  bad_examples:
+    - "Mô hình học từ dữ liệu thật chứ không phải dữ liệu tổng hợp, dùng bộ nhớ ngắn hạn thay vì bộ nhớ dài hạn, nên kết quả phản ánh hành vi thật chứ không phải hành vi được cấu hình."
+  good_examples:
+    - "Mô hình học từ dữ liệu thật và dùng bộ nhớ ngắn hạn, nên kết quả phản ánh hành vi thật của hệ thống."
+
+- id: VA-L2-38
+  name: Nâng giọng bằng chữ văn vẻ
+  lop: 2
+  category: register
+  finding_type: warning
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: medium
+  che_do: [hoc-thuat]
+  description: Bản viết lại được yêu cầu "học thuật hơn" thường đổi chữ thường sang chữ Hán Việt hiếm và thêm trạng từ nhấn mạnh. Văn nặng hơn nhưng không chính xác hơn. Nếu nghĩa không đổi thì giữ chữ thường.
+  explanation: Linter chỉ bắt vài chữ ít khi dùng đúng chỗ. "song" chỉ bị bắt khi đứng làm từ nối sau dấu phẩy hoặc đầu câu, không bắt "song song", "song phương", "song ngữ". Các chữ khác như khuyết, bao hàm, xác lập, triệt để, trọn vẹn, hiển nhiên thì model phải tự soát, vì chúng vẫn có chỗ dùng đúng.
+  signals:
+    regex:
+      - "(?:,\\s*|^|[.!?]\\s+)song(?=[\\s,])(?!\\s+(?:song|phương|ngữ|hành|sinh|tử|toàn|thân)\\b)"
+      - "\\bsuy\\s+xuyển\\b"
+      - "\\btường\\s+minh\\s+(?:hóa|hoá)\\b"
+  bad_examples:
+    - "Kết quả được tường minh hóa trong Bảng 4.2, song phương pháp đề xuất vẫn khuyết khả năng xử lý dữ liệu thời gian thực, và điều này hiển nhiên không làm suy xuyển giá trị của nghiên cứu."
+  good_examples:
+    - "Bảng 4.2 trình bày kết quả thử nghiệm. Tuy nhiên, phương pháp đề xuất chưa xử lý được dữ liệu thời gian thực, và hạn chế này không làm giảm giá trị của nghiên cứu."
+
+- id: VA-L2-39
+  name: Kể cách tác giả suy nghĩ thay vì nêu kết quả
+  lop: 2
+  category: rhetoric
+  finding_type: warning
+  scope: sentence
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: low
+  che_do: [hoc-thuat, ky-thuat]
+  description: Câu văn tả cách người viết đọc bảng hay dựng lập luận, trong khi người đọc chỉ cần biết bảng hay lập luận cho thấy điều gì. Ghi chú lập dàn ý và lý do chọn cách trình bày là của người viết, không đưa vào bài.
+  explanation: Lỗi này hay xuất hiện khi dàn ý viết thành câu hoàn chỉnh và bản nháp chép lại dàn ý.
+  signals:
+    phrases:
+      - "đọc theo cột"
+      - "đọc theo hàng"
+      - "hiện ra bằng mắt"
+  bad_examples:
+    - "Đọc theo cột, cột nào cũng đã có thuật toán đạt yêu cầu. Đọc theo hàng thì không hàng nào đạt đủ, và chỗ trống hiện ra bằng mắt thay vì phải khẳng định bằng lời."
+  good_examples:
+    - "Tiêu chí nào trong bảng cũng có ít nhất một thuật toán đáp ứng, nhưng chưa thuật toán nào đáp ứng đủ cả bốn tiêu chí."
+
+- id: VA-L2-40
+  name: Ẩn dụ tiếng Anh mặc áo tiếng Việt
+  lop: 2
+  category: style
+  finding_type: heuristic
+  scope: phrase
+  aggregation: single
+  min_occurrences: 1
+  false_positive_risk: high
+  che_do: [hoc-thuat, ky-thuat]
+  description: Câu giữ nguyên một ẩn dụ tiếng Anh rồi thay từng chữ bằng tiếng Việt, như chạm vào (touch on), phủ hết (cover), hai nửa của vấn đề (both halves), thả vào (drop in), dựng công cụ đo (build an instrument). Chữ nào cũng đúng nhưng người Việt không nói như vậy. Gọi thẳng quan hệ bằng chữ thường, như liên quan tới, đáp ứng đủ, đưa vào, xây dựng.
+  explanation: Không có signal, vì những chữ này đều có nghĩa đen hợp lệ, ví dụ chạm vào màn hình. Model phải tự soát khi viết lại.
+  bad_examples:
+    - "Ba kỹ thuật nén đều chạm vào bài toán tiết kiệm băng thông ở một điểm nào đó, nhưng không kỹ thuật nào phủ hết, và bộ nén chỉ được thả vào ở tầng truyền tải."
+  good_examples:
+    - "Ba kỹ thuật nén đều giải quyết một phần bài toán tiết kiệm băng thông, tuy nhiên chưa kỹ thuật nào giải quyết đầy đủ, và bộ nén chỉ được đưa vào ở tầng truyền tải."

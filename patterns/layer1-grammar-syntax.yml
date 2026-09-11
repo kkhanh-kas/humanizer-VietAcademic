@@ -11,8 +11,8 @@
   min_occurrences: 1
   false_positive_risk: low
   che_do: [hoc-thuat]
-  description: Maintain a connective density of 4 to 5 connectives per 100 syllables in academic prose.
-  explanation: Vietnamese connects ideas with words inside clauses rather than leaving sentences isolated.
+  description: Keep connective density above 3 per 100 syllables in academic prose. This is a floor that flags isolated sentences, not a target to fill.
+  explanation: Vietnamese connects ideas with words inside clauses rather than leaving sentences isolated. Natural academic prose sits around 4 to 5 per 100 syllables, but adding connectives to reach that number makes every sentence open with a stock transition, which is its own AI pattern.
   bad_examples:
     - "Hệ thống sử dụng cơ chế xác thực hai lớp. Người dùng phải nhập mã OTP. Quá trình đăng nhập hoàn tất. Dữ liệu được bảo vệ."
   good_examples:
@@ -216,7 +216,7 @@
   bad_examples:
     - "- Ưu điểm: Tốc độ xử lý cao.\n- Nhược điểm: Tốn bộ nhớ."
   good_examples:
-    - "Mô hình có ưu điểm là tốc độ xử lý nhanh, song nhược điểm là yêu cầu dung lượng bộ nhớ lớn khi huấn luyện."
+    - "Mô hình xử lý nhanh, tuy nhiên cần nhiều bộ nhớ khi huấn luyện."
 
 - id: VA-L1-13
   name: Subordinating Connectives Usage

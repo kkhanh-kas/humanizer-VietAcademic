@@ -6,7 +6,7 @@ This reference details the foundational grammatical, punctuation, and structural
 
 | ID | Name | Category | Scope | Severity | Key Requirement |
 |---|---|---|---|---|---|
-| `VA-L1-01` | Connective Density | Cadence | Document | Warning | Maintain 4–5 subordinating connectives per 100 syllables |
+| `VA-L1-01` | Connective Density | Cadence | Document | Warning | Keep connective density above 3 per 100 syllables; a floor, not a target |
 | `VA-L1-02` | Passive Calque | Syntax | Sentence | Error | Eliminate `được ... bởi` frame; convert to active voice or `do ...` |
 | `VA-L1-03` | Adverbial Calque | Syntax | Phrase | Warning | Drop `một cách` before adjectives |
 | `VA-L1-04` | Nominalization | Syntax | Document | Warning | Reduce overuse of `sự, việc, tính, quá trình` |
@@ -34,13 +34,18 @@ This reference details the foundational grammatical, punctuation, and structural
 
 ### 1. Connective Subordination (`VA-L1-01`, `VA-L1-13`)
 Vietnamese academic sentences maintain cohesion through subordinating conjunctions located within clauses rather than discourse adverbs standing at the head of every sentence.
-- **Recommended connectives:** *và, là, khi, mà, nếu, còn, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, bên cạnh đó, ngoài ra*.
-- **Avoid in formal text:** *vậy nên, thế nên, bởi vậy, thì, rồi*.
+- **Recommended connectives:** *và, là, khi, mà, nếu, còn, trong khi, nhằm, thông qua, nhờ đó, qua đó, do đó, đồng thời, tuy nhiên, mặc dù, vì thế, cho nên, bên cạnh đó, ngoài ra*.
+- **Prefer common to literary:** write *tuy nhiên* or *nhưng*, not *song* (`VA-L2-38`).
+- **Avoid in formal text:** *vậy nên, thế nên, bởi vậy, rồi*.
+- **`thì` depends on its job:** valid in a condition or topic frame (*nếu … thì*, *mẫu nào thiếu nhãn thì sẽ được loại*), wrong only as filler at the end of a phrase (*trong bối cảnh hiện nay thì*, `VA-L2-23`).
+- **Density is a floor:** below 3 per 100 syllables the sentences stand apart. Around 4–5 is normal. Never add a connective only to raise the number, because a stock transition at the head of every sentence is its own AI pattern.
 
 ### 2. Sentence Length and Cadence (`VA-L1-07`)
 - The median sentence length in reference Vietnamese scholarly publications is **21 syllables**.
 - Nearly 30% of academic sentences exceed **30 syllables**.
 - Alternation is mandatory: mix long multi-clause sentences with concise concluding clauses (approx. 20% under 8 syllables).
+- **Join or split by claims, not by length:** join clauses that depend on each other (cause and effect, claim and condition). Start a new sentence when the next clause makes a new point. A sentence that stacks three or four claims behind connectives is as unnatural as a run of clipped fragments.
+- **The linter counts sentences per paragraph:** hard line breaks inside a paragraph, as in LaTeX and Markdown source, do not end a sentence.
 
 ### 3. Punctuation Invariants (`VA-L1-05`, `VA-L1-06`, `VA-L1-14`, `VA-L1-16`)
 - **No dashes inside sentences:** Do not use `—`, `–`, or spaced ` - ` to interrupt a sentence. Replace with commas plus connectives.

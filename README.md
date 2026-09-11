@@ -4,11 +4,11 @@ Humanizer-VietAcademic là công cụ tối ưu hóa văn phong học thuật ti
 
 ## Cách thức hoạt động
 
-Humanizer-VietAcademic xây dựng bộ 38 pattern trên cơ sở danh mục [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) của Wikipedia, kết hợp với hệ thống quy chuẩn ngữ pháp, nhịp điệu và dấu câu của văn bản học thuật tiếng Việt.
+Humanizer-VietAcademic xây dựng bộ 41 pattern trên cơ sở danh mục [Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) của Wikipedia, kết hợp với hệ thống quy chuẩn ngữ pháp, nhịp điệu và dấu câu của văn bản học thuật tiếng Việt.
 
-> **Nguyên lý cốt lõi:** *Khi phân vân, hãy ghép mệnh đề thay vì tách câu.*
+> **Nguyên lý cốt lõi:** *Nối các mệnh đề phụ thuộc nhau, tách câu khi một câu ôm quá hai ý.*
 
-Tiếng Anh ngắt câu bằng dấu câu, còn tiếng Việt nối câu bằng từ nối. Văn phong học thuật tiếng Việt tự nhiên nối liền 3–4 mệnh đề trong một câu bằng dấu phẩy và các liên từ phụ thuộc (*nhờ đó, qua đó, trong khi, đồng thời*), duy trì nhịp điệu trung bình 21 âm tiết/câu và mật độ từ nối đạt 4–5%.
+Tiếng Anh ngắt câu bằng dấu câu, còn tiếng Việt nối câu bằng từ nối, nên chuỗi câu cụt là lỗi dịch hay gặp nhất. Lỗi ngược lại cũng phổ biến không kém sau khi viết lại: một câu chồng ba bốn ý sau một chuỗi từ nối. Văn học thuật tiếng Việt tự nhiên có câu dài trung bình khoảng 21 âm tiết, xen câu dài với câu ngắn, và mật độ từ nối khoảng 4–5%. Con số này dùng để phát hiện câu đứng rời nhau, không phải chỉ tiêu phải đạt.
 
 ### Quy chuẩn cứng cho văn học thuật tiếng Việt
 
@@ -74,7 +74,24 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 3. **`needs_author_decision`:** Đặt câu hỏi và đưa ra các lựa chọn cho tác giả khi câu gốc mơ hồ và có nhiều cách hiểu kỹ thuật khác nhau.
 4. **`no_change`:** Giữ nguyên văn bản gốc khi câu chữ đã tự nhiên, chuẩn xác và không mắc lỗi AI.
 
-## Bộ 38 pattern
+## Dùng kèm giọng văn riêng
+
+Humanizer chỉ chứa những lỗi mà người viết học thuật tiếng Việt nào cũng có thể mắc. Nó không biết giọng riêng của bạn: bạn quen dùng từ nối nào, chữ nào bạn không bao giờ viết, thuật ngữ nào đề tài của bạn đã chốt. Những thứ đó nên nằm trong một skill nhỏ riêng đặt cạnh humanizer. Đừng sửa thẳng vào skill này, vì lần cập nhật sau sẽ ghi đè lên chỗ bạn sửa.
+
+1. Tạo một skill riêng trong dự án, ví dụ `.claude/skills/<ten-giong-van>/SKILL.md`, hoặc trong thư mục skills của agent bạn đang dùng.
+2. Ghi vào đó ba thứ:
+   - **Các cặp trước và sau lấy từ chính những chỗ bạn tự sửa tay.** Đây là nguồn đáng tin nhất, vì nó là giọng thật của bạn chứ không phải phỏng đoán của model.
+   - **Danh sách từ bạn dùng và từ bạn tránh,** kèm thuật ngữ đã chốt của đề tài.
+   - **Một đoạn mẫu bạn đã duyệt,** để agent bắt chước nhịp câu.
+3. Ghi rõ thứ tự ưu tiên: khi giọng riêng và humanizer khác nhau thì giọng riêng thắng. Humanizer vẫn chạy để bắt lỗi dấu câu và lỗi dịch.
+4. Mỗi lần sửa tay một bản nháp, so từng chữ với bản trước rồi thêm các cặp mới vào skill giọng văn.
+
+Hai lưu ý khi dùng trong một chuỗi agent:
+
+- **Dàn ý nên ghi luận điểm dạng từ khóa.** Dàn ý viết thành câu hoàn chỉnh thường bị chép nguyên vào bản nháp, kéo theo cả lý do trình bày của người lập dàn ý (pattern 40). Humanizer chạy sau cùng không gỡ được lỗi sinh ra từ đầu.
+- **Không đưa nguyên văn khóa luận hay bài báo chưa công bố vào một repo công khai,** kể cả làm ví dụ. Phần mềm kiểm tra đạo văn có thể báo trùng với chính bài của bạn.
+
+## Bộ 41 pattern
 
 ### Nhóm nội dung
 
@@ -136,8 +153,18 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 | 34 | **Câu cụt kịch tính, ngắt câu gãy khúc** | "Hệ thống không ghi nhận lỗi. Không cảnh báo. Chỉ âm thầm ghi log." | "Hệ thống không ghi nhận lỗi và không cảnh báo, mà chỉ âm thầm ghi log" |
 | 35 | **Ẩn dụ, ví von sáo mòn** | "Dữ liệu sạch là chiếc chìa khóa vạn năng mở ra cánh cửa thành công..." | "Chất lượng tiền xử lý dữ liệu quyết định độ chính xác của mô hình" |
 | 36 | **Mở đầu bộc bạch giả tạo** | "Thành thật mà nói, việc tối ưu thời gian phản hồi là..." | "Tối ưu thời gian phản hồi là thách thức kỹ thuật lớn..." |
-| 37 | **Phòng thủ, giải thích cho thắc mắc không ai hỏi** | "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của RDBMS, nhưng..." | "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ phi cấu trúc" |
+| 37 | **Phòng thủ, giải thích cho thắc mắc không ai hỏi** (kể cả ba lần "chứ không", "thay vì" trong một đoạn) | "Điều này không có nghĩa là chúng tôi phủ nhận vai trò của RDBMS, nhưng..." | "Cơ sở dữ liệu NoSQL phù hợp hơn với yêu cầu lưu trữ phi cấu trúc" |
 | 38 | **Đưa phương án giả định để tự bác bỏ** | "Một phương án dễ nghĩ đến là khởi động lại dịch vụ hàng giờ, nhưng..." | "Hệ thống áp dụng cơ chế tự động giải phóng bộ nhớ định kỳ khi vận hành" |
+
+### Nhóm giọng văn
+
+Ba lỗi này hay xuất hiện nhất khi bản viết lại được yêu cầu "học thuật hơn".
+
+| # | Pattern | Trước khi sửa | Sau khi sửa |
+|---|---------|--------|-------|
+| 39 | **Nâng giọng bằng chữ văn vẻ** | "được tường minh hóa trong Bảng 4.2, song phương pháp vẫn khuyết khả năng..." | "Bảng 4.2 trình bày kết quả. Tuy nhiên, phương pháp chưa xử lý được..." |
+| 40 | **Kể cách tác giả suy nghĩ thay vì nêu kết quả** | "Đọc theo cột, cột nào cũng có thuật toán đạt... chỗ trống hiện ra bằng mắt" | "Chưa thuật toán nào đáp ứng đủ cả bốn tiêu chí" |
+| 41 | **Ẩn dụ tiếng Anh mặc áo tiếng Việt** | "đều chạm vào bài toán... không kỹ thuật nào phủ hết... được thả vào" | "đều giải quyết một phần bài toán... chưa giải quyết đầy đủ... được đưa vào" |
 
 ## Ví dụ minh họa thực tế (Full example)
 
@@ -151,7 +178,7 @@ Humanizer-VietAcademic hỗ trợ 4 chế độ kết quả linh hoạt:
 
 ```text
 .
-├── SKILL.md                          # Prompt chính điều phối kỹ năng và 38 pattern
+├── SKILL.md                          # Prompt chính điều phối kỹ năng và 41 pattern
 ├── patterns/
 │   ├── schema.json                   # JSON schema chuẩn hóa định dạng các pattern
 │   ├── layer1-grammar-syntax.yml     # Quy tắc Lớp 1: Ngữ pháp, dấu câu và nhịp điệu
@@ -185,6 +212,7 @@ Repository này được fork từ **blader/humanizer** và tích hợp các ngh
 <details>
 <summary>Xem nhật ký phát hành</summary>
 
+- **3.0.0** (Big update): Đổi nguyên lý cốt lõi từ "khi phân vân, hãy ghép mệnh đề thay vì tách câu" thành "nối các mệnh đề phụ thuộc nhau, tách câu khi một câu ôm quá hai ý", vì nguyên lý cũ đẩy bản viết lại về phía câu dài chồng nhiều ý và từ nối khuôn mẫu. Mật độ từ nối chỉ còn là mức sàn để cảnh báo, không còn là chỉ tiêu. Thêm nhóm giọng văn với ba pattern mới: 39 nâng giọng bằng chữ văn vẻ, 40 kể cách tác giả suy nghĩ thay vì nêu kết quả, 41 ẩn dụ tiếng Anh mặc áo tiếng Việt. Pattern 37 mở rộng cho lối gạt bỏ dày đặc bằng "chứ không" và "thay vì". Các luật mới mang mã `VA-L2-37` đến `VA-L2-40`, ba luật đầu có signal trong linter. Chữ "thì" không còn bị cấm khi đứng trong khung điều kiện. Sửa linter: đếm câu theo đoạn thay vì theo dòng, nên file LaTeX và Markdown ngắt dòng cứng không còn bị đếm sai (trước đây cùng một văn bản ra 139 hoặc 216 câu tùy cách ngắt dòng), và một lỗi vắt qua hai dòng giờ đã bắt được. Linter bỏ qua dòng chú thích `%` và hàng bảng LaTeX. Thêm mục "Dùng kèm giọng văn riêng" hướng dẫn đặt giọng của từng người viết thành một lớp nằm trên humanizer. Tổng số pattern lên 41, các pattern cũ giữ nguyên số.
 - **2.14.0**: Siết hai lỗi còn sót lại sau khi viết lại. Pattern 15 gộp dấu chấm phẩy vào cùng luật với dấu gạch ngang và có ví dụ trước sau riêng, vì trước đây `;` chỉ được nhắc trong phần quy chuẩn cứng nên hay bị bỏ qua. Pattern 14 mới bắt lỗi dịch thô thuật ngữ sang từ lệch ngành, điển hình là dịch `literature` thành `y văn` thay vì `tài liệu` hay `các nghiên cứu trước`, kèm luật `VA-L1-21` trong `patterns/layer1-grammar-syntax.yml` và case hồi quy chứa ngoại lệ cho bài ngành y. Bước rà soát dấu câu và thuật ngữ được đưa thành một bước bắt buộc trong quy trình viết lại. Tổng số pattern lên 38, các pattern cũ từ 14 đến 37 dồn thành 15 đến 38, riêng mã ID trong `patterns/*.yml` giữ nguyên.
 - **2.13.0**: Bổ sung 2 pattern về dấu ngoặc đơn, nâng tổng số lên 37. `VA-L2-36` bắt mệnh đề tiếng Việt bị nhét vào trong ngoặc thay vì viết thành lời văn, `VA-L1-20` bắt chỉ mục tham chiếu kiểu `(mục 3.2)` lẽ ra phải dẫn bằng `ở mục 3.2`. Cả hai đã nối vào `scripts/kiem_tra.py` và có case hồi quy chống báo oan cho trích dẫn, chú thích hình bảng và chú giải thuật ngữ tiếng Anh. Hai pattern chèn vào vị trí 20 và 21 trong nhóm văn phong, các pattern cũ từ 20 đến 35 dồn thành 22 đến 37, riêng mã ID trong `patterns/*.yml` giữ nguyên.
 - **2.12.0**: Chuẩn hóa pattern catalog thành nguồn chân lý duy nhất (single source of truth): `scripts/kiem_tra.py` tự động đọc tín hiệu từ `patterns/*.yml` và lọc theo văn phong đã chọn. Khắc phục 3 trường hợp báo oan (từ nối nguyên nhân `bởi vì`, chuỗi 2 câu ngắn, và từ nằm trong ngoặc kép trích dẫn) kèm bài test trong `scripts/test-kiem-tra.py`. Tái cấu trúc benchmark runner hỗ trợ chấm điểm output thực tế bằng `--actual`. Bổ sung 4 quy tắc Lớp 1 (ngày tháng, chuỗi `của` lặp, thừa từ chỉ số nhiều, thừa từ `sẽ`) và tích hợp toàn bộ kiểm tra vào CI.

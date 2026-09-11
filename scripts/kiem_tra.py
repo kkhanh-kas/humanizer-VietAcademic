@@ -8,6 +8,10 @@ Nhịp điệu và độ tự nhiên vẫn cần người đọc đánh giá l�
 
 Nguyên tắc: thà sót còn hơn báo oan.
 
+Mọi luật chạy trên đoạn văn chứ không chạy trên dòng, nên file LaTeX hay Markdown
+ngắt dòng cứng giữa câu vẫn được đếm câu đúng. Dòng chú thích LaTeX (bắt đầu
+bằng %) được bỏ qua.
+
 Mọi signal đều đọc từ patterns/*.yml qua scripts/catalog.py, nên không có luật
 nào được định nghĩa lần thứ hai ở đây. Chế độ nào áp dụng luật nào là do trường
 che_do trong catalog quyết định.
@@ -43,10 +47,15 @@ MA_NGUON = re.compile(
 )
 
 VAN, TIEU_DE, CODE, BANG, CHU_THICH = "van", "tieu_de", "code", "bang", "chu_thich"
+# Dòng trống, hoặc chỗ bắt đầu một mục danh sách. Chỉ dùng để ngắt đoạn.
+NGAT = "ngat"
 
 # Chú thích hình/bảng và mục tài liệu tham khảo không phải văn xuôi.
 CHU_THICH_RE = re.compile(r"^\**\s*(Hình|Bảng|Biểu đồ|Sơ đồ|Figure|Table)\s*\d", re.I)
 TLTK_RE = re.compile(r"^\**\s*(TÀI LIỆU THAM KHẢO|\[\d+\])", re.I)
+MUC_DANH_SACH = re.compile(r"^\s*(?:[\-\*\+•]\s+|\\item\b)")
+# Hàng bảng LaTeX kết thúc bằng & hoặc \\. Dấu & trong văn xuôi LaTeX luôn viết là \&.
+HANG_BANG_LATEX = re.compile(r"(?:(?<!\\)&|\\\\)\s*$")
 
 
 def phan_loai(text):
@@ -57,11 +66,16 @@ def phan_loai(text):
         if FENCE.match(d):
             trong_fence = not trong_fence
             continue
-        if trong_fence or not d:
+        if trong_fence:
             continue
+        if not d:
+            ket_qua.append((i, "", NGAT)); continue
+        if d.startswith("%"):
+            # Dòng chú thích của LaTeX.
+            ket_qua.append((i, d, CODE)); continue
         if CHU_THICH_RE.match(d) or TLTK_RE.match(d):
             ket_qua.append((i, d, CHU_THICH)); continue
-        if d.startswith("|") or re.match(r"^[\|\+\-\s:]+$", d):
+        if d.startswith("|") or re.match(r"^[\|\+\-\s:]+$", d) or HANG_BANG_LATEX.search(d):
             ket_qua.append((i, d, BANG)); continue
         if MA_NGUON.search(d):
             ket_qua.append((i, d, CODE)); continue
@@ -72,6 +86,9 @@ def phan_loai(text):
         d = INLINE_CODE.sub(" ", MD_LINK.sub(r"\1", URL.sub(" ", d)))
         d = re.sub(r"^\s*[\-\*\+•]\s+", "", d).strip("* ")
         if d:
+            if MUC_DANH_SACH.match(dong):
+                # Mỗi mục danh sách là một đoạn riêng.
+                ket_qua.append((i, "", NGAT))
             ket_qua.append((i, d, VAN))
     return ket_qua
 
@@ -80,13 +97,68 @@ def van_xuoi(dong_pl):
     return [(i, d) for i, d, l in dong_pl if l == VAN]
 
 
-def tach_cau(dong_van):
+def doan_van(dong_pl):
+    """Gom các dòng văn xuôi liền nhau thành đoạn.
+
+    File LaTeX và Markdown thường ngắt dòng cứng giữa câu, nên mọi luật phải chạy
+    trên đoạn chứ không chạy trên dòng. Chạy trên dòng thì mỗi lần ngắt dòng bị
+    đếm thành một câu mới, và một lỗi nằm vắt qua hai dòng thì không bắt được.
+
+    Trả về [(văn bản của đoạn, [(vị trí bắt đầu trong đoạn, số dòng)])].
+    """
+    doan, hien_tai = [], []
+    for i, d, l in dong_pl:
+        if l == VAN:
+            hien_tai.append((i, d))
+        elif hien_tai:
+            doan.append(hien_tai)
+            hien_tai = []
+    if hien_tai:
+        doan.append(hien_tai)
+
     ra = []
-    for i, d in dong_van:
-        for c in re.split(r"(?<![0-9])(?<=[\.\!\?…])\s+", d):
-            c = c.strip()
+    for cac_dong in doan:
+        text, moc = "", []
+        for i, d in cac_dong:
+            if text:
+                text += " "
+            moc.append((len(text), i))
+            text += d
+        ra.append((text, moc))
+    return ra
+
+
+def dong_tai(moc, vi_tri):
+    """Số dòng chứa ký tự nằm ở vi_tri trong đoạn."""
+    so = moc[0][1]
+    for bat_dau, i in moc:
+        if bat_dau > vi_tri:
+            break
+        so = i
+    return so
+
+
+def ngu_canh(text, m, rong=90):
+    """Trích một khúc quanh chỗ khớp để người đọc tìm lại được."""
+    bat_dau = max(0, m.start() - 30)
+    return text[bat_dau:bat_dau + rong]
+
+
+TACH_CAU = re.compile(r"(?<![0-9])(?<=[\.\!\?…])\s+")
+
+
+def tach_cau(doan):
+    """Trả về [(số dòng, câu, số thứ tự đoạn)]."""
+    ra = []
+    for k, (text, moc) in enumerate(doan):
+        bat_dau = 0
+        for m in list(TACH_CAU.finditer(text)) + [None]:
+            ket_thuc = m.start() if m else len(text)
+            c = text[bat_dau:ket_thuc].strip()
             if c:
-                ra.append((i, c))
+                ra.append((dong_tai(moc, bat_dau), c, k))
+            if m:
+                bat_dau = m.end()
     return ra
 
 
@@ -140,6 +212,9 @@ MA_PATTERN = {
     "ngoac-dien-giai": "VA-L2-36",
     "tham-chieu-ngoac": "VA-L1-20",
     "thuat-ngu-lech": "VA-L1-21",
+    "phan-de-day": "VA-L2-37",
+    "nang-giong": "VA-L2-38",
+    "ke-cach-nghi": "VA-L2-39",
 }
 
 GACH_CHEN = catalog.bien_dich(CATALOG, "VA-L2-14")
@@ -164,6 +239,13 @@ THOI_PHONG_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-01")
 SAO_NGU_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-07")
 NGUON_MO_HO_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-05")
 THUAT_NGU_LECH_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L1-21")
+PHAN_DE_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-37")
+NANG_GIONG = catalog.bien_dich(CATALOG, "VA-L2-38")
+KE_CACH_NGHI_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L2-39")
+
+# Một hai lần "chứ không", "thay vì" trong một đoạn là bình thường. Từ lần thứ ba
+# thì đoạn văn đang gạt bỏ những cách hiểu chưa ai nêu ra.
+NGUONG_PHAN_DE = 3
 
 TU_NOI = CATALOG["VA-L1-13"]["phrases"]
 TU_NOI_RE = catalog.bien_dich_cum_tu(CATALOG, "VA-L1-13")
@@ -183,7 +265,8 @@ class Loi:
 def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
     pl = phan_loai(text)
     dv = van_xuoi(pl)
-    cau = tach_cau(dv)
+    doan = doan_van(pl)
+    cau = tach_cau(doan)
     loi = []
     G = lambda *a, **k: loi.append(Loi(*a, **k))
 
@@ -191,69 +274,92 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
         """Chế độ đang chạy có áp dụng luật này không? Do che_do trong catalog quyết định."""
         return catalog.ap_dung_cho(CATALOG, MA_PATTERN[ma], che_do)
 
-    for i, d in dv:
-        d = che_trich_dan(d)
-        d_ngoai_ngoac = re.sub(r"\([^)]*\)", " ", d)
+    for text_doan, moc in doan:
+        d = che_trich_dan(text_doan)
+        # Thay phần trong ngoặc bằng khoảng trắng cùng độ dài để vị trí khớp không bị lệch.
+        d_ngoai_ngoac = re.sub(r"\([^)]*\)", lambda m: " " * len(m.group(0)), d)
+        dong = lambda m: dong_tai(moc, m.start())
         if bat("gach-ngang"):
             for m in GACH_CHEN.finditer(d_ngoai_ngoac):
-                G("gach-ngang", i, d[:90], "Tiếng Việt học thuật không dùng gạch ngang chen giữa câu. "
+                G("gach-ngang", dong(m), ngu_canh(d, m), "Tiếng Việt học thuật không dùng gạch ngang chen giữa câu. "
                   "Tách thành hai câu hoặc thay bằng dấu phẩy và từ nối.")
-        if bat("cham-phay") and CHAM_PHAY.search(d):
-            G("cham-phay", i, d[:90], "Tiếng Việt không dùng chấm phẩy giữa câu. Thay bằng dấu phẩy hoặc tách câu.")
+        if bat("cham-phay"):
+            for m in CHAM_PHAY.finditer(d):
+                G("cham-phay", dong(m), ngu_canh(d, m),
+                  "Tiếng Việt không dùng chấm phẩy giữa câu. Thay bằng dấu phẩy hoặc tách câu.")
         if bat("mot-cach"):
             for m in MOT_CACH.finditer(d):
-                G("mot-cach", i, m.group(0), "Bỏ 'một cách', giữ nguyên tính từ (dấu vết dịch đuôi '-ly').")
+                G("mot-cach", dong(m), m.group(0), "Bỏ 'một cách', giữ nguyên tính từ (dấu vết dịch đuôi '-ly').")
         if bat("bi-dong"):
             for m in BI_DONG.finditer(d):
-                G("bi-dong", i, m.group(0)[:90], "Đảo thành chủ động, hoặc dùng 'do ... thực hiện'.")
+                G("bi-dong", dong(m), m.group(0)[:90], "Đảo thành chủ động, hoặc dùng 'do ... thực hiện'.")
         if bat("so-thap-phan"):
             for m in SO_THAP_PHAN.finditer(d):
-                G("so-thap-phan", i, m.group(0),
+                G("so-thap-phan", dong(m), m.group(0),
                   f"Tiếng Việt viết {m.group(0).replace('.', ',')}.", muc="nhe")
         if bat("thoi-phong"):
             for m in THOI_PHONG_RE.finditer(d):
-                G("thoi-phong", i, m.group(0), "Thổi phồng tầm quan trọng. Nêu sự thật trực tiếp.", muc="nhe")
+                G("thoi-phong", dong(m), m.group(0), "Thổi phồng tầm quan trọng. Nêu sự thật trực tiếp.", muc="nhe")
         if bat("sao-ngu"):
             for m in SAO_NGU_RE.finditer(d):
-                G("sao-ngu", i, m.group(0), "Sáo ngữ AI trừu tượng. Thay bằng từ vựng kỹ thuật cụ thể.", muc="nhe")
+                G("sao-ngu", dong(m), m.group(0), "Sáo ngữ AI trừu tượng. Thay bằng từ vựng kỹ thuật cụ thể.", muc="nhe")
         if bat("nguon-mo-ho"):
             for m in NGUON_MO_HO_RE.finditer(d):
-                G("nguon-mo-ho", i, m.group(0), "Nguồn mơ hồ. Dẫn trích dẫn cụ thể ([1]) hoặc nêu thẳng sự kiện.")
+                G("nguon-mo-ho", dong(m), m.group(0), "Nguồn mơ hồ. Dẫn trích dẫn cụ thể ([1]) hoặc nêu thẳng sự kiện.")
         if bat("thuat-ngu-lech"):
             for m in THUAT_NGU_LECH_RE.finditer(d):
-                G("thuat-ngu-lech", i, m.group(0),
+                G("thuat-ngu-lech", dong(m), m.group(0),
                   "Thuật ngữ dịch thô sang từ lệch ngành. 'literature' là 'tài liệu', "
                   "'các nghiên cứu trước' hoặc 'công trình đã công bố'. Bài y học giữ nguyên 'y văn'.",
                   muc="nhe")
         if bat("ngay-thang"):
             for m in NGAY_THANG.finditer(d):
-                G("ngay-thang", i, m.group(0),
+                G("ngay-thang", dong(m), m.group(0),
                   "Tiếng Việt viết ngày trước tháng, dạng 18/6/2026.")
         if bat("chuoi-cua"):
             for m in CHUOI_CUA.finditer(d):
-                G("chuoi-cua", i, m.group(0)[:90],
+                G("chuoi-cua", dong(m), m.group(0)[:90],
                   "Chuỗi 'của' lồng nhau là văn dịch. Bỏ bớt hoặc đảo lại cụm danh từ.", muc="nhe")
         if bat("bi-dong-trung"):
             for m in BI_DONG_TRUNG_RE.finditer(d):
-                G("bi-dong-trung", i, m.group(0), "Thừa động từ phụ (văn dịch Trung). Bỏ 'tiến hành/thực hiện'.", muc="nhe")
+                G("bi-dong-trung", dong(m), m.group(0), "Thừa động từ phụ (văn dịch Trung). Bỏ 'tiến hành/thực hiện'.", muc="nhe")
         if bat("lech-register"):
             for m in KHAU_NGU.finditer(d):
-                G("lech-register", i, m.group(1), "Khẩu ngữ trong văn học thuật.", muc="nhe")
+                G("lech-register", dong(m), m.group(1), "Khẩu ngữ trong văn học thuật.", muc="nhe")
         if bat("xung-ho"):
             for m in XUNG_HO_BAN.finditer(d):
-                G("xung-ho", i, m.group(0), "Không xưng hô 'bạn' trong văn học thuật. "
+                G("xung-ho", dong(m), m.group(0), "Không xưng hô 'bạn' trong văn học thuật. "
                   "Dùng 'chúng tôi', 'tác giả' hoặc lược chủ ngữ.")
         if bat("tham-chieu-ngoac"):
             for m in THAM_CHIEU_NGOAC.finditer(d):
                 # Signal chỉ khớp "(mục ", nên trích thêm chữ phía sau để phân biệt hai chỗ.
-                G("tham-chieu-ngoac", i, d[m.start():m.start() + 30],
+                G("tham-chieu-ngoac", dong(m), d[m.start():m.start() + 30],
                   "Dẫn chỉ mục bằng 'ở mục', 'tại mục' hoặc 'trình bày ở mục', không đóng khung trong ngoặc. "
                   "Chú thích hình, bảng, phụ lục thì giữ nguyên trong ngoặc.")
         if bat("ngoac-dien-giai"):
             for m in NGOAC_DIEN_GIAI.finditer(d):
-                G("ngoac-dien-giai", i, m.group(0)[:90],
+                G("ngoac-dien-giai", dong(m), m.group(0)[:90],
                   "Mệnh đề tiếng Việt nằm trong ngoặc đơn. Gỡ ra thành lời văn nối bằng liên từ, "
                   "chỉ để lại thuật ngữ tiếng Anh trong ngoặc. Chú giải thuật ngữ thì giữ nguyên.",
+                  muc="nhe")
+        if bat("nang-giong"):
+            for m in NANG_GIONG.finditer(d):
+                G("nang-giong", dong(m), m.group(0).strip(" ,"),
+                  "Chữ văn vẻ đứng thay chữ thường. Nếu nghĩa không đổi thì dùng lại chữ thường: "
+                  "'tuy nhiên' thay 'song', 'rút ra' thay 'tường minh hóa', 'suy yếu' thay 'suy xuyển'.",
+                  muc="nhe")
+        if bat("ke-cach-nghi"):
+            for m in KE_CACH_NGHI_RE.finditer(d):
+                G("ke-cach-nghi", dong(m), m.group(0),
+                  "Đang kể cách tác giả đọc bảng hay dựng lập luận. Nêu thẳng điều bảng hoặc lập luận cho thấy.",
+                  muc="nhe")
+        if bat("phan-de-day"):
+            ds = list(PHAN_DE_RE.finditer(d))
+            if len(ds) >= NGUONG_PHAN_DE:
+                G("phan-de-day", dong(ds[0]),
+                  f"{len(ds)} lần gạt bỏ trong một đoạn: " + ", ".join(m.group(0) for m in ds),
+                  "Mỗi 'chứ không', 'thay vì' gạt bỏ một cách hiểu chưa ai nêu. "
+                  "Chỉ giữ chỗ chặn một cách hiểu sai có thật, còn lại nói thẳng điều đúng.",
                   muc="nhe")
 
     if bat("ngoac-kep"):
@@ -261,27 +367,31 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
         if n_ngoac:
             G("ngoac-kep", 0, f"{n_ngoac} dấu \" thẳng", "Dùng “ ” thay cho \" \".", muc="nhe")
 
-    # Câu cụt liên tiếp
+    # Câu cụt liên tiếp trong cùng một đoạn
     if bat("cau-cut"):
-        chuoi, dong_truoc = [], None
-        for dong, c in cau + [(None, "x " * 20)]:
-            if dong == dong_truoc and dem_am_tiet(c) <= nguong_cut:
+        chuoi, doan_truoc, dong_dau = [], None, None
+        for so_dong, c, k in cau + [(None, "x " * 20, None)]:
+            if k == doan_truoc and dem_am_tiet(c) <= nguong_cut:
+                if not chuoi:
+                    dong_dau = so_dong
                 chuoi.append(c)
             else:
                 if len(chuoi) >= nguong_chuoi:
-                    G("cau-cut", dong_truoc, " / ".join(chuoi)[:120],
+                    G("cau-cut", dong_dau, " / ".join(chuoi)[:120],
                       "Nối lại bằng dấu phẩy và từ nối. Nhịp câu cụt liên tiếp là cú pháp dịch tiếng Anh.")
                 chuoi = [c] if dem_am_tiet(c) <= nguong_cut else []
-            dong_truoc = dong
+                dong_dau = so_dong
+            doan_truoc = k
 
     if bat("doi-xung"):
-        dx = [(i, m.group(0)) for i, d in dv for m in DOI_XUNG.finditer(d)]
+        dx = [(dong_tai(moc, m.start()), m.group(0))
+              for d, moc in doan for m in DOI_XUNG.finditer(d)]
         for i, tr in dx[1:]:
             G("doi-xung", i, tr[:90], "Cấu trúc đối xứng lặp nhiều lần nghe rất máy. "
               "Giữ tối đa một lần, còn lại viết thẳng.", muc="nhe")
 
     toan = chuan_hoa(" ".join(d for _, d in dv))
-    tong_am = sum(dem_am_tiet(c) for _, c in cau) or 1
+    tong_am = sum(dem_am_tiet(c) for _, c, _ in cau) or 1
 
     if bat("danh-tu-hoa"):
         n_dth = len(DANH_TU_HOA.findall(toan))
@@ -307,7 +417,8 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
                   "Đổi sang từ nối khác cùng chức năng để tránh đơn điệu.", muc="nhe")
     if bat("thieu-lien-ket") and tong_am >= 200 and len(tn) / tong_am * 100 < 3.0:
         G("thieu-lien-ket", 0, f"{len(tn)} từ nối / {tong_am} âm tiết ({len(tn)/tong_am*100:.1f}%)",
-          "Câu đang đứng rời nhau. Tiếng Việt cần 4-5% từ nối để mạch văn liền mạch.", muc="nhe")
+          "Câu đang đứng rời nhau. Nối các mệnh đề phụ thuộc nhau bằng từ nối, "
+          "nhưng đừng thêm từ nối chỉ để đạt con số.", muc="nhe")
 
     # Tiêu đề viết hoa kiểu Anh
     if bat("tieu-de-hoa"):
@@ -330,7 +441,7 @@ def quet(text, che_do="hoc-thuat", nguong_cut=6, nguong_chuoi=3):
                 G("tieu-de-hoa", i, td.strip()[:90],
                   "Tiếng Việt chỉ viết hoa chữ đầu tiêu đề và tên riêng, không viết hoa từng chữ như tiếng Anh.")
 
-    dai = [dem_am_tiet(c) for _, c in cau]
+    dai = [dem_am_tiet(c) for _, c, _ in cau]
     tk = {
         "so_cau": len(cau), "so_am_tiet": tong_am,
         "tb_cau": sum(dai) / len(dai) if dai else 0,
@@ -364,7 +475,10 @@ TEN = {
     "chuoi-cua": "Chuỗi 'của' lồng nhau",
     "ngoac-dien-giai": "Diễn giải nhét trong ngoặc đơn",
     "tham-chieu-ngoac": "Chỉ mục tham chiếu để trong ngoặc",
-    "thuat-ngu-lech": "Thuật ngữ dịch thô lệch ngành"
+    "thuat-ngu-lech": "Thuật ngữ dịch thô lệch ngành",
+    "phan-de-day": "Gạt bỏ dày đặc ('chứ không', 'thay vì')",
+    "nang-giong": "Nâng giọng bằng chữ văn vẻ",
+    "ke-cach-nghi": "Kể cách tác giả suy nghĩ thay vì nêu kết quả"
 }
 
 

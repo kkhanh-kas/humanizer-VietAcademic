@@ -9,8 +9,8 @@ This rubric evaluates the quality and fidelity of humanized Vietnamese academic 
 3. **Meaning Preservation (Bảo toàn ngữ nghĩa):** Is the core intellectual meaning of the original passage preserved without semantic distortion?
 4. **Factual Integrity (Bảo toàn sự thật):** Are all numbers, dates, equations, metrics, and facts preserved without hallucination?
 5. **Citation Integrity (Tính toàn vẹn của trích dẫn):** Are literature citation tags (`[1]`, `(Nguyen et al., 2024)`) preserved in full, properly positioned, and assigned to the correct clause?
-6. **Cadence & Connective Density (Sự chuẩn mực về nhịp điệu):** Does the text maintain connective density (4–5 per 100 syllables) and alternate long/short sentence lengths?
-7. **Register Fit (Phù hợp văn phong):** Does the vocabulary and tone strictly adhere to formal academic conventions (no colloquialisms, no second-person *bạn*)?
+6. **Cadence & Connective Density (Sự chuẩn mực về nhịp điệu):** Does the text join dependent clauses, split sentences that stack claims, and alternate long/short sentence lengths? Connective density should stay above 3 per 100 syllables without connectives added only to reach a number.
+7. **Register Fit (Phù hợp văn phong):** Does the vocabulary and tone strictly adhere to formal academic conventions (no colloquialisms, no second-person *bạn*) without inflating plain words into rare literary ones?
 8. **Terminology Consistency (Nhất quán thuật ngữ):** Are technical terms used consistently and correctly?
 9. **Edit Necessity (Tính cần thiết):** Were the edits necessary to eliminate AI artifacts or translationese?
 10. **Over-Editing Avoidance (Tránh gọt giũa quá mức):** Did the rewriter avoid altering phrases that were already natural and correct?

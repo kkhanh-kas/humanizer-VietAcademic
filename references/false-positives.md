@@ -6,11 +6,16 @@ This reference defines valid Vietnamese academic conventions that must **NEVER**
 
 ### 1. Long, Compound Sentences
 - **Standard:** Sentences running 25 to 45 syllables connected logically by commas and subordinating connectives (*nhờ đó, qua đó, trong khi, đồng thời*) are the norm in Vietnamese scientific writing.
-- **Rule:** Do NOT shorten a sentence simply because it is long, provided it preserves its logical thread.
+- **Rule:** Do NOT shorten a sentence simply because it is long, provided it preserves its logical thread. Split it only when it stacks separate claims.
 
 ### 2. High Density of Sino-Vietnamese Terminology
 - **Standard:** Technical concepts and abstract nouns in formal Vietnamese legitimately rely on Sino-Vietnamese roots.
 - **Example:** Always prefer *“khả năng xác minh”* over conversational *“khả năng kiểm tra lại được”*.
+- **Limit:** This covers terms and concepts. It does not cover swapping a plain verb, adjective or connective for a rare literary one, such as *song* for *nhưng* or *suy xuyển* for *suy yếu* (`VA-L2-38`).
+
+### 2a. `thì` in a Condition or Topic Frame
+- **Standard:** *“Mẫu nào thiếu nhãn thì sẽ được loại khỏi tập huấn luyện.”* and *“Nếu mẫu quá nhỏ thì kết quả không ổn định.”* are formal written Vietnamese.
+- **Rule:** Flag *thì* only as filler at the end of a phrase (*trong bối cảnh hiện nay thì*).
 
 ### 3. Subject Ellipsis
 - **Standard:** Omission of grammatical subject across sequential sentences where context is established.
